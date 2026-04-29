@@ -35,7 +35,7 @@ Tone: serious craft, calm typography, quiet confidence. Not playful, not theatri
 
 ## Tech Stack
 
-- **Vite + React 18 + TypeScript** (strict mode)
+- **Vite + React 19 + TypeScript** (strict mode) — matches the React version used in MemorizeMate
 - **React Router v7** for routing
 - **Zustand** for the tiny global state (theme only)
 - **Framer Motion** for micro-interactions and page transitions
