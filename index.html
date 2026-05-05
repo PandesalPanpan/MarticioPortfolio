@@ -1,9 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FAF8F5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0F1117" media="(prefers-color-scheme: dark)" />
     <title>Peter Elijah Marticio — Full-Stack Developer</title>
+    <meta
+      name="description"
+      content="Portfolio of Peter Elijah Marticio — Full-Stack Developer and Computer Engineering student at PUP."
+    />
+    <meta property="og:title" content="Peter Elijah Marticio" />
+    <meta property="og:description" content="Full-Stack Developer · Computer Engineering @ PUP" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('mp-theme');
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (_) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
