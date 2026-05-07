@@ -1,0 +1,10 @@
+.tag {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: var(--text-xs);
+}
