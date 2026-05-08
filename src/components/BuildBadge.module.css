@@ -1,0 +1,12 @@
+.badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  color: #fff;
+  cursor: help;
+}
+.ai { background: var(--chip-ai); }
+.scratch { background: var(--chip-scratch); }
