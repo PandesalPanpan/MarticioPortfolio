@@ -1,0 +1,30 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.inner {
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+.brand { color: var(--ink); display: inline-flex; background-image: none; }
+.brand:hover { background-image: none; }
+.nav {
+  display: flex;
+  gap: var(--space-6);
+  margin-left: var(--space-6);
+  flex: 1;
+}
+.nav a { color: var(--ink); font-size: var(--text-sm); }
+.controls { display: flex; gap: var(--space-3); align-items: center; }
+
+@media (max-width: 640px) {
+  .nav { display: none; }
+}
