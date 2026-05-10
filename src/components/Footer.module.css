@@ -1,0 +1,16 @@
+.footer {
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-24);
+}
+.inner {
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+.nav { display: flex; gap: var(--space-6); }
+.nav a { color: var(--muted); }
