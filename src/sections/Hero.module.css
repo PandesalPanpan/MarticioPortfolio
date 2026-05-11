@@ -1,0 +1,33 @@
+.hero {
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: var(--space-24) var(--space-6) var(--space-16);
+}
+.eyebrow {
+  color: var(--muted);
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-4);
+}
+.title {
+  font-size: clamp(var(--text-3xl), 7vw, var(--text-5xl));
+  max-width: 720px;
+  margin-bottom: var(--space-6);
+}
+.tagline {
+  font-size: var(--text-lg);
+  color: var(--muted);
+  max-width: 640px;
+  margin-bottom: var(--space-8);
+}
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-8);
+}
+.note {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  font-style: italic;
+}
