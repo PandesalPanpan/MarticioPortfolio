@@ -1,0 +1,28 @@
+.section {
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-6);
+}
+.section > h2 { margin-bottom: var(--space-8); }
+.timeline {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  border-left: 2px solid var(--border);
+  padding-left: var(--space-6);
+}
+.item { display: grid; grid-template-columns: 180px 1fr; gap: var(--space-6); }
+.dates {
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+.role { font-size: var(--text-lg); margin-bottom: var(--space-3); }
+.company { color: var(--muted); font-weight: 400; }
+.bullets { padding-left: var(--space-6); color: var(--muted); display: flex; flex-direction: column; gap: var(--space-2); }
+
+@media (max-width: 640px) {
+  .item { grid-template-columns: 1fr; gap: var(--space-2); }
+}
