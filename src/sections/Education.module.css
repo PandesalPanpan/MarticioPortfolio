@@ -1,0 +1,23 @@
+.section {
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-6);
+}
+.section > h2 { margin-bottom: var(--space-8); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.item { display: flex; flex-direction: column; gap: var(--space-2); }
+.institution { font-size: var(--text-lg); }
+.credential { color: var(--ink); }
+.dates {
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+.note { color: var(--muted); font-size: var(--text-sm); }
+.link { font-size: var(--text-sm); margin-top: auto; }
+
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
