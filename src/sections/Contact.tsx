@@ -1,14 +1,14 @@
-import { Mail, Github, Linkedin } from 'lucide-react';
+import { Mail, Globe } from 'lucide-react';
 import { BoopIcon } from '@/components/BoopIcon';
 import styles from './Contact.module.css';
 
 const links = [
   { href: 'mailto:petermarticio@gmail.com', label: 'petermarticio@gmail.com', Icon: Mail },
-  { href: 'https://github.com/PandesalPanpan', label: 'github.com/PandesalPanpan', Icon: Github },
+  { href: 'https://github.com/PandesalPanpan', label: 'github.com/PandesalPanpan', Icon: Globe },
   {
     href: 'https://www.linkedin.com/in/peter-elijah-a-marticio-46340125b/',
     label: 'LinkedIn',
-    Icon: Linkedin,
+    Icon: Globe,
   },
 ];
 

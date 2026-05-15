@@ -9,17 +9,19 @@ type ButtonProps = BaseProps & ButtonHTMLAttributes<HTMLButtonElement> & { as?: 
 type AnchorProps = BaseProps & AnchorHTMLAttributes<HTMLAnchorElement> & { as: 'a'; href: string };
 
 export function Button(props: ButtonProps | AnchorProps) {
-  const { variant = 'primary', children, className = '', ...rest } = props as ButtonProps & AnchorProps;
-  const cls = `${styles.btn} ${styles[variant]} ${className}`.trim();
   if (props.as === 'a') {
+    const { variant = 'primary', children, className = '', ...rest } = props;
+    const cls = `${styles.btn} ${styles[variant]} ${className}`.trim();
     return (
-      <a className={cls} {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}>
+      <a className={cls} {...rest}>
         {children}
       </a>
     );
   }
+  const { variant = 'primary', children, className = '', ...rest } = props;
+  const cls = `${styles.btn} ${styles[variant]} ${className}`.trim();
   return (
-    <button className={cls} {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}>
+    <button className={cls} {...rest}>
       {children}
     </button>
   );
