@@ -24,6 +24,21 @@
 }
 .nav a { color: var(--ink); font-size: var(--text-sm); }
 .controls { display: flex; gap: var(--space-3); align-items: center; }
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: var(--space-2);
+  z-index: 999;
+  padding: var(--space-2) var(--space-4);
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  background-image: none;
+}
+.skipLink:focus {
+  left: var(--space-2);
+}
 
 @media (max-width: 640px) {
   .nav { display: none; }
