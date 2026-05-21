@@ -1,0 +1,17 @@
+# Development — hot-reload Vite dev server in Docker
+# Run: docker compose -f docker-compose.dev.yml up
+
+services:
+  portfolio-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./src:/app/src
+      - ./index.html:/app/index.html
+      - ./public:/app/public
+    environment:
+      - NODE_ENV=development

@@ -1,0 +1,45 @@
+# Production — Dokploy + Traefik
+# Dokploy automatically picks up docker-compose.yml files and injects
+# its Traefik network. Labels here follow the Dokploy convention.
+
+services:
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - dokploy
+    labels:
+      - "traefik.enable=true"
+
+      # Primary domain — HTTPS
+      - "traefik.http.routers.portfolio.rule=Host(`marticio.tech`)"
+      - "traefik.http.routers.portfolio.entrypoints=websecure"
+      - "traefik.http.routers.portfolio.tls.certresolver=letsencrypt"
+
+      # WWW → apex redirect
+      - "traefik.http.routers.portfolio-www.rule=Host(`www.marticio.tech`)"
+      - "traefik.http.routers.portfolio-www.entrypoints=websecure"
+      - "traefik.http.routers.portfolio-www.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.portfolio-www.middlewares=redirect-www-to-apex"
+
+      # HTTP → HTTPS redirect
+      - "traefik.http.routers.portfolio-http.rule=Host(`marticio.tech`) || Host(`www.marticio.tech`)"
+      - "traefik.http.routers.portfolio-http.entrypoints=web"
+      - "traefik.http.routers.portfolio-http.middlewares=redirect-to-https"
+
+      # Middleware definitions
+      - "traefik.http.middlewares.redirect-www-to-apex.redirectregex.regex=^https?://www\\.(.+)"
+      - "traefik.http.middlewares.redirect-www-to-apex.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.redirect-www-to-apex.redirectregex.permanent=true"
+
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+
+      # Service port
+      - "traefik.http.services.portfolio.loadbalancer.server.port=80"
+
+networks:
+  dokploy:
+    external: true
