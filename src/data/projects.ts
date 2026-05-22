@@ -9,7 +9,7 @@ export const projects: Project[] = [
       'A polished PWA flashcard app using the FSRS algorithm. Offline-first via IndexedDB, smart CSV/cloze import, GitHub-style review heatmap, and an ink-and-paper design system with light/dark/auto themes.',
     tech: ['React 19', 'TypeScript', 'Vite', 'Zustand', 'IndexedDB', 'ts-fsrs', 'Framer Motion', 'PWA'],
     buildStyle: 'ai-assisted',
-    links: { code: 'https://github.com/PandesalPanpan' /* TODO: replace once repo is public */ },
+    links: { code: 'https://github.com/PandesalPanpan/MemorizeMate' },
     featured: true,
     highlights: [
       'Custom FSRS scheduling integration',
@@ -22,9 +22,10 @@ export const projects: Project[] = [
     id: 'classhub',
     title: 'ClassHub',
     blurb: 'Undergraduate thesis — PUP Computer Engineering Dept.',
-    description: 'Thesis project for the PUP CompE Department. Built from scratch in JavaScript.',
-    tech: ['JavaScript', 'Node.js'],
-    buildStyle: 'from-scratch',
+    description:
+      'PUP CompE thesis. Built on Laravel with Filament for the admin panel, FullCalendar.js for scheduling, and PostgreSQL as the database.',
+    tech: ['Laravel', 'Filament', 'PHP', 'FullCalendar.js', 'PostgreSQL'],
+    buildStyle: 'ai-assisted',
     links: { code: 'https://github.com/PandesalPanpan/classhub' },
     featured: true,
     highlights: ['Undergraduate thesis', 'Deployed and used by the department'],
@@ -47,7 +48,7 @@ export const projects: Project[] = [
     title: 'Thesis-RFID-IMS',
     blurb: 'Inventory management with RFID, biometrics, and barcode.',
     description: 'Web app integrating RFID, biometric, and barcode hardware for inventory workflows.',
-    tech: ['PHP', 'MySQL', 'JavaScript'],
+    tech: ['Laravel', 'Filament', 'PHP'],
     buildStyle: 'from-scratch',
     links: { code: 'https://github.com/PandesalPanpan/Thesis-RFID-Borrowing-IMS' },
     featured: true,
@@ -64,10 +65,13 @@ export const projects: Project[] = [
   {
     id: 'express-inventory',
     title: 'express-inventory-application',
-    blurb: 'Odin Project — Express + MongoDB inventory CRUD.',
-    tech: ['Node.js', 'Express', 'MongoDB', 'EJS'],
+    blurb: 'Odin Project — Express + PostgreSQL inventory CRUD.',
+    tech: ['Node.js', 'Express', 'PostgreSQL', 'EJS'],
     buildStyle: 'from-scratch',
-    links: { code: 'https://github.com/PandesalPanpan/express-inventory-application' },
+    links: {
+      live: 'https://express-inventory-application-lukv.onrender.com/',
+      code: 'https://github.com/PandesalPanpan/express-inventory-application',
+    },
     featured: true,
   },
   {

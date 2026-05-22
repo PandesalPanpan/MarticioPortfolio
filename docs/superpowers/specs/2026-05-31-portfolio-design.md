@@ -160,7 +160,7 @@ Order:
 | # | Project | Build Style |
 |---|---|---|
 | 1 | MemorizeMate | AI-Assisted |
-| 2 | ClassHub | From Scratch |
+| 2 | ClassHub | AI-Assisted |
 | 3 | Threaded | AI-Assisted |
 | 4 | Thesis-RFID-IMS | From Scratch |
 | 5 | binary-speed (CS50) | From Scratch |
