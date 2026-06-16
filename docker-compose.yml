@@ -4,7 +4,7 @@
 
 services:
   portfolio:
-    image: pandesalpanpan/marticioportfolio:1.0.0
+    image: pandesalpanpan/marticioportfolio:1.2.0
     restart: unless-stopped
     networks:
       - dokploy
