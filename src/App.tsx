@@ -15,7 +15,7 @@ export default function App() {
     <BrowserRouter>
       <GlobalStyles />
       <Header />
-      <div id="main-content">
+      <main id="main-content">
         <Suspense fallback={<div style={{ padding: '64px 24px', textAlign: 'center', color: 'var(--muted)' }}>Loading...</div>}>
           <ErrorBoundary>
             <Routes>
@@ -26,7 +26,7 @@ export default function App() {
             </Routes>
           </ErrorBoundary>
         </Suspense>
-      </div>
+      </main>
       <Footer />
     </BrowserRouter>
   );

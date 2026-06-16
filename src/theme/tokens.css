@@ -44,7 +44,7 @@
   --muted: #5c5c66;
   --accent: #3b3fe4;
   --highlight: #f2b441;
-  --chip-ai: #0d9488;
+  --chip-ai: #0f766e;
   --chip-scratch: #475569;
   --border: rgba(26, 26, 31, 0.08);
   --shadow: 0 1px 2px rgba(26, 26, 31, 0.04), 0 4px 12px rgba(26, 26, 31, 0.06);
@@ -55,10 +55,10 @@
   --surface: #161922;
   --ink: #ececf2;
   --muted: #9ca0ae;
-  --accent: #8b8fff;
+  --accent: #8486e3;
   --highlight: #f4c26c;
-  --chip-ai: #2dd4bf;
-  --chip-scratch: #94a3b8;
+  --chip-ai: #0f766e;
+  --chip-scratch: #64748b;
   --border: rgba(236, 236, 242, 0.08);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.4);
 }

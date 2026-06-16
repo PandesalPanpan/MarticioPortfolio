@@ -5,7 +5,7 @@ export function VersionToggle() {
   const { pathname } = useLocation();
   const isHandmade = pathname.startsWith('/handmade');
   return (
-    <div className={styles.toggle} role="group" aria-label="Site version">
+    <fieldset className={styles.toggle} aria-label="Site version">
       <NavLink
         to="/"
         className={!isHandmade ? `${styles.option} ${styles.active}` : styles.option}
@@ -20,6 +20,6 @@ export function VersionToggle() {
       >
         Handmade
       </NavLink>
-    </div>
+    </fieldset>
   );
 }

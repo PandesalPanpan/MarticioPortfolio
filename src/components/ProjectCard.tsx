@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ExternalLink, Code2, ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import type { Project } from '@/data/types';
 import { Card } from './Card';
 import { Tag } from './Tag';
@@ -51,29 +51,31 @@ export function ProjectCard({ project }: { project: Project }) {
           </button>
         )}
       </div>
-      <AnimatePresence initial={false}>
-        {expanded && hasDetails && (
-          <motion.div
-            id={panelId}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className={styles.detailsWrap}
-          >
-            <div className={styles.details}>
-              {project.description && <p>{project.description}</p>}
-              {project.highlights?.length ? (
-                <ul>
-                  {project.highlights.map((h) => (
-                    <li key={h}>{h}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence initial={false}>
+          {expanded && hasDetails && (
+            <m.div
+              id={panelId}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className={styles.detailsWrap}
+            >
+              <div className={styles.details}>
+                {project.description && <p>{project.description}</p>}
+                {project.highlights?.length ? (
+                  <ul>
+                    {project.highlights.map((h) => (
+                      <li key={h}>{h}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
+      </LazyMotion>
     </Card>
   );
 }

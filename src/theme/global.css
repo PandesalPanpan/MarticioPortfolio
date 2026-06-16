@@ -1,11 +1,14 @@
 @import './tokens.css';
 
-@import '@fontsource-variable/fraunces/index.css';
-@import '@fontsource-variable/inter/index.css';
-@import '@fontsource-variable/jetbrains-mono/index.css';
+@import './fonts.css';
 
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+}
 
 html, body, #root { height: 100%; }
 

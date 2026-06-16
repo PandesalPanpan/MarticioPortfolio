@@ -18,10 +18,10 @@ export function Button(props: ButtonProps | AnchorProps) {
       </a>
     );
   }
-  const { variant = 'primary', children, className = '', ...rest } = props;
+  const { variant = 'primary', children, className = '', type = 'button', ...rest } = props;
   const cls = `${styles.btn} ${styles[variant]} ${className}`.trim();
   return (
-    <button className={cls} {...rest}>
+    <button className={cls} type={type} {...rest}>
       {children}
     </button>
   );
