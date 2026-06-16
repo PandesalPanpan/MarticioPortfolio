@@ -11,8 +11,13 @@ node_modules
 dist
 dist-ssr
 test-results
+playwright-report
 *.local
 *.tsbuildinfo
+
+# Local tooling / generated audit artifacts
+.commandcode/
+lighthouse-result.html
 
 # Editor directories and files
 .vscode/*
