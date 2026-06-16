@@ -9,7 +9,10 @@ export const projects: Project[] = [
       'A polished PWA flashcard app using the FSRS algorithm. Offline-first via IndexedDB, smart CSV/cloze import, GitHub-style review heatmap, and an ink-and-paper design system with light/dark/auto themes.',
     tech: ['React 19', 'TypeScript', 'Vite', 'Zustand', 'IndexedDB', 'ts-fsrs', 'Framer Motion', 'PWA'],
     buildStyle: 'ai-assisted',
-    links: { code: 'https://github.com/PandesalPanpan/MemorizeMate' },
+    links: {
+      live: 'https://memorizemate.marticio.com',
+      code: 'https://github.com/PandesalPanpan/MemorizeMate',
+    },
     featured: true,
     highlights: [
       'Custom FSRS scheduling integration',
@@ -38,7 +41,7 @@ export const projects: Project[] = [
       'Actively-used journaling app shared with my partner. Daily-post streaks, random roulette reward points, and a shop where each partner sets real-world treats redeemable with points. Ported from Livewire to React.',
     tech: ['Laravel', 'Filament', 'React', 'TypeScript', 'MySQL'],
     buildStyle: 'ai-assisted',
-    links: { live: 'https://threaded.marticio.tech' },
+    links: { live: 'https://threaded.marticio.com' },
     featured: true,
     highlights: ['Daily streak tracking', 'Roulette reward points', 'Partner shop with redeemable treats'],
     images: [],
