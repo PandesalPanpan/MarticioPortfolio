@@ -15,14 +15,10 @@ export const education: Education[] = [
     start: 'Ongoing',
     end: '',
     link: 'https://www.theodinproject.com/',
-    note: 'Active contributor and curriculum learner.',
-  },
-  {
-    id: 'cs50',
-    institution: "Harvard's CS50",
-    credential: 'Introduction to Computer Science',
-    start: '',
-    end: 'Completed',
-    link: undefined /* TODO: paste certificate URL */,
+    note: 'Open-source contributor to TheOdinProject/curriculum.',
+    contribution: {
+      label: 'View merged contributions',
+      url: 'https://github.com/TheOdinProject/curriculum/pulls?q=is%3Apr+is%3Amerged+author%3APandesalPanpan',
+    },
   },
 ];

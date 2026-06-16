@@ -18,6 +18,7 @@
   color: var(--muted);
 }
 .note { color: var(--muted); font-size: var(--text-sm); }
-.link { font-size: var(--text-sm); margin-top: auto; }
+.links { display: flex; flex-direction: column; gap: var(--space-1); margin-top: auto; padding-top: var(--space-2); }
+.link { font-size: var(--text-sm); }
 
 @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }

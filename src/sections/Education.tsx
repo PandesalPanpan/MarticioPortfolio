@@ -15,7 +15,14 @@ export function Education() {
               {e.start}{e.end ? (e.start ? ` – ${e.end}` : e.end) : ''}
             </p>
             {e.note && <p className={styles.note}>{e.note}</p>}
-            {e.link && <a href={e.link} className={styles.link}>Learn more →</a>}
+            <div className={styles.links}>
+              {e.link && <a href={e.link} className={styles.link}>Learn more →</a>}
+              {e.contribution && (
+                <a href={e.contribution.url} className={styles.link} target="_blank" rel="noreferrer">
+                  {e.contribution.label} →
+                </a>
+              )}
+            </div>
           </Card>
         ))}
       </div>
