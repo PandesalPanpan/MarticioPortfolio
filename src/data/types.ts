@@ -30,4 +30,21 @@ export type Education = {
   end: string;
   link?: string;
   note?: string;
+  /** Optional secondary call-to-action, e.g. open-source contributions. */
+  contribution?: { label: string; url: string };
+};
+
+export type Certification = {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  /** Imported full-resolution image shown in the lightbox. */
+  image: string;
+  /** Imported thumbnail image shown on the card. */
+  thumb: string;
+  /** Path to the original PDF in /public (download link). */
+  pdf: string;
+  /** Optional public verification URL. */
+  verifyUrl?: string;
 };

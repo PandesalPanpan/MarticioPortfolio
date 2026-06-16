@@ -2,6 +2,7 @@ import { Hero } from '@/sections/Hero';
 import { Projects } from '@/sections/Projects';
 import { Experience } from '@/sections/Experience';
 import { Education } from '@/sections/Education';
+import { Certifications } from '@/sections/Certifications';
 import { Contact } from '@/sections/Contact';
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
       <Projects />
       <Experience />
       <Education />
+      <Certifications />
       <Contact />
     </>
   );
