@@ -58,22 +58,39 @@ test('jargon tooltip is reachable by keyboard focus and exposes a definition', a
   await expect(page.locator(`#${describedById}`)).toContainText(/Virtual Private Server/i);
 });
 
-test('project signature video opens in the lightbox and renders a <video>', async ({ page }) => {
+test('project signature video opens in the lightbox and autoplays muted', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: /Play MemorizeMate walkthrough video/i }).click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
-  await expect(dialog.locator('video')).toHaveAttribute('src', '/media/memorizemate/study.mp4');
+  const video = dialog.locator('video');
+  await expect(video).toHaveAttribute('src', '/media/memorizemate/study.mp4');
+  // Muted is required for autoplay to actually start (otherwise it looks like a still).
+  await expect(video).toHaveJSProperty('muted', true);
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
 });
 
-test('project screenshot gallery opens an image in the lightbox', async ({ page }) => {
+test('lightbox gallery navigates between images without closing', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: /View screenshot: Daily streak tracking/i }).click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   await expect(dialog.locator('img')).toHaveAttribute('src', '/media/threaded/streak.png');
+  // Next advances to the following gallery image; the dialog stays open.
+  await dialog.getByRole('button', { name: 'Next' }).click();
+  await expect(dialog.locator('img')).toHaveAttribute('src', '/media/threaded/shop.png');
+  // Arrow-key navigation also works.
+  await page.keyboard.press('ArrowLeft');
+  await expect(dialog.locator('img')).toHaveAttribute('src', '/media/threaded/streak.png');
+  await expect(dialog).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
+});
+
+test('project Live and Code links open in a new tab', async ({ page }) => {
+  await page.goto('/');
+  const projects = page.locator('#projects');
+  await expect(projects.getByRole('link', { name: 'Live' }).first()).toHaveAttribute('target', '_blank');
+  await expect(projects.getByRole('link', { name: 'Code' }).first()).toHaveAttribute('target', '_blank');
 });

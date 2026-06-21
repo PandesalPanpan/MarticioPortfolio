@@ -31,12 +31,12 @@ export function ProjectCard({ project }: { project: Project }) {
       </div>
       <div className={styles.actions}>
         {project.links.live && (
-          <a href={project.links.live} className={styles.link}>
+          <a href={project.links.live} className={styles.link} target="_blank" rel="noreferrer">
             <ExternalLink size={14} /> Live
           </a>
         )}
         {project.links.code && (
-          <a href={project.links.code} className={styles.link}>
+          <a href={project.links.code} className={styles.link} target="_blank" rel="noreferrer">
             <Code2 size={14} /> Code
           </a>
         )}

@@ -43,7 +43,7 @@ export const projects: Project[] = [
     highlights: ['Daily streak tracking', 'Roulette reward points', 'Partner shop with redeemable treats'],
     video: {
       poster: '/media/threaded/feed.png',
-      src: '/media/threaded/feed.webm',
+      src: '/media/threaded/feed.mp4',
     },
     gallery: [
       { src: '/media/threaded/streak.png', caption: 'Daily streak tracking' },

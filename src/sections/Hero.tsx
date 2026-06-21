@@ -27,7 +27,7 @@ export function Hero() {
         <div className={styles.actions}>
           <Button as="a" href="#projects" variant="primary">View Projects</Button>
           <Button as="a" href="/resume.pdf" variant="secondary" download>Download Resume</Button>
-          <Button as="a" href="https://github.com/PandesalPanpan" variant="ghost">GitHub</Button>
+          <Button as="a" href="https://github.com/PandesalPanpan" variant="ghost" target="_blank" rel="noreferrer">GitHub</Button>
         </div>
         <p className={styles.note}>
           This is the AI-assisted build. A from-scratch version is in progress — toggle above.

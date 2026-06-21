@@ -34,8 +34,7 @@ export function CertCard({ cert }: { cert: Certification }) {
       <Lightbox
         open={open}
         onClose={() => setOpen(false)}
-        title={cert.title}
-        image={cert.image}
+        items={[{ type: 'image', src: cert.image, title: cert.title }]}
         actions={actions}
       />
     </Card>

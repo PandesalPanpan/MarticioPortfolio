@@ -15,7 +15,7 @@ export function Projects() {
           <ProjectCard key={p.id} project={p} />
         ))}
       </div>
-      <a className={styles.more} href="https://github.com/PandesalPanpan?tab=repositories">
+      <a className={styles.more} href="https://github.com/PandesalPanpan?tab=repositories" target="_blank" rel="noreferrer">
         More on GitHub <ArrowRight size={14} />
       </a>
       <p className={styles.legend}>

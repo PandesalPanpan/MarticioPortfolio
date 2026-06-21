@@ -8,7 +8,7 @@ export function Footer() {
         <span suppressHydrationWarning>© {new Date().getFullYear()} Peter Elijah Marticio</span>
         <nav className={styles.nav} aria-label="Footer">
           <Link to="/colophon">Colophon</Link>
-          <a href="https://github.com/PandesalPanpan/MarticioPortfolio">Source</a>
+          <a href="https://github.com/PandesalPanpan/MarticioPortfolio" target="_blank" rel="noreferrer">Source</a>
         </nav>
       </div>
     </footer>
