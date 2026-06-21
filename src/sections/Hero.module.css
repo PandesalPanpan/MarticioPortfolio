@@ -2,6 +2,9 @@
   max-width: var(--grid-max);
   margin: 0 auto;
   padding: var(--space-24) var(--space-6) var(--space-16);
+}
+/* When a portrait is present the hero becomes a two-column layout. */
+.hero.withPortrait {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
@@ -31,11 +34,6 @@
   display: flex;
   gap: var(--space-3);
   flex-wrap: wrap;
-  margin-bottom: var(--space-3);
-}
-.subActions {
-  font-size: var(--text-sm);
-  color: var(--muted);
   margin-bottom: var(--space-8);
 }
 .note {
@@ -48,9 +46,17 @@
   justify-content: center;
   align-items: center;
 }
+.portrait {
+  width: clamp(180px, 24vw, 280px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
 
 @media (max-width: 820px) {
-  .hero {
+  .hero.withPortrait {
     grid-template-columns: 1fr;
     gap: var(--space-8);
     padding-top: var(--space-16);

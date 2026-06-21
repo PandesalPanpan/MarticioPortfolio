@@ -1,6 +1,7 @@
 import { skills } from '@/data/skills';
 import { Tag } from '@/components/Tag';
 import { Term } from '@/components/Term';
+import { SkillIcon } from '@/components/SkillIcon';
 import styles from './Skills.module.css';
 
 export function Skills() {
@@ -18,7 +19,10 @@ export function Skills() {
               {group.items.map((item) => (
                 <li key={item}>
                   <Tag>
-                    <Term term={item}>{item}</Term>
+                    <span className={styles.chip}>
+                      <SkillIcon name={item} />
+                      <Term term={item}>{item}</Term>
+                    </span>
                   </Tag>
                 </li>
               ))}

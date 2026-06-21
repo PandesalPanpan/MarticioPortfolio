@@ -31,18 +31,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: 'classhub',
-    title: 'ClassHub',
-    blurb: 'Undergraduate thesis — PUP Computer Engineering Dept.',
-    description:
-      'PUP CompE thesis. Built on Laravel with Filament for the admin panel, FullCalendar.js for scheduling, and PostgreSQL as the database.',
-    tech: ['Laravel', 'Filament', 'PHP', 'FullCalendar.js', 'PostgreSQL'],
-    buildStyle: 'ai-assisted',
-    links: { code: 'https://github.com/PandesalPanpan/classhub' },
-    featured: true,
-    highlights: ['Undergraduate thesis', 'Deployed and used by the department'],
-  },
-  {
     id: 'threaded',
     title: 'Threaded',
     blurb: 'Personal journaling app with streaks, rewards, and a partner-driven shop.',
@@ -62,6 +50,18 @@ export const projects: Project[] = [
       { src: '/media/threaded/shop.png', caption: 'Partner reward shop' },
       { src: '/media/threaded/throwbacks.png', caption: 'Memory throwbacks' },
     ],
+  },
+  {
+    id: 'classhub',
+    title: 'ClassHub',
+    blurb: 'Undergraduate thesis — PUP Computer Engineering Dept.',
+    description:
+      'PUP CompE thesis. Built on Laravel with Filament for the admin panel, FullCalendar.js for scheduling, and PostgreSQL as the database.',
+    tech: ['Laravel', 'Filament', 'PHP', 'FullCalendar.js', 'PostgreSQL'],
+    buildStyle: 'ai-assisted',
+    links: { code: 'https://github.com/PandesalPanpan/classhub' },
+    featured: true,
+    highlights: ['Undergraduate thesis', 'Deployed and used by the department'],
   },
   {
     id: 'thesis-rfid-ims',

@@ -13,6 +13,19 @@ test('sections render in the new order: experience → skills → projects', asy
   expect(order.indexOf('skills')).toBeLessThan(order.indexOf('projects'));
 });
 
+test('MemorizeMate and Threaded are the first two projects (side by side)', async ({ page }) => {
+  await page.goto('/');
+  const titles = await page.locator('#projects h3').allInnerTexts();
+  expect(titles[0]).toBe('MemorizeMate');
+  expect(titles[1]).toBe('Threaded');
+});
+
+test('skill chips render brand/icon SVGs', async ({ page }) => {
+  await page.goto('/');
+  const iconCount = await page.locator('#skills li svg').count();
+  expect(iconCount).toBeGreaterThanOrEqual(15);
+});
+
 test('skills section renders all category groups', async ({ page }) => {
   await page.goto('/');
   const section = page.locator('#skills');
@@ -22,15 +35,18 @@ test('skills section renders all category groups', async ({ page }) => {
   }
 });
 
-test('hero character renders as an SVG image', async ({ page }) => {
+test('hero is text-only (no character figure) and shows the brand monogram', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('img', { name: /Illustrated avatar of Peter/i })).toBeVisible();
+  // The illustrated character has been removed.
+  await expect(page.getByRole('img', { name: /Illustrated avatar of Peter/i })).toHaveCount(0);
+  // The header monogram links home.
+  await expect(page.getByRole('link', { name: 'Home' })).toBeVisible();
 });
 
-test('résumé and CV download links point to the right files', async ({ page }) => {
+test('resume download link points to the right file and CV is gone', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: /Download Résumé/i })).toHaveAttribute('href', '/resume.pdf');
-  await expect(page.getByRole('link', { name: /Download CV/i })).toHaveAttribute('href', '/cv.pdf');
+  await expect(page.getByRole('link', { name: /Download Resume/i })).toHaveAttribute('href', '/resume.pdf');
+  await expect(page.getByRole('link', { name: /Download CV/i })).toHaveCount(0);
 });
 
 test('jargon tooltip is reachable by keyboard focus and exposes a definition', async ({ page }) => {

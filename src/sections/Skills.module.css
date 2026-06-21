@@ -33,6 +33,14 @@
   padding: 0;
   margin: 0;
 }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.chip svg {
+  display: block;
+}
 
 @media (max-width: 640px) {
   .groups { grid-template-columns: 1fr; }

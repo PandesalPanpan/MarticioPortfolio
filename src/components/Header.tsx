@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import { VersionToggle } from './VersionToggle';
-import { AvatarMark } from './Avatar';
+import { Monogram } from './Monogram';
 import styles from './Header.module.css';
 
 export function Header() {
@@ -10,7 +10,7 @@ export function Header() {
       <a href="#main-content" className={styles.skipLink}>Skip to content</a>
       <div className={styles.inner}>
         <Link to="/" className={styles.brand} aria-label="Home">
-          <AvatarMark size={32} />
+          <Monogram size={32} />
         </Link>
         <nav className={styles.nav} aria-label="Primary">
           <a href="/#experience">Experience</a>
