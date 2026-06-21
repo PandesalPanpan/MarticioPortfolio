@@ -4,6 +4,7 @@ import { GlobalStyles } from '@/theme/GlobalStyles';
 import { Header } from '@/components/Header';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Footer } from '@/components/Footer';
+import { usePrefetchHandmade } from '@/hooks/usePrefetchHandmade';
 import Home from '@/routes/Home';
 
 const Handmade = lazy(() => import('@/routes/Handmade'));
@@ -11,6 +12,7 @@ const Colophon = lazy(() => import('@/routes/Colophon'));
 const NotFound = lazy(() => import('@/routes/NotFound'));
 
 export default function App() {
+  usePrefetchHandmade();
   return (
     <BrowserRouter>
       <GlobalStyles />

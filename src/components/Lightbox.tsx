@@ -10,13 +10,15 @@ type LightboxProps = {
   onClose: () => void;
   title: string;
   image: string;
+  /** When set, a video plays here (the `image` is used as its poster). */
+  video?: string;
   /** Action links rendered in the header (e.g. Download PDF, Verify). */
   actions?: { label: string; href: string }[];
 };
 
-const FOCUSABLE = 'a[href], button:not([disabled])';
+const FOCUSABLE = 'a[href], button:not([disabled]), video[controls]';
 
-export function Lightbox({ open, onClose, title, image, actions = [] }: LightboxProps) {
+export function Lightbox({ open, onClose, title, image, video, actions = [] }: LightboxProps) {
   const reduced = usePrefersReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -104,7 +106,19 @@ export function Lightbox({ open, onClose, title, image, actions = [] }: Lightbox
                 </div>
               </div>
               <div className={styles.imageWrap}>
-                <img src={image} alt={title} className={styles.image} />
+                {video ? (
+                  <video
+                    src={video}
+                    poster={image}
+                    className={styles.media}
+                    controls
+                    autoPlay
+                    playsInline
+                    aria-label={title}
+                  />
+                ) : (
+                  <img src={image} alt={title} className={styles.image} />
+                )}
               </div>
             </m.div>
           </m.div>

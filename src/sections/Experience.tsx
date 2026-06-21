@@ -1,4 +1,5 @@
 import { experience } from '@/data/experience';
+import { renderWithGlossary } from '@/components/glossaryText';
 import styles from './Experience.module.css';
 
 export function Experience() {
@@ -16,7 +17,7 @@ export function Experience() {
                 {e.role} · <span className={styles.company}>{e.company}</span>
               </h3>
               <ul className={styles.bullets}>
-                {e.bullets.map((b) => <li key={b}>{b}</li>)}
+                {e.bullets.map((b) => <li key={b}>{renderWithGlossary(b)}</li>)}
               </ul>
             </div>
           </li>

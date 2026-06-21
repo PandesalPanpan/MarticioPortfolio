@@ -19,7 +19,16 @@ export const projects: Project[] = [
       'Offline-ready with service worker caching',
       '38 unit tests + Playwright e2e',
     ],
-    images: [],
+    video: {
+      poster: '/media/memorizemate/study.png',
+      src: '/media/memorizemate/study.mp4',
+    },
+    gallery: [
+      { src: '/media/memorizemate/home.png', caption: 'Home dashboard with review heatmap' },
+      { src: '/media/memorizemate/decks.png', caption: 'Deck library' },
+      { src: '/media/memorizemate/generate.png', caption: 'AI-assisted card generation' },
+      { src: '/media/memorizemate/stats.png', caption: 'Review statistics' },
+    ],
   },
   {
     id: 'classhub',
@@ -44,7 +53,15 @@ export const projects: Project[] = [
     links: { live: 'https://threaded.marticio.com' },
     featured: true,
     highlights: ['Daily streak tracking', 'Roulette reward points', 'Partner shop with redeemable treats'],
-    images: [],
+    video: {
+      poster: '/media/threaded/feed.png',
+      src: '/media/threaded/feed.webm',
+    },
+    gallery: [
+      { src: '/media/threaded/streak.png', caption: 'Daily streak tracking' },
+      { src: '/media/threaded/shop.png', caption: 'Partner reward shop' },
+      { src: '/media/threaded/throwbacks.png', caption: 'Memory throwbacks' },
+    ],
   },
   {
     id: 'thesis-rfid-ims',

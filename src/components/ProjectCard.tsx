@@ -4,7 +4,9 @@ import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import type { Project } from '@/data/types';
 import { Card } from './Card';
 import { Tag } from './Tag';
+import { Term } from './Term';
 import { BuildBadge } from './BuildBadge';
+import { ProjectMedia } from './ProjectMedia';
 import styles from './ProjectCard.module.css';
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -19,9 +21,12 @@ export function ProjectCard({ project }: { project: Project }) {
         <BuildBadge style={project.buildStyle} />
       </div>
       <p className={styles.blurb}>{project.blurb}</p>
+      <ProjectMedia project={project} />
       <div className={styles.tech}>
         {project.tech.map((t) => (
-          <Tag key={t}>{t}</Tag>
+          <Tag key={t}>
+            <Term term={t}>{t}</Term>
+          </Tag>
         ))}
       </div>
       <div className={styles.actions}>
