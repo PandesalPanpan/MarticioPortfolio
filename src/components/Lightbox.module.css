@@ -48,11 +48,16 @@
   padding: var(--space-4);
   overflow: auto;
 }
-.image {
+.image,
+.media {
   max-width: 100%;
   max-height: calc(92vh - 64px);
   object-fit: contain;
   border-radius: var(--radius-sm);
+}
+.media {
+  width: auto;
+  background: #000;
 }
 
 @media (max-width: 768px) {

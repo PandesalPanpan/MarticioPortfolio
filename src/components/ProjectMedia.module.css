@@ -1,0 +1,93 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.poster {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+.posterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+.poster:hover .posterImg {
+  transform: scale(1.03);
+}
+.playBadge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.playBadge svg {
+  padding: var(--space-3);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 88%, transparent);
+  box-shadow: var(--shadow);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.poster:hover .playBadge svg {
+  transform: scale(1.08);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.zoom {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  display: inline-flex;
+  padding: 3px;
+  color: #fff;
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+.thumb:hover .zoom,
+.thumb:focus-visible .zoom {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .posterImg,
+  .playBadge svg,
+  .zoom {
+    transition: none;
+  }
+}

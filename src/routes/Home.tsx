@@ -1,6 +1,7 @@
 import { Hero } from '@/sections/Hero';
-import { Projects } from '@/sections/Projects';
 import { Experience } from '@/sections/Experience';
+import { Skills } from '@/sections/Skills';
+import { Projects } from '@/sections/Projects';
 import { Education } from '@/sections/Education';
 import { Certifications } from '@/sections/Certifications';
 import { Contact } from '@/sections/Contact';
@@ -9,8 +10,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Projects />
       <Experience />
+      <Skills />
+      <Projects />
       <Education />
       <Certifications />
       <Contact />

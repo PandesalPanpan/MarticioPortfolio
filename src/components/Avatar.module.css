@@ -1,0 +1,14 @@
+.avatar {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+  cursor: grab;
+  user-select: none;
+}
+.avatar:active {
+  cursor: grabbing;
+}
+.mark {
+  display: block;
+}

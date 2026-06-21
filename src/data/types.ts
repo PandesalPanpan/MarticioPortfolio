@@ -1,5 +1,21 @@
 export type BuildStyle = 'ai-assisted' | 'from-scratch';
 
+/** A still image shown in the project card gallery; opens full-size in the lightbox. */
+export type GalleryItem = {
+  /** Path (in /public) to the image. */
+  src: string;
+  /** Short caption / alt text. */
+  caption: string;
+};
+
+/** A signature walkthrough video: poster shown on the card, video plays in the lightbox. */
+export type ProjectVideo = {
+  /** Path (in /public) to the poster still. */
+  poster: string;
+  /** Path (in /public) to the video file (webm/mp4). */
+  src: string;
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -10,7 +26,10 @@ export type Project = {
   links: { live?: string; code?: string };
   featured: boolean;
   highlights?: string[];
-  images?: string[];
+  /** Optional signature video (poster + click-to-play in the lightbox). */
+  video?: ProjectVideo;
+  /** Optional screenshot gallery (thumbnails open in the lightbox). */
+  gallery?: GalleryItem[];
 };
 
 export type Experience = {
