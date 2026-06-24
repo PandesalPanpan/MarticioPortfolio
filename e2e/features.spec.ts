@@ -43,6 +43,41 @@ test('hero is text-only (no character figure) and shows the brand monogram', asy
   await expect(page.getByRole('link', { name: 'Home' })).toBeVisible();
 });
 
+test('header nav stays sticky after scrolling down the page', async ({ page }) => {
+  await page.goto('/');
+  const nav = page.getByRole('navigation', { name: 'Primary' });
+  await expect(nav).toBeVisible();
+  // Scroll past the first viewport (Skills/Projects); the header must remain pinned.
+  await page.locator('#projects').scrollIntoViewIfNeeded();
+  await expect(nav).toBeInViewport();
+  const top = await page.locator('header').evaluate((el) => el.getBoundingClientRect().top);
+  expect(top).toBe(0);
+});
+
+test('hero shows the portrait photo', async ({ page }) => {
+  await page.goto('/');
+  const portrait = page.getByRole('img', { name: /Portrait of Peter Elijah Marticio/i });
+  await expect(portrait).toBeVisible();
+  await expect(portrait).toHaveAttribute('src', '/formal_pic.jpg');
+});
+
+test('hero open-source link points to merged Odin curriculum PRs in a new tab', async ({ page }) => {
+  await page.goto('/');
+  const oss = page.getByRole('link', { name: /contribute to open source/i });
+  await expect(oss).toHaveAttribute('target', '_blank');
+  await expect(oss).toHaveAttribute(
+    'href',
+    'https://github.com/TheOdinProject/curriculum/pulls?q=is%3Apr+is%3Amerged+author%3APandesalPanpan',
+  );
+});
+
+test('FindTheNumber is the third project (after Threaded) and jollibee-clone is gone', async ({ page }) => {
+  await page.goto('/');
+  const titles = await page.locator('#projects h3').allInnerTexts();
+  expect(titles[2]).toBe('FindTheNumber');
+  expect(titles).not.toContain('jollibee-clone');
+});
+
 test('resume download link points to the right file and CV is gone', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('link', { name: /Download Resume/i })).toHaveAttribute('href', '/resume.pdf');
