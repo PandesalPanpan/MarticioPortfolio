@@ -52,6 +52,25 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: 'findthenumber',
+    title: 'FindTheNumber',
+    blurb: "Real-time 2-player web game of the TikTok 'find the number' challenge.",
+    description:
+      "Real-time two-player web game recreating the TikTok 'find the number on flipped paper' challenge. Players race to fill a 10×10 grid on a shared sheet of scattered, mirror-flipped numbers. Built on WebRTC peer-to-peer connectivity with a WebSocket relay fallback, and an NTP-synced clock to keep both players fair.",
+    tech: ['React', 'TypeScript', 'Vite', 'WebRTC', 'WebSocket', 'Node.js', 'Docker'],
+    buildStyle: 'ai-assisted',
+    links: {
+      live: 'https://findthenumber.marticio.com',
+      code: 'https://github.com/PandesalPanpan/FindTheNumber',
+    },
+    featured: true,
+    highlights: [
+      'WebRTC peer-to-peer with WebSocket relay fallback',
+      'NTP-synced clock for fair timing',
+      'Hand-drawn marks via rough.js + Playwright e2e',
+    ],
+  },
+  {
     id: 'classhub',
     title: 'ClassHub',
     blurb: 'Undergraduate thesis — PUP Computer Engineering Dept.',
@@ -92,15 +111,6 @@ export const projects: Project[] = [
       live: 'https://react-shopping-cart-pandesal.netlify.app/',
       code: 'https://github.com/PandesalPanpan/shopping-cart',
     },
-    featured: true,
-  },
-  {
-    id: 'jollibee-clone',
-    title: 'jollibee-clone',
-    blurb: 'Frontend craft exercise — Jollibee site clone.',
-    tech: ['HTML', 'CSS', 'JavaScript'],
-    buildStyle: 'from-scratch',
-    links: { code: 'https://github.com/PandesalPanpan/jollibee-clone' },
     featured: true,
   },
   {

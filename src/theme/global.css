@@ -8,9 +8,16 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 72px;
+  /* Reserve the scrollbar gutter so short pages (e.g. /handmade) don't shift
+     the centered layout sideways relative to tall, scrollable pages. */
+  scrollbar-gutter: stable;
 }
 
-html, body, #root { height: 100%; }
+html, body { height: 100%; }
+/* min-height (not height) so #root grows with the page content. A fixed
+   100% height would clip the sticky header's containing block to one
+   viewport, causing the nav to detach once you scroll past it. */
+#root { min-height: 100%; }
 
 html {
   font-family: 'Inter Variable', system-ui, -apple-system, sans-serif;

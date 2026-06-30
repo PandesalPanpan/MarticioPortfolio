@@ -3,11 +3,14 @@ import { Term } from '@/components/Term';
 import styles from './Hero.module.css';
 
 /**
- * Optional hero portrait. To enable later: drop a headshot in /public
- * (e.g. /portrait.jpg) and set PORTRAIT to its path. The hero automatically
- * switches to a two-column layout with the photo; until then it's text-only.
+ * Hero portrait. Set PORTRAIT to null to fall back to the text-only layout.
+ * When set, the hero switches to a two-column layout with the photo.
  */
-const PORTRAIT: string | null = null;
+const PORTRAIT: string | null = '/formal_pic.jpg';
+
+/** Merged pull requests on The Odin Project curriculum, authored by Peter. */
+const OSS_CONTRIBUTIONS_URL =
+  'https://github.com/TheOdinProject/curriculum/pulls?q=is%3Apr+is%3Amerged+author%3APandesalPanpan';
 
 export function Hero() {
   return (
@@ -19,10 +22,13 @@ export function Hero() {
         <p className={styles.eyebrow}>Full-Stack Developer · Computer Engineering @ PUP</p>
         <h1 id="hero-title" className={styles.title}>Peter Elijah Marticio</h1>
         <p className={styles.tagline}>
-          Full-stack developer and Computer Engineering student. I write most of the{' '}
-          <Term term="IMS">Inventory Management System</Term> at Caret Solutions and troubleshoot
-          production directly when deploys hide bugs others miss. I self-host my apps on a{' '}
-          <Term term="VPS">VPS</Term> and learn in the open via The Odin Project.
+          Full-stack developer and Computer Engineering student. I build full-stack web apps
+          and <Term term="IMS">Inventory Management Systems</Term> that run in production,
+          self-host my projects on a <Term term="VPS">VPS</Term>, and{' '}
+          <a href={OSS_CONTRIBUTIONS_URL} target="_blank" rel="noreferrer">
+            contribute to open source
+          </a>{' '}
+          while learning in the open via The Odin Project.
         </p>
         <div className={styles.actions}>
           <Button as="a" href="#projects" variant="primary">View Projects</Button>
@@ -35,7 +41,13 @@ export function Hero() {
       </div>
       {PORTRAIT && (
         <div className={styles.figure}>
-          <img src={PORTRAIT} alt="Peter Elijah Marticio" className={styles.portrait} />
+          <img
+            src={PORTRAIT}
+            alt="Portrait of Peter Elijah Marticio in a barong"
+            className={styles.portrait}
+            width={300}
+            height={400}
+          />
         </div>
       )}
     </section>
