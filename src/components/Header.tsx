@@ -13,14 +13,20 @@ export function Header() {
           <Monogram size={32} />
         </Link>
         <nav className={styles.nav} aria-label="Primary">
-          <a href="/#experience">Experience</a>
-          <a href="/#skills">Skills</a>
-          <a href="/#projects">Projects</a>
+          <a href="/#services">Services</a>
+          <a href="/#projects">Work</a>
+          <a href="/#why">Why me</a>
           <Link to="/colophon">Colophon</Link>
         </nav>
         <div className={styles.controls}>
           <VersionToggle />
           <ThemeToggle />
+          <a
+            href="mailto:petermarticio@gmail.com?subject=Let%27s%20build%20something"
+            className={styles.hire}
+          >
+            Hire me
+          </a>
         </div>
       </div>
     </header>

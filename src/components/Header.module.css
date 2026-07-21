@@ -24,6 +24,26 @@
 }
 .nav a { color: var(--ink); font-size: var(--text-sm); }
 .controls { display: flex; gap: var(--space-3); align-items: center; }
+.hire {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--accent-ink);
+  background: var(--gradient-brand);
+  border-radius: var(--radius-md);
+  background-image: var(--gradient-brand);
+  background-size: auto;
+  box-shadow: var(--shadow);
+  transition: transform var(--duration-fast) var(--ease-out), filter var(--duration-fast) var(--ease-out);
+}
+.hire:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  background-image: var(--gradient-brand);
+  background-size: auto;
+}
 .skipLink {
   position: absolute;
   left: -9999px;

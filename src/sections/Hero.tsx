@@ -8,9 +8,14 @@ import styles from './Hero.module.css';
  */
 const PORTRAIT: string | null = '/formal_pic.jpg';
 
-/** Merged pull requests on The Odin Project curriculum, authored by Peter. */
-const OSS_CONTRIBUTIONS_URL =
-  'https://github.com/TheOdinProject/curriculum/pulls?q=is%3Apr+is%3Amerged+author%3APandesalPanpan';
+const CONTACT_EMAIL = 'mailto:petermarticio@gmail.com?subject=Let%27s%20build%20something';
+
+/** Quick trust signals shown under the hero copy. */
+const STATS = [
+  { value: '4', label: 'apps in production' },
+  { value: '1,000+', label: 'items managed in systems I built' },
+  { value: '30%', label: 'faster checkout shipped for a client' },
+];
 
 export function Hero() {
   return (
@@ -18,36 +23,48 @@ export function Hero() {
       className={`${styles.hero} ${PORTRAIT ? styles.withPortrait : ''}`}
       aria-labelledby="hero-title"
     >
+      <div className={styles.atmosphere} aria-hidden="true" />
       <div className={styles.copy}>
-        <p className={styles.eyebrow}>Full-Stack Developer · Computer Engineering @ PUP</p>
-        <h1 id="hero-title" className={styles.title}>Peter Elijah Marticio</h1>
+        <p className={styles.badge}>
+          <span className={styles.dot} aria-hidden="true" />
+          Available for freelance &amp; full-time work
+        </p>
+        <p className={styles.name}>
+          Peter Elijah Marticio · Full-Stack Developer
+        </p>
+        <h1 id="hero-title" className={styles.title}>
+          I build software that <span className={styles.grad}>runs your business.</span>
+        </h1>
         <p className={styles.tagline}>
-          Full-stack developer and Computer Engineering student. I build full-stack web apps
-          and <Term term="IMS">Inventory Management Systems</Term> that run in production,
-          self-host my projects on a <Term term="VPS">VPS</Term>, and{' '}
-          <a href={OSS_CONTRIBUTIONS_URL} target="_blank" rel="noreferrer">
-            contribute to open source
-          </a>{' '}
-          while learning in the open via The Odin Project.
+          Full-stack developer and Computer Engineering student. I design, build, and ship
+          production web apps, <Term term="IMS">inventory &amp; POS systems</Term>, and internal
+          tools — then deploy and self-host them on a <Term term="VPS">VPS</Term> so they keep
+          running long after launch.
         </p>
         <div className={styles.actions}>
-          <Button as="a" href="#projects" variant="primary">View Projects</Button>
-          <Button as="a" href="/resume.pdf" variant="secondary" download>Download Resume</Button>
-          <Button as="a" href="https://github.com/PandesalPanpan" variant="ghost" target="_blank" rel="noreferrer">GitHub</Button>
+          <Button as="a" href={CONTACT_EMAIL} variant="primary">Hire me</Button>
+          <Button as="a" href="#projects" variant="secondary">See what I build</Button>
         </div>
-        <p className={styles.note}>
-          This is the AI-assisted build. A from-scratch version is in progress — toggle above.
-        </p>
+        <dl className={styles.stats}>
+          {STATS.map((s) => (
+            <div key={s.label} className={styles.stat}>
+              <dt className={styles.statValue}>{s.value}</dt>
+              <dd className={styles.statLabel}>{s.label}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
       {PORTRAIT && (
         <div className={styles.figure}>
-          <img
-            src={PORTRAIT}
-            alt="Portrait of Peter Elijah Marticio in a barong"
-            className={styles.portrait}
-            width={300}
-            height={400}
-          />
+          <div className={styles.portraitRing}>
+            <img
+              src={PORTRAIT}
+              alt="Portrait of Peter Elijah Marticio in a barong"
+              className={styles.portrait}
+              width={300}
+              height={400}
+            />
+          </div>
         </div>
       )}
     </section>

@@ -1,16 +1,19 @@
 import { test, expect } from '@playwright/test';
 
-test('sections render in the new order: experience → skills → projects', async ({ page }) => {
+test('sections render in the SaaS order: services → projects → experience → skills → why', async ({ page }) => {
   await page.goto('/');
   const order = await page.evaluate(() => {
-    const ids = ['experience', 'skills', 'projects', 'education', 'certifications'];
+    const ids = ['services', 'projects', 'experience', 'skills', 'why', 'hire'];
     return ids
       .map((id) => ({ id, top: document.getElementById(id)?.getBoundingClientRect().top ?? Infinity }))
       .sort((a, b) => a.top - b.top)
       .map((x) => x.id);
   });
+  expect(order.indexOf('services')).toBeLessThan(order.indexOf('projects'));
+  expect(order.indexOf('projects')).toBeLessThan(order.indexOf('experience'));
   expect(order.indexOf('experience')).toBeLessThan(order.indexOf('skills'));
-  expect(order.indexOf('skills')).toBeLessThan(order.indexOf('projects'));
+  expect(order.indexOf('skills')).toBeLessThan(order.indexOf('why'));
+  expect(order.indexOf('why')).toBeLessThan(order.indexOf('hire'));
 });
 
 test('MemorizeMate and Threaded are the first two projects (side by side)', async ({ page }) => {
@@ -61,7 +64,7 @@ test('hero shows the portrait photo', async ({ page }) => {
   await expect(portrait).toHaveAttribute('src', '/formal_pic.jpg');
 });
 
-test('hero open-source link points to merged Odin curriculum PRs in a new tab', async ({ page }) => {
+test('open-source link points to merged Odin curriculum PRs in a new tab', async ({ page }) => {
   await page.goto('/');
   const oss = page.getByRole('link', { name: /contribute to open source/i });
   await expect(oss).toHaveAttribute('target', '_blank');
@@ -80,7 +83,7 @@ test('FindTheNumber is the third project (after Threaded) and jollibee-clone is 
 
 test('resume download link points to the right file and CV is gone', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: /Download Resume/i })).toHaveAttribute('href', '/resume.pdf');
+  await expect(page.getByRole('link', { name: /Download résumé/i })).toHaveAttribute('href', '/resume.pdf');
   await expect(page.getByRole('link', { name: /Download CV/i })).toHaveCount(0);
 });
 
