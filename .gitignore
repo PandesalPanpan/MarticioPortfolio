@@ -15,6 +15,14 @@ playwright-report
 *.local
 *.tsbuildinfo
 
+# Secrets / local env (chatbot API key lives here)
+.env
+.env.*
+!.env.example
+
+# Netlify
+.netlify
+
 # Local tooling / generated audit artifacts
 .commandcode/
 lighthouse-result.html

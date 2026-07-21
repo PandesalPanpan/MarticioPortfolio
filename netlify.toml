@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# The function declares `config.path = '/api/chat'`, so no manual redirect is
+# needed for it. The SPA fallback below stays in public/_redirects and only
+# catches routes that aren't the API or a real asset.

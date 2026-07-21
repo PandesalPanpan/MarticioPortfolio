@@ -4,6 +4,7 @@ import { GlobalStyles } from '@/theme/GlobalStyles';
 import { Header } from '@/components/Header';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Footer } from '@/components/Footer';
+import { ChatWidget } from '@/components/ChatWidget/ChatWidget';
 import { usePrefetchHandmade } from '@/hooks/usePrefetchHandmade';
 import Home from '@/routes/Home';
 
@@ -30,6 +31,7 @@ export default function App() {
         </Suspense>
       </main>
       <Footer />
+      <ChatWidget />
     </BrowserRouter>
   );
 }
