@@ -13,7 +13,7 @@ export const services: Service[] = [
     no: '01',
     title: 'Full-stack web apps',
     blurb:
-      'From idea to a deployed product your users can actually reach — front end, back end, database, and everything between.',
+      'From idea to a deployed product your users can actually reach. Front end, back end, database, and everything in between.',
     bullets: [
       'React + TypeScript interfaces',
       'Laravel or Node.js APIs & auth',
@@ -25,7 +25,7 @@ export const services: Service[] = [
     no: '02',
     title: 'Inventory, POS & internal tools',
     blurb:
-      'The systems a business actually runs on. Built around your real workflow, not a template — and battle-tested in production.',
+      'The systems a business actually runs on. Built around your real workflow, not a template, and battle-tested in production.',
     bullets: [
       'Inventory management (RFID, barcode, biometrics)',
       'POS with thermal printing & daily transactions',
@@ -37,7 +37,7 @@ export const services: Service[] = [
     no: '03',
     title: 'Deploy, self-host & maintain',
     blurb:
-      "I don't just hand off a repo — I ship it and keep it running so you own your stack instead of renting someone else's.",
+      "I don't just hand off a repo. I ship it and keep it running, so you own your stack instead of renting someone else's.",
     bullets: [
       'Dockerised deploys on your own VPS',
       'Nginx, CI/CD & zero-downtime releases',

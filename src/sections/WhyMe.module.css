@@ -12,10 +12,13 @@
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--accent);
+  color: var(--muted);
   margin-bottom: var(--space-3);
 }
-.title { font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl)); }
+.title {
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl));
+  letter-spacing: -0.01em;
+}
 
 .grid {
   list-style: none;
@@ -34,9 +37,9 @@
   height: 40px;
   margin-bottom: var(--space-2);
   border-radius: var(--radius-md);
-  color: var(--accent-ink);
-  background: var(--gradient-brand);
-  box-shadow: var(--shadow);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 .itemTitle { font-size: var(--text-lg); }
 .body { color: var(--muted); font-size: var(--text-base); }

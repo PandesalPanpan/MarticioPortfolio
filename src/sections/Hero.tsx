@@ -23,7 +23,6 @@ export function Hero() {
       className={`${styles.hero} ${PORTRAIT ? styles.withPortrait : ''}`}
       aria-labelledby="hero-title"
     >
-      <div className={styles.atmosphere} aria-hidden="true" />
       <div className={styles.copy}>
         <p className={styles.badge}>
           <span className={styles.dot} aria-hidden="true" />
@@ -33,12 +32,12 @@ export function Hero() {
           Peter Elijah Marticio · Full-Stack Developer
         </p>
         <h1 id="hero-title" className={styles.title}>
-          I build software that <span className={styles.grad}>runs your business.</span>
+          I build software that runs your business.
         </h1>
         <p className={styles.tagline}>
           Full-stack developer and Computer Engineering student. I design, build, and ship
           production web apps, <Term term="IMS">inventory &amp; POS systems</Term>, and internal
-          tools — then deploy and self-host them on a <Term term="VPS">VPS</Term> so they keep
+          tools, then deploy and self-host them on a <Term term="VPS">VPS</Term> so they keep
           running long after launch.
         </p>
         <div className={styles.actions}>
@@ -56,15 +55,13 @@ export function Hero() {
       </div>
       {PORTRAIT && (
         <div className={styles.figure}>
-          <div className={styles.portraitRing}>
-            <img
-              src={PORTRAIT}
-              alt="Portrait of Peter Elijah Marticio in a barong"
-              className={styles.portrait}
-              width={300}
-              height={400}
-            />
-          </div>
+          <img
+            src={PORTRAIT}
+            alt="Portrait of Peter Elijah Marticio in a barong"
+            className={styles.portrait}
+            width={300}
+            height={400}
+          />
         </div>
       )}
     </section>

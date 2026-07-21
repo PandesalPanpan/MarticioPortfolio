@@ -20,7 +20,7 @@ export function Projects() {
       </a>
       <p className={styles.legend}>
         Projects are labeled by build style. <em>AI-Assisted</em> means I used AI tooling
-        (Claude Code, Copilot) as a pair-programmer — I drove the architecture, made the calls,
+        (Claude Code, Copilot) as a pair-programmer. I drove the architecture, made the calls,
         and reviewed everything. <em>From Scratch</em> means no AI was used. Both are mine.
       </p>
     </section>

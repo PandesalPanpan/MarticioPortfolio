@@ -5,36 +5,25 @@
 }
 .card {
   position: relative;
-  overflow: hidden;
   text-align: center;
   padding: var(--space-20) var(--space-6);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: var(--shadow-lg);
+  background: var(--surface-2);
 }
-.glow {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(50% 90% at 20% 0%, var(--glow-1), transparent 60%),
-    radial-gradient(50% 90% at 80% 100%, var(--glow-2), transparent 60%);
-}
-.card > :not(.glow) { position: relative; z-index: 1; }
 
 .eyebrow {
   font-family: 'JetBrains Mono Variable', monospace;
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--accent);
+  color: var(--muted);
   margin: 0 auto var(--space-3);
 }
 .title {
   font-size: clamp(var(--text-3xl), 5vw, var(--text-4xl));
   max-width: 18ch;
+  letter-spacing: -0.02em;
   margin: 0 auto var(--space-4);
 }
 .sub {

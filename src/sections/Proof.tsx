@@ -17,7 +17,7 @@ export function Proof() {
       <div className={styles.inner}>
         <p className={styles.eyebrow}>Proven in production</p>
         <h2 id="proof-title" className={styles.title}>
-          Not side projects — systems real businesses depend on.
+          Not side projects. Systems real businesses depend on.
         </h2>
         <dl className={styles.metrics}>
           {METRICS.map((m) => (
@@ -30,7 +30,7 @@ export function Proof() {
         <p className={styles.trust}>
           Shipped during hands-on roles at{' '}
           <strong>Caret Solutions</strong>, <strong>Meta Core Systems</strong>, and{' '}
-          <strong>NTEK Systems</strong> — and I{' '}
+          <strong>NTEK Systems</strong>. I also{' '}
           <a href={OSS_CONTRIBUTIONS_URL} target="_blank" rel="noreferrer">
             contribute to open source
           </a>{' '}

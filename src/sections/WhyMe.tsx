@@ -5,7 +5,7 @@ const POINTS = [
   {
     Icon: Rocket,
     title: 'I ship, not just build',
-    body: 'Projects go all the way to a live URL with real users — not a demo that dies on my laptop.',
+    body: 'Projects go all the way to a live URL with real users, not a demo that dies on my laptop.',
   },
   {
     Icon: ServerCog,
@@ -30,7 +30,7 @@ export function WhyMe() {
       <div className={styles.head}>
         <p className={styles.eyebrow}>Why work with me</p>
         <h2 id="why-title" className={styles.title}>
-          A developer who owns the whole thing — start to running.
+          A developer who owns the whole thing, start to shipped.
         </h2>
       </div>
       <ul className={styles.grid}>

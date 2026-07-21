@@ -12,11 +12,12 @@
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--accent);
+  color: var(--muted);
   margin-bottom: var(--space-3);
 }
 .title {
   font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl));
+  letter-spacing: -0.01em;
 }
 
 .grid {
@@ -38,32 +39,17 @@
     border-color var(--duration-base) var(--ease-out),
     box-shadow var(--duration-base) var(--ease-out);
 }
-/* Gradient hairline that lights up on hover. */
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 3px;
-  background: var(--gradient-brand);
-  opacity: 0;
-  transition: opacity var(--duration-base) var(--ease-out);
-}
 .card:hover {
-  transform: translateY(-4px);
   border-color: var(--border-strong);
   box-shadow: var(--shadow-lg);
 }
-.card:hover::before { opacity: 1; }
 
 .no {
   font-family: 'Fraunces Variable', Georgia, serif;
   font-size: var(--text-3xl);
   font-weight: 600;
   line-height: 1;
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--muted);
 }
 .cardTitle { font-size: var(--text-xl); }
 .blurb {

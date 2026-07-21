@@ -30,19 +30,15 @@
   padding: 7px var(--space-4);
   font-size: var(--text-sm);
   font-weight: 500;
-  color: var(--accent-ink);
-  background: var(--gradient-brand);
+  color: var(--on-ink);
+  background: var(--ink);
+  background-image: none;
   border-radius: var(--radius-md);
-  background-image: var(--gradient-brand);
-  background-size: auto;
-  box-shadow: var(--shadow);
-  transition: transform var(--duration-fast) var(--ease-out), filter var(--duration-fast) var(--ease-out);
+  transition: background var(--duration-fast) var(--ease-out);
 }
 .hire:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.05);
-  background-image: var(--gradient-brand);
-  background-size: auto;
+  background: color-mix(in srgb, var(--ink) 85%, var(--muted));
+  background-image: none;
 }
 .skipLink {
   position: absolute;

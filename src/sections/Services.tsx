@@ -8,7 +8,7 @@ export function Services() {
       <div className={styles.head}>
         <p className={styles.eyebrow}>What I can build for you</p>
         <h2 id="services-title" className={styles.title}>
-          Software that earns its keep — designed, built, and kept running.
+          Software that earns its keep. Designed, built, and kept running.
         </h2>
       </div>
       <div className={styles.grid}>
