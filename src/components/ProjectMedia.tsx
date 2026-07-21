@@ -16,7 +16,7 @@ export function ProjectMedia({ project }: { project: Project }) {
   if (!video && !(gallery && gallery.length)) return null;
 
   const items: MediaItem[] = [
-    ...(video ? [{ type: 'video' as const, src: video.src, poster: video.poster, title: `${title} — walkthrough` }] : []),
+    ...(video ? [{ type: 'video' as const, src: video.src, poster: video.poster, title: `${title} walkthrough` }] : []),
     ...(gallery ?? []).map((g) => ({ type: 'image' as const, src: g.src, title: g.caption })),
   ];
   const galleryOffset = video ? 1 : 0;

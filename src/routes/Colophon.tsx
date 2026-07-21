@@ -8,7 +8,7 @@ export default function Colophon() {
         <h2>Why two versions of this site exist</h2>
         <p>
           AI-assisted coding is the reality of how I work now. But I also want to show I can build
-          without it. So this site ships in two versions — the one you're on, built with AI
+          without it. So this site ships in two versions: the one you're on, built with AI
           pair-programming, and a from-scratch version I'm hand-writing in parallel. Toggle between
           them in the header. Same content, different process.
         </p>

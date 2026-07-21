@@ -6,7 +6,7 @@ export type Service = {
   bullets: string[];
 };
 
-/** "What I can build for you" — positioned around Peter's proven strengths. */
+/** "What I can build for you": positioned around Peter's proven strengths. */
 export const services: Service[] = [
   {
     id: 'web-apps',

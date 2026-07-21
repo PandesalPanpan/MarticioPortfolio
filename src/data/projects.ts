@@ -73,7 +73,7 @@ export const projects: Project[] = [
   {
     id: 'classhub',
     title: 'ClassHub',
-    blurb: 'Undergraduate thesis — PUP Computer Engineering Dept.',
+    blurb: 'Undergraduate thesis, PUP Computer Engineering Dept.',
     description:
       'PUP CompE thesis. Built on Laravel with Filament for the admin panel, FullCalendar.js for scheduling, and PostgreSQL as the database.',
     tech: ['Laravel', 'Filament', 'PHP', 'FullCalendar.js', 'PostgreSQL'],
@@ -95,7 +95,7 @@ export const projects: Project[] = [
   {
     id: 'binary-speed',
     title: 'binary-speed',
-    blurb: 'CS50 final project — binary ↔ hex training game.',
+    blurb: 'CS50 final project: binary ↔ hex training game.',
     tech: ['Python'],
     buildStyle: 'from-scratch',
     links: { code: 'https://github.com/PandesalPanpan/binary-speed' },
@@ -104,7 +104,7 @@ export const projects: Project[] = [
   {
     id: 'shopping-cart',
     title: 'shopping-cart',
-    blurb: 'Odin Project — React shopping cart with routing and cart state.',
+    blurb: 'Odin Project: React shopping cart with routing and cart state.',
     tech: ['React', 'JavaScript', 'React Router', 'CSS Modules'],
     buildStyle: 'from-scratch',
     links: {

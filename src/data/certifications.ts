@@ -7,7 +7,7 @@ import tesdaThumb from '@/assets/certs/tesda-thumb.webp';
 export const certifications: Certification[] = [
   {
     id: 'cs50',
-    title: 'CS50x — Introduction to Computer Science',
+    title: 'CS50x: Introduction to Computer Science',
     issuer: "Harvard University",
     date: '2025',
     image: cs50Full,
@@ -17,7 +17,7 @@ export const certifications: Certification[] = [
   },
   {
     id: 'tesda',
-    title: 'National Certificate II — Computer Systems Servicing',
+    title: 'National Certificate II: Computer Systems Servicing',
     issuer: 'TESDA (Philippines)',
     date: 'Feb 2024',
     image: tesdaFull,
