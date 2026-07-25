@@ -8,9 +8,11 @@
 import { SYSTEM_PROMPT } from './persona.mjs';
 
 const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
-// DeepSeek's fast, general chat model (V3). Their "flash" doesn't exist;
-// `deepseek-reasoner` (R1) is the slower reasoning model — not needed here.
-const MODEL = 'deepseek-chat';
+// `deepseek-chat` was retired: the API now only accepts deepseek-v4-flash or
+// deepseek-v4-pro. Flash is the right pick for a chat widget (~2s to first
+// token, minimal reasoning overhead); pro spends 10s+ thinking before it
+// speaks, which reads as a hang in a streaming UI.
+const MODEL = 'deepseek-v4-flash';
 
 const MAX_TURNS = 16; // cap conversation history sent upstream
 const MAX_CHARS = 4000; // per-message hard cap

@@ -5,6 +5,7 @@ import { Projects } from '@/sections/Projects';
 import { Experience } from '@/sections/Experience';
 import { Skills } from '@/sections/Skills';
 import { WhyMe } from '@/sections/WhyMe';
+import { FitCheck } from '@/sections/FitCheck';
 import { Education } from '@/sections/Education';
 import { Certifications } from '@/sections/Certifications';
 import { FinalCta } from '@/sections/FinalCta';
@@ -20,6 +21,7 @@ export default function Home() {
       <Experience />
       <Skills />
       <WhyMe />
+      <FitCheck />
       <Education />
       <Certifications />
       <FinalCta />
