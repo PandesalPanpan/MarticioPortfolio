@@ -66,6 +66,14 @@ export function ChatWidget() {
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
+  // Grow the input with its content, up to the max-height set in CSS.
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }, [draft, open]);
+
   const submit = (text: string) => {
     const value = text.trim();
     if (!value || isStreaming) return;
