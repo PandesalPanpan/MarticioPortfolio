@@ -20,13 +20,24 @@ const GLYPH_PATHS = [
   'M14 25 L24 40 L34 25 V40',
 ];
 
+// Boxed geometry, kept in sync with src/components/Monogram.tsx. The glyph
+// spans 20x32 about centre (24,24); at this scale the mark plus stroke stands
+// ~30.6 of the 48 box so it stays legible down to a 16px tab icon.
+const BOX_SCALE = 0.8;
+/** Rendered stroke width once BOX_SCALE is applied. */
+const BOX_STROKE = 5;
+/** Keeps the glyph centre pinned at (24,24) under the scale. Rounded so the
+ *  generated files carry 4.8 rather than binary-float noise. */
+const BOX_OFFSET = Number((24 - 24 * BOX_SCALE).toFixed(4));
+const BOX_TRANSFORM = `translate(${BOX_OFFSET} ${BOX_OFFSET}) scale(${BOX_SCALE})`;
+
 /** @param {{ stroke: string, box?: string, rx?: number }} opts */
 function svg({ stroke, box, rx = 11 }) {
   // Boxed shrinks the glyph to sit inside the container with even padding;
   // the stroke is pre-divided by that scale so both variants read the same.
   const group = box
     ? `  <rect width="48" height="48" rx="${rx}" fill="${box}"/>\n` +
-      `  <g fill="none" stroke="${stroke}" stroke-width="${20/3}" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.6 9.6) scale(0.6)">`
+      `  <g fill="none" stroke="${stroke}" stroke-width="${BOX_STROKE / BOX_SCALE}" stroke-linecap="round" stroke-linejoin="round" transform="${BOX_TRANSFORM}">`
     : `  <g fill="none" stroke="${stroke}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">`;
 
   return (
@@ -117,7 +128,7 @@ const favicon =
   `    }\n` +
   `  </style>\n` +
   `  <rect class="box" width="48" height="48" rx="11"/>\n` +
-  `  <g class="mark" fill="none" stroke-width="${20/3}" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.6 9.6) scale(0.6)">\n` +
+  `  <g class="mark" fill="none" stroke-width="${BOX_STROKE / BOX_SCALE}" stroke-linecap="round" stroke-linejoin="round" transform="${BOX_TRANSFORM}">\n` +
   GLYPH_PATHS.map((d) => `    <path d="${d}"/>`).join('\n') +
   `\n  </g>\n</svg>\n`;
 writeFileSync('public/favicon.svg', favicon);

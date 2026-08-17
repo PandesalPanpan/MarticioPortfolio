@@ -13,6 +13,18 @@
  * favicon is boxed. Keep /public/favicon.svg in sync with these paths.
  */
 
+/**
+ * Boxed geometry. The glyph paths span 20x32 around centre (24,24), so at
+ * BOX_SCALE the mark plus its stroke stands 32*0.8 + 5 = 30.6 of the 48 box,
+ * roughly two thirds, leaving even ~8.7 margins inside the rounded corners.
+ * The translate keeps (24,24) fixed: 24 - 24*BOX_SCALE.
+ */
+const BOX_SCALE = 0.8;
+/** Rendered stroke width once BOX_SCALE is applied. */
+const BOX_STROKE = 5;
+/** Rounded so the attribute reads 4.8 rather than binary-float noise. */
+const BOX_OFFSET = Number((24 - 24 * BOX_SCALE).toFixed(4));
+
 /** One source of truth for the letterforms. Drawn to fill the 48px viewBox. */
 const GLYPH = (
   <>
@@ -33,13 +45,13 @@ export function Monogram({ size = 32, boxed = false }: { size?: number; boxed?: 
       <g
         fill="none"
         stroke={boxed ? 'var(--on-ink)' : 'currentColor'}
-        // Pre-divided by the boxed scale, so the stroke reads the same weight
-        // in both variants rather than thinning to 2.4.
-        strokeWidth={boxed ? 20 / 3 : 4}
+        // Pre-divided by the boxed scale, so the stroke renders at BOX_STROKE
+        // rather than shrinking with the glyph.
+        strokeWidth={boxed ? BOX_STROKE / BOX_SCALE : 4}
         strokeLinecap="round"
         strokeLinejoin="round"
-        // Shrink the glyph to sit inside the container with even padding.
-        transform={boxed ? 'translate(9.6 9.6) scale(0.6)' : undefined}
+        // Inset the glyph so it sits inside the container with even padding.
+        transform={boxed ? `translate(${BOX_OFFSET} ${BOX_OFFSET}) scale(${BOX_SCALE})` : undefined}
       >
         {GLYPH}
       </g>
