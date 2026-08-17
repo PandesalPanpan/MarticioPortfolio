@@ -2,9 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test('homepage loads, theme toggle works, projects visible', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: /runs your business/i, level: 1 })).toBeVisible();
-  // The name still appears in the hero for identity/SEO, even though the value prop is the h1.
-  await expect(page.getByText('Peter Elijah Marticio', { exact: false }).first()).toBeVisible();
+  // The name is the h1 now that the hero leads with identity rather than a pitch.
+  await expect(
+    page.getByRole('heading', { name: 'Peter Elijah Marticio', level: 1 }),
+  ).toBeVisible();
+  await expect(page.getByText(/Full-Stack Developer · Computer Engineering @ PUP/i)).toBeVisible();
 
   // Projects: at least 3 key projects visible
   await expect(page.locator('h3').filter({ hasText: 'MemorizeMate' })).toBeVisible();
@@ -17,7 +19,7 @@ test('homepage loads, theme toggle works, projects visible', async ({ page }) =>
   const next = await page.locator('html').getAttribute('data-theme');
   expect(next).not.toBe(initialTheme);
 
-  // /handmade is reachable
+  // /handmade is reachable from the footer
   await page.getByRole('link', { name: 'Handmade' }).click();
   await expect(page.getByRole('heading', { name: /Handmade version/i })).toBeVisible();
 });

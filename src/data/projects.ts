@@ -7,6 +7,8 @@ export const projects: Project[] = [
     blurb: 'Offline-first spaced-repetition flashcards (PWA) that keep working with no signal, then sync when you are back.',
     description:
       'A polished PWA flashcard app using the FSRS algorithm. Offline-first via IndexedDB, smart CSV/cloze import, GitHub-style review heatmap, and an ink-and-paper design system with light/dark/auto themes.',
+    role: 'Sole developer',
+    status: 'Live · self-hosted',
     tech: ['React 19', 'TypeScript', 'Vite', 'Zustand', 'IndexedDB', 'ts-fsrs', 'Framer Motion', 'PWA'],
     buildStyle: 'ai-assisted',
     links: {
@@ -36,6 +38,8 @@ export const projects: Project[] = [
     blurb: 'Personal journaling app with streaks, rewards, and a partner-driven shop.',
     description:
       'Actively-used journaling app shared with my partner. Daily-post streaks, random roulette reward points, and a shop where each partner sets real-world treats redeemable with points. Ported from Livewire to React.',
+    role: 'Sole developer',
+    status: 'Live · used daily',
     tech: ['Laravel', 'Filament', 'React', 'TypeScript', 'MySQL'],
     buildStyle: 'ai-assisted',
     links: { live: 'https://threaded.marticio.com' },
@@ -57,6 +61,8 @@ export const projects: Project[] = [
     blurb: "Real-time 2-player web game of the TikTok 'find the number' challenge.",
     description:
       "Real-time two-player web game recreating the TikTok 'find the number on flipped paper' challenge. Players race to fill a 10×10 grid on a shared sheet of scattered, mirror-flipped numbers. Built on WebRTC peer-to-peer connectivity with a WebSocket relay fallback, and an NTP-synced clock to keep both players fair.",
+    role: 'Sole developer',
+    status: 'Live · self-hosted',
     tech: ['React', 'TypeScript', 'Vite', 'WebRTC', 'WebSocket', 'Node.js', 'Docker'],
     buildStyle: 'ai-assisted',
     links: {
@@ -76,6 +82,8 @@ export const projects: Project[] = [
     blurb: 'Undergraduate thesis, PUP Computer Engineering Dept.',
     description:
       'PUP CompE thesis. Built on Laravel with Filament for the admin panel, FullCalendar.js for scheduling, and PostgreSQL as the database.',
+    role: 'Team of 4 · backend & admin panel',
+    status: 'Deployed at PUP CompE Dept.',
     tech: ['Laravel', 'Filament', 'PHP', 'FullCalendar.js', 'PostgreSQL'],
     buildStyle: 'ai-assisted',
     links: { code: 'https://github.com/PandesalPanpan/classhub' },
@@ -87,6 +95,8 @@ export const projects: Project[] = [
     title: 'Thesis-RFID-IMS',
     blurb: 'Inventory management with RFID, biometrics, and barcode.',
     description: 'Web app integrating RFID, biometric, and barcode hardware for inventory workflows.',
+    role: 'Sole developer',
+    status: 'Prototype · hardware integrated',
     tech: ['Laravel', 'Filament', 'PHP'],
     buildStyle: 'from-scratch',
     links: { code: 'https://github.com/PandesalPanpan/Thesis-RFID-Borrowing-IMS' },
@@ -96,6 +106,8 @@ export const projects: Project[] = [
     id: 'binary-speed',
     title: 'binary-speed',
     blurb: 'CS50 final project: binary ↔ hex training game.',
+    role: 'Sole developer',
+    status: 'CS50 final project, 2025',
     tech: ['Python'],
     buildStyle: 'from-scratch',
     links: { code: 'https://github.com/PandesalPanpan/binary-speed' },
@@ -105,6 +117,8 @@ export const projects: Project[] = [
     id: 'shopping-cart',
     title: 'shopping-cart',
     blurb: 'Odin Project: React shopping cart with routing and cart state.',
+    role: 'Sole developer',
+    status: 'Live demo · Odin Project',
     tech: ['React', 'JavaScript', 'React Router', 'CSS Modules'],
     buildStyle: 'from-scratch',
     links: {
@@ -117,6 +131,8 @@ export const projects: Project[] = [
     id: 'knights-travails',
     title: 'odin-knights-travails',
     blurb: 'Shortest knight path solver (BFS on chessboard).',
+    role: 'Sole developer',
+    status: 'Complete · Odin Project',
     tech: ['JavaScript'],
     buildStyle: 'from-scratch',
     links: { code: 'https://github.com/PandesalPanpan/odin-knights-travails' },

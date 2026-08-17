@@ -21,6 +21,10 @@ export type Project = {
   title: string;
   blurb: string;
   description?: string;
+  /** How I contributed, e.g. "Sole developer". Shown in the card's Role row. */
+  role: string;
+  /** Where it stands today, e.g. "Live · self-hosted". Shown in the Status row. */
+  status: string;
   tech: string[];
   buildStyle: BuildStyle;
   links: { live?: string; code?: string };
@@ -58,10 +62,13 @@ export type Certification = {
   title: string;
   issuer: string;
   date: string;
-  /** Imported full-resolution image shown in the lightbox. */
-  image: string;
-  /** Imported thumbnail image shown on the card. */
-  thumb: string;
+  /**
+   * Imported certificate scans. Optional: the current cards link out to the
+   * issuer instead of showing the image, and importing these pulls the full
+   * webp files into the bundle. The assets are still in src/assets/certs.
+   */
+  image?: string;
+  thumb?: string;
   /** Path to the original PDF in /public (download link). */
   pdf: string;
   /** Optional public verification URL. */

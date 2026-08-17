@@ -1,61 +1,75 @@
 import { useState } from 'react';
-import { Play, Maximize2 } from 'lucide-react';
+import { Play } from 'lucide-react';
 import type { Project } from '@/data/types';
 import { Lightbox, type MediaItem } from './Lightbox';
 import styles from './ProjectMedia.module.css';
 
+/** Tiles shown on the card; the rest are reachable by paging the lightbox. */
+const MAX_TILES = 4;
+
 /**
- * Renders a project's signature video (poster + click-to-play) and/or its
- * screenshot gallery. Everything opens in the shared Lightbox as one navigable
- * set (video first, then screenshots), so you can arrow between them without
- * closing. Nothing loads or plays until clicked.
+ * A project's signature video and screenshots as one navigable set (video
+ * first), shown as a capped grid of thumbnails. Nothing loads or plays until
+ * a tile is clicked.
  */
 export function ProjectMedia({ project }: { project: Project }) {
   const [openAt, setOpenAt] = useState<number | null>(null);
   const { video, gallery, title } = project;
-  if (!video && !(gallery && gallery.length)) return null;
+  if (!video && !gallery?.length) return null;
 
   const items: MediaItem[] = [
-    ...(video ? [{ type: 'video' as const, src: video.src, poster: video.poster, title: `${title} walkthrough` }] : []),
+    ...(video
+      ? [{ type: 'video' as const, src: video.src, poster: video.poster, title: `${title} walkthrough` }]
+      : []),
     ...(gallery ?? []).map((g) => ({ type: 'image' as const, src: g.src, title: g.caption })),
   ];
-  const galleryOffset = video ? 1 : 0;
+
+  const tiles = items.slice(0, MAX_TILES);
+  const extra = items.length - tiles.length;
 
   return (
     <div className={styles.wrap}>
-      {video && (
-        <button
-          type="button"
-          className={styles.poster}
-          onClick={() => setOpenAt(0)}
-          aria-label={`Play ${title} walkthrough video`}
-        >
-          <img src={video.poster} alt="" className={styles.posterImg} loading="lazy" />
-          <span className={styles.playBadge} aria-hidden="true">
-            <Play size={20} fill="currentColor" />
-          </span>
-        </button>
-      )}
-
-      {gallery && gallery.length > 0 && (
-        <ul className={styles.gallery}>
-          {gallery.map((g, i) => (
-            <li key={g.src}>
-              <button
-                type="button"
-                className={styles.thumb}
-                onClick={() => setOpenAt(galleryOffset + i)}
-                aria-label={`View screenshot: ${g.caption}`}
-              >
-                <img src={g.src} alt="" className={styles.thumbImg} loading="lazy" />
-                <span className={styles.zoom} aria-hidden="true">
-                  <Maximize2 size={14} />
-                </span>
-              </button>
+      <ul className={styles.grid}>
+        {tiles.map((item, i) => {
+          const isVideo = item.type === 'video';
+          const showMore = extra > 0 && i === tiles.length - 1;
+          return (
+            <li key={item.src} className={styles.cell}>
+              <figure className={styles.figure}>
+                <button
+                  type="button"
+                  className={styles.thumb}
+                  onClick={() => setOpenAt(i)}
+                  title={item.title}
+                  aria-label={
+                    showMore
+                      ? `View ${item.title} and ${extra} more`
+                      : isVideo
+                        ? `Play ${item.title}`
+                        : `View screenshot: ${item.title}`
+                  }
+                >
+                  <img
+                    src={isVideo ? item.poster : item.src}
+                    alt=""
+                    loading="lazy"
+                    className={styles.thumbImg}
+                  />
+                  {isVideo && !showMore && (
+                    <span className={styles.play} aria-hidden="true">
+                      <Play size={18} fill="currentColor" />
+                    </span>
+                  )}
+                  {showMore && (
+                    <span className={styles.more} aria-hidden="true">+{extra} more</span>
+                  )}
+                </button>
+                <figcaption className={styles.caption}>{item.title}</figcaption>
+              </figure>
             </li>
-          ))}
-        </ul>
-      )}
+          );
+        })}
+      </ul>
 
       <Lightbox
         open={openAt !== null}

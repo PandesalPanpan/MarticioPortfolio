@@ -1,7 +1,5 @@
 @import './tokens.css';
 
-@import './fonts.css';
-
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
 
@@ -20,25 +18,33 @@ html, body { height: 100%; }
 #root { min-height: 100%; }
 
 html {
-  font-family: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.6;
   color-scheme: light dark;
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  transition: background var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
+  transition: background-color var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
+  /* Faint graph-paper rule, anchored to the top so it does not drift as the
+     page grows. Painted on the body rather than a wrapper so it covers the
+     full scroll height including the sticky header's backdrop. */
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center top;
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Fraunces Variable', Georgia, serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 h1 { font-size: var(--text-5xl); }
@@ -75,7 +81,7 @@ button {
 img, svg { display: block; max-width: 100%; }
 
 code, pre {
-  font-family: 'JetBrains Mono Variable', ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.9em;
 }
 

@@ -1,69 +1,56 @@
-import { Button } from '@/components/Button';
 import { Term } from '@/components/Term';
 import styles from './Hero.module.css';
 
-/**
- * Hero portrait. Set PORTRAIT to null to fall back to the text-only layout.
- * When set, the hero switches to a two-column layout with the photo.
- */
-const PORTRAIT: string | null = '/formal_pic.jpg';
+const PORTRAIT = '/formal_pic.jpg';
 
-const CONTACT_EMAIL = 'mailto:petermarticio@gmail.com?subject=Let%27s%20build%20something';
-
-/** Quick trust signals shown under the hero copy. */
-const STATS = [
-  { value: '4', label: 'apps in production' },
-  { value: '40M+', label: 'units of stock tracked in systems I built' },
-  { value: '100%', label: 'of my apps ship with tests and CI' },
-];
+const OSS_CONTRIBUTIONS_URL =
+  'https://github.com/TheOdinProject/curriculum/pulls?q=is%3Apr+is%3Amerged+author%3APandesalPanpan';
 
 export function Hero() {
   return (
-    <section
-      className={`${styles.hero} ${PORTRAIT ? styles.withPortrait : ''}`}
-      aria-labelledby="hero-title"
-    >
+    <section id="top" className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.copy}>
-        <p className={styles.badge}>
-          <span className={styles.dot} aria-hidden="true" />
-          Available for freelance &amp; full-time work
-        </p>
-        <p className={styles.name}>
-          Peter Elijah Marticio · Full-Stack Developer
+        <p className={styles.eyebrow}>
+          Full-Stack Developer · Computer Engineering @ PUP
         </p>
         <h1 id="hero-title" className={styles.title}>
-          I build software that runs your business.
+          Peter Elijah Marticio
         </h1>
         <p className={styles.tagline}>
-          Full-stack developer and Computer Engineering student. I design, build, and ship
-          production web apps, <Term term="IMS">inventory &amp; POS systems</Term>, and internal
-          tools, then deploy and self-host them on a <Term term="VPS">VPS</Term> so they keep
-          running long after launch.
+          Full-stack developer and Computer Engineering student. I build full-stack web apps
+          and <Term term="IMS">Inventory Management Systems</Term> that run in production,
+          self-host my projects on a <Term term="VPS">VPS</Term>, and{' '}
+          <a href={OSS_CONTRIBUTIONS_URL} target="_blank" rel="noreferrer">
+            contribute to open source
+          </a>{' '}
+          while learning in the open via The Odin Project.
         </p>
         <div className={styles.actions}>
-          <Button as="a" href={CONTACT_EMAIL} variant="primary">Hire me</Button>
-          <Button as="a" href="#projects" variant="secondary">See what I build</Button>
+          <a href="#projects" className={styles.primary}>View projects</a>
+          <a href="/resume.pdf" download className={styles.secondary}>Download resume</a>
+          <a
+            href="https://github.com/PandesalPanpan"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.ghost}
+          >
+            GitHub ↗
+          </a>
         </div>
-        <dl className={styles.stats}>
-          {STATS.map((s) => (
-            <div key={s.label} className={styles.stat}>
-              <dt className={styles.statValue}>{s.value}</dt>
-              <dd className={styles.statLabel}>{s.label}</dd>
-            </div>
-          ))}
-        </dl>
       </div>
-      {PORTRAIT && (
-        <div className={styles.figure}>
-          <img
-            src={PORTRAIT}
-            alt="Portrait of Peter Elijah Marticio in a barong"
-            className={styles.portrait}
-            width={300}
-            height={400}
-          />
-        </div>
-      )}
+
+      {/* Two tilted cards peeking out behind the portrait, as in the design. */}
+      <div className={styles.figure}>
+        <span className={`${styles.card} ${styles.cardBack}`} aria-hidden="true" />
+        <span className={`${styles.card} ${styles.cardMid}`} aria-hidden="true" />
+        <img
+          src={PORTRAIT}
+          alt="Portrait of Peter Elijah Marticio"
+          className={styles.portrait}
+          width={150}
+          height={186}
+        />
+      </div>
     </section>
   );
 }
