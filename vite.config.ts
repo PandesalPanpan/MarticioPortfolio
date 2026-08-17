@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import fs from 'node:fs';
 import { streamChat, ChatError } from './server/chat.mjs';
+import { runFitCheck, FitCheckError } from './server/fitcheck.mjs';
 import { enforceRateLimit, createMemoryStore, RateLimitError } from './server/ratelimit.mjs';
 
 function inlineCssPlugin() {
@@ -85,6 +86,45 @@ function chatDevApiPlugin(apiKey: string) {
                 : 'Chat is temporarily unavailable.';
             res.end(JSON.stringify({ error: message }));
             if (status >= 500) server.config.logger.error(`[chat] ${String(err)}`);
+          }
+        });
+      });
+
+      // Mirrors netlify/functions/fit-check.mjs. Same rate limiter as chat.
+      server.middlewares.use('/api/fit-check', (req, res) => {
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.end('Method not allowed');
+          return;
+        }
+        let raw = '';
+        req.on('data', (chunk) => (raw += chunk));
+        req.on('end', async () => {
+          try {
+            const forwarded = req.headers['x-forwarded-for'];
+            const ip =
+              (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(',')[0]?.trim() ||
+              req.socket.remoteAddress ||
+              'unknown';
+            await enforceRateLimit({ ip, store: rateStore });
+
+            const { jd } = JSON.parse(raw || '{}');
+            const result = await runFitCheck({ jd, apiKey });
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Cache-Control', 'no-store');
+            res.end(JSON.stringify(result));
+          } catch (err) {
+            const status = err instanceof FitCheckError ? err.status : 500;
+            res.statusCode = status;
+            res.setHeader('Content-Type', 'application/json');
+            if (err instanceof RateLimitError) res.setHeader('Retry-After', String(err.retryAfter));
+            const message =
+              (err instanceof FitCheckError || err instanceof RateLimitError) && status < 500
+                ? err.message
+                : 'Fit Check is temporarily unavailable.';
+            res.end(JSON.stringify({ error: message }));
+            if (status >= 500) server.config.logger.error(`[fit-check] ${String(err)}`);
           }
         });
       });

@@ -4,13 +4,14 @@ import styles from './Footer.module.css';
 export function Footer() {
   return (
     <footer className={styles.footer}>
-      <div className={styles.inner}>
-        <span suppressHydrationWarning>© {new Date().getFullYear()} Peter Elijah Marticio</span>
-        <nav className={styles.nav} aria-label="Footer">
-          <Link to="/colophon">Colophon</Link>
-          <a href="https://github.com/PandesalPanpan/MarticioPortfolio" target="_blank" rel="noreferrer">Source</a>
-        </nav>
-      </div>
+      <span suppressHydrationWarning>© {new Date().getFullYear()} marticio.com</span>
+      {/* The design's footer is just the two end labels; these keep the
+          standalone routes reachable now that they are out of the header. */}
+      <nav className={styles.nav} aria-label="Footer">
+        <Link to="/colophon">Colophon</Link>
+        <Link to="/handmade">Handmade</Link>
+      </nav>
+      <span>Self-hosted on a VPS</span>
     </footer>
   );
 }

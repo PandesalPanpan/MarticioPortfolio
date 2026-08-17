@@ -1,16 +1,29 @@
 import { certifications } from '@/data/certifications';
-import { CertCard } from '@/components/CertCard';
+import { Reveal } from '@/components/Reveal';
+import { SectionHeading } from '@/components/SectionHeading';
 import styles from './Certifications.module.css';
 
 export function Certifications() {
   return (
-    <section id="certifications" className={styles.section} aria-labelledby="certifications-title">
-      <h2 id="certifications-title">Certifications</h2>
+    <Reveal id="certs" labelledBy="certifications-title" className={styles.section}>
+      <SectionHeading id="certifications-title">Certifications</SectionHeading>
       <div className={styles.grid}>
         {certifications.map((c) => (
-          <CertCard key={c.id} cert={c} />
+          <div key={c.id} className={styles.card}>
+            <h3 className={styles.title}>{c.title}</h3>
+            <p className={styles.issuer}>{c.issuer} · {c.date}</p>
+            {c.verifyUrl ? (
+              <a href={c.verifyUrl} target="_blank" rel="noreferrer" className={styles.link}>
+                Verify ↗
+              </a>
+            ) : (
+              <a href={c.pdf} target="_blank" rel="noreferrer" className={`${styles.link} ${styles.muted}`}>
+                PDF
+              </a>
+            )}
+          </div>
         ))}
       </div>
-    </section>
+    </Reveal>
   );
 }

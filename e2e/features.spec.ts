@@ -1,19 +1,18 @@
 import { test, expect } from '@playwright/test';
 
-test('sections render in the SaaS order: services → projects → experience → skills → why', async ({ page }) => {
+const SECTION_ORDER = ['top', 'now', 'work', 'projects', 'skills', 'certs', 'contact'];
+
+test('sections render top to bottom: hero → now → background → projects → skills → certs → contact', async ({ page }) => {
   await page.goto('/');
-  const order = await page.evaluate(() => {
-    const ids = ['services', 'projects', 'experience', 'skills', 'why', 'hire'];
-    return ids
-      .map((id) => ({ id, top: document.getElementById(id)?.getBoundingClientRect().top ?? Infinity }))
-      .sort((a, b) => a.top - b.top)
-      .map((x) => x.id);
-  });
-  expect(order.indexOf('services')).toBeLessThan(order.indexOf('projects'));
-  expect(order.indexOf('projects')).toBeLessThan(order.indexOf('experience'));
-  expect(order.indexOf('experience')).toBeLessThan(order.indexOf('skills'));
-  expect(order.indexOf('skills')).toBeLessThan(order.indexOf('why'));
-  expect(order.indexOf('why')).toBeLessThan(order.indexOf('hire'));
+  const tops = await page.evaluate(
+    (ids) => ids.map((id) => document.getElementById(id)?.getBoundingClientRect().top ?? null),
+    SECTION_ORDER,
+  );
+  // Every section is present...
+  expect(tops.every((t) => t !== null)).toBe(true);
+  // ...and they appear in this order down the page.
+  const sorted = [...(tops as number[])].sort((a, b) => a - b);
+  expect(tops).toEqual(sorted);
 });
 
 test('MemorizeMate and Threaded are the first two projects (side by side)', async ({ page }) => {
@@ -83,7 +82,7 @@ test('FindTheNumber is the third project (after Threaded) and jollibee-clone is 
 
 test('resume download link points to the right file and CV is gone', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: /Download résumé/i })).toHaveAttribute('href', '/resume.pdf');
+  await expect(page.getByRole('link', { name: /Download resume/i })).toHaveAttribute('href', '/resume.pdf');
   await expect(page.getByRole('link', { name: /Download CV/i })).toHaveCount(0);
 });
 
@@ -98,7 +97,7 @@ test('jargon tooltip is reachable by keyboard focus and exposes a definition', a
 
 test('project signature video opens in the lightbox and autoplays muted', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: /Play MemorizeMate walkthrough video/i }).click();
+  await page.getByRole('button', { name: /Play MemorizeMate walkthrough/i }).click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   const video = dialog.locator('video');
@@ -126,9 +125,29 @@ test('lightbox gallery navigates between images without closing', async ({ page 
   await expect(dialog).toBeHidden();
 });
 
-test('project Live and Code links open in a new tab', async ({ page }) => {
+test('project Live and Source links open in a new tab', async ({ page }) => {
   await page.goto('/');
   const projects = page.locator('#projects');
-  await expect(projects.getByRole('link', { name: 'Live' }).first()).toHaveAttribute('target', '_blank');
-  await expect(projects.getByRole('link', { name: 'Code' }).first()).toHaveAttribute('target', '_blank');
+  await expect(projects.getByRole('link', { name: /^Live/ }).first()).toHaveAttribute('target', '_blank');
+  await expect(projects.getByRole('link', { name: /^Source/ }).first()).toHaveAttribute('target', '_blank');
+});
+
+test('each project card states role and status', async ({ page }) => {
+  await page.goto('/');
+  const first = page.locator('#projects article').first();
+  await expect(first.getByRole('term').filter({ hasText: 'Role' })).toBeVisible();
+  await expect(first.getByText('Sole developer')).toBeVisible();
+  await expect(first.getByText('Live · self-hosted')).toBeVisible();
+});
+
+test('background tabs swap work history for education', async ({ page }) => {
+  await page.goto('/');
+  const section = page.locator('#work');
+  await expect(section.getByRole('heading', { name: 'Caret Solutions Inc.' })).toBeVisible();
+
+  await section.getByRole('tab', { name: 'Education' }).click();
+  await expect(
+    section.getByRole('heading', { name: 'Polytechnic University of the Philippines' }),
+  ).toBeVisible();
+  await expect(section.getByRole('heading', { name: 'Caret Solutions Inc.' })).toHaveCount(0);
 });

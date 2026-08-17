@@ -1,86 +1,56 @@
-import { useState } from 'react';
-import { ExternalLink, Code2, ChevronDown } from 'lucide-react';
-import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import type { Project } from '@/data/types';
-import { Card } from './Card';
-import { Tag } from './Tag';
-import { Term } from './Term';
 import { BuildBadge } from './BuildBadge';
 import { ProjectMedia } from './ProjectMedia';
+import { Reveal } from './Reveal';
 import styles from './ProjectCard.module.css';
 
 export function ProjectCard({ project }: { project: Project }) {
-  const [expanded, setExpanded] = useState(false);
-  const hasDetails = !!(project.description || project.highlights?.length);
-  const panelId = `project-${project.id}-details`;
+  // The long-form copy is the card body here; the short blurb is the fallback
+  // for projects that never got a longer write-up.
+  const body = project.description ?? project.blurb;
 
   return (
-    <Card className={styles.card}>
+    <Reveal as="article" className={styles.card}>
       <div className={styles.head}>
         <h3 className={styles.title}>{project.title}</h3>
         <BuildBadge style={project.buildStyle} />
+        <span className={styles.spacer} />
+        <div className={styles.links}>
+          {project.links.live && (
+            <a href={project.links.live} target="_blank" rel="noreferrer">Live ↗</a>
+          )}
+          {project.links.code && (
+            <a href={project.links.code} target="_blank" rel="noreferrer" className={styles.muted}>
+              Source ↗
+            </a>
+          )}
+        </div>
       </div>
-      <p className={styles.blurb}>{project.blurb}</p>
-      <ProjectMedia project={project} />
+
+      <p className={styles.blurb}>{body}</p>
+
+      <dl className={styles.meta}>
+        <dt>Role</dt>
+        <dd>{project.role}</dd>
+        <dt>Status</dt>
+        <dd>{project.status}</dd>
+      </dl>
+
+      {project.highlights?.length ? (
+        <ul className={styles.highlights}>
+          {project.highlights.map((h) => (
+            <li key={h}>{h}</li>
+          ))}
+        </ul>
+      ) : null}
+
       <div className={styles.tech}>
         {project.tech.map((t) => (
-          <Tag key={t}>
-            <Term term={t}>{t}</Term>
-          </Tag>
+          <span key={t} className={styles.chip}>{t}</span>
         ))}
       </div>
-      <div className={styles.actions}>
-        {project.links.live && (
-          <a href={project.links.live} className={styles.link} target="_blank" rel="noreferrer">
-            <ExternalLink size={14} /> Live
-          </a>
-        )}
-        {project.links.code && (
-          <a href={project.links.code} className={styles.link} target="_blank" rel="noreferrer">
-            <Code2 size={14} /> Code
-          </a>
-        )}
-        {hasDetails && (
-          <button
-            type="button"
-            className={styles.expand}
-            aria-expanded={expanded}
-            aria-controls={panelId}
-            onClick={() => setExpanded((v) => !v)}
-          >
-            <ChevronDown
-              size={14}
-              style={{ transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 200ms' }}
-            />
-            {expanded ? 'Less' : 'More'}
-          </button>
-        )}
-      </div>
-      <LazyMotion features={domAnimation}>
-        <AnimatePresence initial={false}>
-          {expanded && hasDetails && (
-            <m.div
-              id={panelId}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className={styles.detailsWrap}
-            >
-              <div className={styles.details}>
-                {project.description && <p>{project.description}</p>}
-                {project.highlights?.length ? (
-                  <ul>
-                    {project.highlights.map((h) => (
-                      <li key={h}>{h}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </div>
-            </m.div>
-          )}
-        </AnimatePresence>
-      </LazyMotion>
-    </Card>
+
+      <ProjectMedia project={project} />
+    </Reveal>
   );
 }

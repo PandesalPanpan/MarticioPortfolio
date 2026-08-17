@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import { ChatWidget } from '@/components/ChatWidget/ChatWidget';
 import { usePrefetchHandmade } from '@/hooks/usePrefetchHandmade';
 import Home from '@/routes/Home';
+import styles from './App.module.css';
 
 const Handmade = lazy(() => import('@/routes/Handmade'));
 const Colophon = lazy(() => import('@/routes/Colophon'));
@@ -17,20 +18,23 @@ export default function App() {
   return (
     <BrowserRouter>
       <GlobalStyles />
-      <Header />
-      <main id="main-content">
-        <Suspense fallback={<div style={{ padding: '64px 24px', textAlign: 'center', color: 'var(--muted)' }}>Loading...</div>}>
-          <ErrorBoundary>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/handmade" element={<Handmade />} />
-              <Route path="/colophon" element={<Colophon />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </ErrorBoundary>
-        </Suspense>
-      </main>
-      <Footer />
+      {/* One 820px column holds the header, content and footer, as in the design. */}
+      <div className={styles.page}>
+        <Header />
+        <main id="main-content">
+          <Suspense fallback={<div style={{ padding: '64px 24px', textAlign: 'center', color: 'var(--muted)' }}>Loading...</div>}>
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/handmade" element={<Handmade />} />
+                <Route path="/colophon" element={<Colophon />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </ErrorBoundary>
+          </Suspense>
+        </main>
+        <Footer />
+      </div>
       <ChatWidget />
     </BrowserRouter>
   );

@@ -5,6 +5,6 @@
   background: var(--bg);
   border: 1px solid var(--border);
   color: var(--muted);
-  font-family: 'JetBrains Mono Variable', monospace;
+  font-family: var(--font-mono);
   font-size: var(--text-xs);
 }

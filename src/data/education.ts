@@ -7,6 +7,7 @@ export const education: Education[] = [
     credential: 'Bachelor in Computer Engineering',
     start: '2021',
     end: 'Present',
+    endsOnGraduation: true,
   },
   {
     id: 'odin',

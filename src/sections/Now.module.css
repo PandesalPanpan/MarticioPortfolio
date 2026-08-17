@@ -1,0 +1,31 @@
+.now {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: var(--space-4) 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  margin-bottom: 44px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--highlight);
+  flex: none;
+}
+
+.body {
+  margin: 0;
+  max-width: none;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.strong {
+  color: var(--ink);
+}
