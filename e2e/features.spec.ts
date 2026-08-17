@@ -83,7 +83,7 @@ test('FindTheNumber is the third project (after Threaded) and jollibee-clone is 
 
 test('resume download link points to the right file and CV is gone', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: /Download résumé/i })).toHaveAttribute('href', '/resume.pdf');
+  await expect(page.getByRole('link', { name: /Download resume/i })).toHaveAttribute('href', '/resume.pdf');
   await expect(page.getByRole('link', { name: /Download CV/i })).toHaveCount(0);
 });
 

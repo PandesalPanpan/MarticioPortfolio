@@ -37,7 +37,7 @@ export const services: Service[] = [
     no: '03',
     title: 'Deploy, self-host & maintain',
     blurb:
-      "I don't just hand off a repo. I ship it and keep it running, so you own your stack instead of renting someone else's.",
+      "I don't just hand off a repo. I ship it and keep it running on infrastructure you control, with no vendor lock-in.",
     bullets: [
       'Dockerised deploys on your own VPS',
       'Nginx, CI/CD & zero-downtime releases',

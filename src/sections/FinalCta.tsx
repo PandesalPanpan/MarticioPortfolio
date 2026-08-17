@@ -17,7 +17,7 @@ export function FinalCta() {
         </p>
         <div className={styles.actions}>
           <Button as="a" href={CONTACT_EMAIL} variant="primary">Hire me</Button>
-          <Button as="a" href="/resume.pdf" variant="secondary" download>Download résumé</Button>
+          <Button as="a" href="/resume.pdf" variant="secondary" download>Download resume</Button>
         </div>
       </div>
     </section>

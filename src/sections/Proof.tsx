@@ -5,10 +5,10 @@ const OSS_CONTRIBUTIONS_URL =
   'https://github.com/TheOdinProject/curriculum/pulls?q=is%3Apr+is%3Amerged+author%3APandesalPanpan';
 
 const METRICS = [
+  { value: '40M+', label: 'units of stock tracked through one inventory system' },
+  { value: '2M+', label: 'units moved per day across 24 graded product lines' },
   { value: '300–500', label: 'daily transactions handled by a POS I built' },
-  { value: '1,000+', label: 'items managed in a live inventory system' },
   { value: '30%', label: 'faster checkout after Bluetooth print integration' },
-  { value: '500+', label: 'daily transactions monitored in real time' },
 ];
 
 export function Proof() {

@@ -1,4 +1,4 @@
-import { Rocket, ServerCog, MessageSquare, Cpu } from 'lucide-react';
+import { Rocket, ServerCog, MessageSquare, Workflow } from 'lucide-react';
 import styles from './WhyMe.module.css';
 
 const POINTS = [
@@ -18,9 +18,9 @@ const POINTS = [
     body: 'You talk to the person writing the code. No account managers, no telephone game, no lost context.',
   },
   {
-    Icon: Cpu,
-    title: 'Software + hardware',
-    body: 'A Computer Engineering background means RFID, barcode, biometrics, and thermal printers are not scary edge cases.',
+    Icon: Workflow,
+    title: 'Built for messy real workflows',
+    body: 'Stock ledgers, approvals, and audit trails that survive contact with how a business actually operates, not a happy-path demo.',
   },
 ];
 

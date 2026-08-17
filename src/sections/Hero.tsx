@@ -13,8 +13,8 @@ const CONTACT_EMAIL = 'mailto:petermarticio@gmail.com?subject=Let%27s%20build%20
 /** Quick trust signals shown under the hero copy. */
 const STATS = [
   { value: '4', label: 'apps in production' },
-  { value: '1,000+', label: 'items managed in systems I built' },
-  { value: '30%', label: 'faster checkout shipped for a client' },
+  { value: '40M+', label: 'units of stock tracked in systems I built' },
+  { value: '100%', label: 'of my apps ship with tests and CI' },
 ];
 
 export function Hero() {

@@ -4,7 +4,7 @@ export const projects: Project[] = [
   {
     id: 'memorizemate',
     title: 'MemorizeMate',
-    blurb: 'Offline-first spaced-repetition flashcards (PWA).',
+    blurb: 'Offline-first spaced-repetition flashcards (PWA) that keep working with no signal, then sync when you are back.',
     description:
       'A polished PWA flashcard app using the FSRS algorithm. Offline-first via IndexedDB, smart CSV/cloze import, GitHub-style review heatmap, and an ink-and-paper design system with light/dark/auto themes.',
     tech: ['React 19', 'TypeScript', 'Vite', 'Zustand', 'IndexedDB', 'ts-fsrs', 'Framer Motion', 'PWA'],

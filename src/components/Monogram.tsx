@@ -35,7 +35,7 @@ export function Monogram({ size = 32, boxed = false }: { size?: number; boxed?: 
         stroke={boxed ? 'var(--on-ink)' : 'currentColor'}
         // Pre-divided by the boxed scale, so the stroke reads the same weight
         // in both variants rather than thinning to 2.4.
-        strokeWidth={boxed ? 6 : 4}
+        strokeWidth={boxed ? 20 / 3 : 4}
         strokeLinecap="round"
         strokeLinejoin="round"
         // Shrink the glyph to sit inside the container with even padding.

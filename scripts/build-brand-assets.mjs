@@ -26,7 +26,7 @@ function svg({ stroke, box, rx = 11 }) {
   // the stroke is pre-divided by that scale so both variants read the same.
   const group = box
     ? `  <rect width="48" height="48" rx="${rx}" fill="${box}"/>\n` +
-      `  <g fill="none" stroke="${stroke}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.6 9.6) scale(0.6)">`
+      `  <g fill="none" stroke="${stroke}" stroke-width="${20/3}" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.6 9.6) scale(0.6)">`
     : `  <g fill="none" stroke="${stroke}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">`;
 
   return (
@@ -117,7 +117,7 @@ const favicon =
   `    }\n` +
   `  </style>\n` +
   `  <rect class="box" width="48" height="48" rx="11"/>\n` +
-  `  <g class="mark" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.6 9.6) scale(0.6)">\n` +
+  `  <g class="mark" fill="none" stroke-width="${20/3}" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.6 9.6) scale(0.6)">\n` +
   GLYPH_PATHS.map((d) => `    <path d="${d}"/>`).join('\n') +
   `\n  </g>\n</svg>\n`;
 writeFileSync('public/favicon.svg', favicon);
