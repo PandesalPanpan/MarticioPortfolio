@@ -192,8 +192,10 @@ export const EVIDENCE = [
     kind: 'cert',
     ref: 'pup',
     label: 'PUP',
+    // Deliberately date-neutral: EVIDENCE_PROMPT is built once at import, so a
+    // "to present" here would go stale the moment Peter graduates.
     detail:
-      'Bachelor in Computer Engineering at the Polytechnic University of the Philippines, 2021 to present.',
+      'Bachelor in Computer Engineering at the Polytechnic University of the Philippines, started 2021.',
   },
 ];
 

@@ -1,4 +1,5 @@
 import { Term } from '@/components/Term';
+import { hasGraduated } from '@/data/graduation';
 import styles from './Hero.module.css';
 
 const PORTRAIT = '/formal_pic.jpg';
@@ -7,6 +8,7 @@ const OSS_CONTRIBUTIONS_URL =
   'https://github.com/TheOdinProject/curriculum/pulls?q=is%3Apr+is%3Amerged+author%3APandesalPanpan';
 
 export function Hero() {
+  const standing = hasGraduated() ? 'graduate' : 'student';
   return (
     <section id="top" className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.copy}>
@@ -17,7 +19,7 @@ export function Hero() {
           Peter Elijah Marticio
         </h1>
         <p className={styles.tagline}>
-          Full-stack developer and Computer Engineering student. I build full-stack web apps
+          Full-stack developer and Computer Engineering {standing}. I build full-stack web apps
           and <Term term="IMS">Inventory Management Systems</Term> that run in production,
           self-host my projects on a <Term term="VPS">VPS</Term>, and{' '}
           <a href={OSS_CONTRIBUTIONS_URL} target="_blank" rel="noreferrer">
@@ -39,10 +41,7 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Two tilted cards peeking out behind the portrait, as in the design. */}
       <div className={styles.figure}>
-        <span className={`${styles.card} ${styles.cardBack}`} aria-hidden="true" />
-        <span className={`${styles.card} ${styles.cardMid}`} aria-hidden="true" />
         <img
           src={PORTRAIT}
           alt="Portrait of Peter Elijah Marticio"

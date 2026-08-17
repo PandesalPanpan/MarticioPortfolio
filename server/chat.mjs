@@ -5,7 +5,7 @@
 // The DeepSeek API key never leaves the server: it is read from the
 // DEEPSEEK_API_KEY env var and only used here.
 
-import { SYSTEM_PROMPT } from './persona.mjs';
+import { buildSystemPrompt } from './persona.mjs';
 
 const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
 // `deepseek-chat` was retired: the API now only accepts deepseek-v4-flash or
@@ -78,7 +78,7 @@ export async function streamChat({ messages, apiKey, signal }) {
       stream: true,
       temperature: TEMPERATURE,
       max_tokens: MAX_TOKENS,
-      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...conversation],
+      messages: [{ role: 'system', content: buildSystemPrompt() }, ...conversation],
     }),
     signal,
   });

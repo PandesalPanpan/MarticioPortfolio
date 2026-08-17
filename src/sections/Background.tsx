@@ -3,6 +3,7 @@ import { Reveal } from '@/components/Reveal';
 import { SectionHeading } from '@/components/SectionHeading';
 import { experience } from '@/data/experience';
 import { education } from '@/data/education';
+import { GRADUATION_YEAR, hasGraduated } from '@/data/graduation';
 import styles from './Background.module.css';
 
 type Entry = {
@@ -37,19 +38,18 @@ const WORK: Entry[] = experience.map((e) => ({
   bullets: e.bullets,
 }));
 
-const EDUCATION: Entry[] = education.map((e) => ({
-  id: e.id,
-  period: period(e.start, e.end),
-  title: e.institution,
-  sub: e.credential,
-  bullets: e.note ? [e.note] : [],
-  link: e.contribution,
-}));
-
-const TABS = [
-  { id: 'work', label: 'Work', entries: WORK },
-  { id: 'edu', label: 'Education', entries: EDUCATION },
-] as const;
+/** Built per render so the in-progress degree closes out on graduation day. */
+function buildEducation(): Entry[] {
+  const graduated = hasGraduated();
+  return education.map((e) => ({
+    id: e.id,
+    period: period(e.start, e.endsOnGraduation && graduated ? GRADUATION_YEAR : e.end),
+    title: e.institution,
+    sub: e.credential,
+    bullets: e.note ? [e.note] : [],
+    link: e.contribution,
+  }));
+}
 
 export function Background() {
   const [tab, setTab] = useState<'work' | 'edu'>('work');
@@ -68,6 +68,11 @@ export function Background() {
       if (Math.abs(drift) > 1) window.scrollBy(0, drift);
     });
   };
+
+  const TABS = [
+    { id: 'work', label: 'Work', entries: WORK },
+    { id: 'edu', label: 'Education', entries: buildEducation() },
+  ] as const;
 
   const active = TABS.find((t) => t.id === tab) ?? TABS[0];
 

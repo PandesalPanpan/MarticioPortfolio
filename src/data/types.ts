@@ -51,6 +51,11 @@ export type Education = {
   credential: string;
   start: string;
   end: string;
+  /**
+   * Marks the in-progress degree. Until the graduation date passes the entry
+   * shows `end`; after it, the conferral year. See src/data/graduation.ts.
+   */
+  endsOnGraduation?: boolean;
   link?: string;
   note?: string;
   /** Optional secondary call-to-action, e.g. open-source contributions. */

@@ -74,30 +74,12 @@
 .ghost:hover { color: var(--ink); }
 
 .figure {
-  position: relative;
   width: 150px;
   height: 186px;
   flex: none;
 }
 
-.card {
-  position: absolute;
-  inset: 0;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-}
-.cardBack {
-  transform: rotate(-6deg);
-  background: var(--surface-2);
-}
-.cardMid {
-  transform: rotate(3deg);
-  background: var(--surface);
-}
-
 .portrait {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
