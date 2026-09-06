@@ -17,6 +17,34 @@ const HINT_KEY = 'askpeter:hint-dismissed';
 const HINT_DELAY_MS = 3500;
 
 export function ChatWidget() {
+  const [available, setAvailable] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    async function checkAvailability() {
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'GET',
+          headers: { Accept: 'application/json' },
+        });
+        const data = response.ok ? await response.json() : null;
+        if (active) setAvailable(data?.available === true);
+      } catch {
+        // Stay hidden when the status endpoint cannot be reached.
+      }
+    }
+
+    void checkAvailability();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  return available ? <AvailableChatWidget /> : null;
+}
+
+function AvailableChatWidget() {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState('');
   const [showHint, setShowHint] = useState(false);
