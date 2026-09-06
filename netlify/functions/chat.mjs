@@ -12,6 +12,12 @@ export const config = { path: '/api/chat' };
 const rateStore = createBlobStore(getStore);
 
 export default async function handler(request) {
+  const apiKey = Netlify.env.get('DEEPSEEK_API_KEY');
+
+  if (request.method === 'GET') {
+    return json({ available: Boolean(apiKey) }, 200, { 'Cache-Control': 'no-store' });
+  }
+
   if (request.method !== 'POST') {
     return json({ error: 'Method not allowed' }, 405);
   }
@@ -29,7 +35,7 @@ export default async function handler(request) {
 
     const stream = await streamChat({
       messages: body?.messages,
-      apiKey: process.env.DEEPSEEK_API_KEY,
+      apiKey,
       signal: request.signal,
     });
 

@@ -46,6 +46,14 @@ function chatDevApiPlugin(apiKey: string) {
     apply: 'serve' as const,
     configureServer(server: import('vite').ViteDevServer) {
       server.middlewares.use('/api/chat', (req, res) => {
+        if (req.method === 'GET') {
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Cache-Control', 'no-store');
+          res.end(JSON.stringify({ available: Boolean(apiKey) }));
+          return;
+        }
+
         if (req.method !== 'POST') {
           res.statusCode = 405;
           res.end('Method not allowed');
