@@ -1,8 +1,19 @@
 import { test, expect } from '@playwright/test';
 
-const SECTION_ORDER = ['top', 'now', 'work', 'projects', 'skills', 'certs', 'contact'];
+const SECTION_ORDER = [
+  'top',
+  'inventory-demo',
+  'work',
+  'now',
+  'projects',
+  'skills',
+  'certs',
+  'contact',
+];
 
-test('sections render top to bottom: hero → now → background → projects → skills → certs → contact', async ({ page }) => {
+test('sections render top to bottom: hero → inventory demo → background → now → projects → skills → certs → contact', async ({
+  page,
+}) => {
   await page.goto('/');
   const tops = await page.evaluate(
     (ids) => ids.map((id) => document.getElementById(id)?.getBoundingClientRect().top ?? null),
@@ -73,7 +84,9 @@ test('open-source link points to merged Odin curriculum PRs in a new tab', async
   );
 });
 
-test('FindTheNumber is the third project (after Threaded) and jollibee-clone is gone', async ({ page }) => {
+test('FindTheNumber is the third project (after Threaded) and jollibee-clone is gone', async ({
+  page,
+}) => {
   await page.goto('/');
   const titles = await page.locator('#projects h3').allInnerTexts();
   expect(titles[2]).toBe('FindTheNumber');
@@ -82,13 +95,18 @@ test('FindTheNumber is the third project (after Threaded) and jollibee-clone is 
 
 test('resume download link points to the right file and CV is gone', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('link', { name: /Download resume/i })).toHaveAttribute('href', '/resume.pdf');
+  await expect(page.getByRole('link', { name: /Download resume/i })).toHaveAttribute(
+    'href',
+    '/resume.pdf',
+  );
   await expect(page.getByRole('link', { name: /Download CV/i })).toHaveCount(0);
 });
 
 test('jargon tooltip is reachable by keyboard focus and exposes a definition', async ({ page }) => {
   await page.goto('/');
-  const vps = page.locator('#hero-title').locator('xpath=following::*[normalize-space(text())="VPS"][1]');
+  const vps = page
+    .locator('#hero-title')
+    .locator('xpath=following::*[normalize-space(text())="VPS"][1]');
   await vps.focus();
   const describedById = await vps.getAttribute('aria-describedby');
   expect(describedById).toBeTruthy();
@@ -128,8 +146,14 @@ test('lightbox gallery navigates between images without closing', async ({ page 
 test('project Live and Source links open in a new tab', async ({ page }) => {
   await page.goto('/');
   const projects = page.locator('#projects');
-  await expect(projects.getByRole('link', { name: /^Live/ }).first()).toHaveAttribute('target', '_blank');
-  await expect(projects.getByRole('link', { name: /^Source/ }).first()).toHaveAttribute('target', '_blank');
+  await expect(projects.getByRole('link', { name: /^Live/ }).first()).toHaveAttribute(
+    'target',
+    '_blank',
+  );
+  await expect(projects.getByRole('link', { name: /^Source/ }).first()).toHaveAttribute(
+    'target',
+    '_blank',
+  );
 });
 
 test('each project card states role and status', async ({ page }) => {

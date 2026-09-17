@@ -1,4 +1,5 @@
 import { Hero } from '@/sections/Hero';
+import { InventoryDemo } from '@/sections/InventoryDemo';
 import { Now } from '@/sections/Now';
 import { Background } from '@/sections/Background';
 import { Projects } from '@/sections/Projects';
@@ -10,8 +11,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Now />
+      <InventoryDemo />
       <Background />
+      <Now />
       <Projects />
       <Skills />
       <Certifications />

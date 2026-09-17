@@ -49,10 +49,13 @@
   --ink: #1a1a1f;
   --muted: #5c5c66;
   --accent: #3b3fe4;
+  --accent-soft: #edeeff;
   /* text/icon colour that sits on a solid --ink fill */
   --on-ink: #faf8f5;
   --highlight: #b7791f;
   --chip-ai: #0f766e;
+  --success-soft: #e8faf7;
+  --danger: #b8292e;
   --chip-scratch: #475569;
   --border: rgba(26, 26, 31, 0.1);
   --border-strong: rgba(26, 26, 31, 0.2);
@@ -69,10 +72,13 @@
   --ink: #ececf2;
   --muted: #9ca0ae;
   --accent: #8486e3;
+  --accent-soft: rgba(132, 134, 227, 0.16);
   /* text/icon colour that sits on a solid --ink fill */
   --on-ink: #0f1117;
   --highlight: #f4c26c;
   --chip-ai: #0f766e;
+  --success-soft: rgba(15, 118, 110, 0.18);
+  --danger: #f08a8f;
   --chip-scratch: #64748b;
   --border: rgba(236, 236, 242, 0.1);
   --border-strong: rgba(236, 236, 242, 0.2);
