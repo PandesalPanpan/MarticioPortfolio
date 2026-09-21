@@ -8,9 +8,6 @@ import { enforceRateLimit, createBlobStore, RateLimitError } from '../../server/
 
 export const config = { path: '/api/chat' };
 
-// One durable store per warm instance; the Blobs client itself is cheap to reuse.
-const rateStore = createBlobStore(getStore);
-
 export default async function handler(request) {
   const apiKey = Netlify.env.get('DEEPSEEK_API_KEY');
 
@@ -30,6 +27,10 @@ export default async function handler(request) {
   }
 
   try {
+    // Netlify injects the Blobs runtime context for each request. Create the
+    // store inside the handler so production has site/token context available.
+    const rateStore = createBlobStore(getStore);
+
     // Per-visitor + global rate limiting before we spend an upstream call.
     await enforceRateLimit({ ip: clientIp(request), store: rateStore });
 
