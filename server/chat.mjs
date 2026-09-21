@@ -8,11 +8,11 @@
 import { buildSystemPrompt } from './persona.mjs';
 
 const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
-// `deepseek-chat` was retired: the API now only accepts deepseek-v4-flash or
-// deepseek-v4-pro. Flash is the right pick for a chat widget (~2s to first
-// token, minimal reasoning overhead); pro spends 10s+ thinking before it
-// speaks, which reads as a hang in a streaming UI.
-const MODEL = 'deepseek-v4-flash';
+// Use the current Flash alias and explicitly disable thinking for this small
+// portfolio Q&A widget. That keeps time-to-first-token fast and ensures the
+// stream contains visible `content` deltas instead of spending its budget on
+// reasoning that the UI intentionally does not render.
+const MODEL = 'deepseek-flash';
 
 const MAX_TURNS = 16; // cap conversation history sent upstream
 const MAX_CHARS = 4000; // per-message hard cap
@@ -76,6 +76,7 @@ export async function streamChat({ messages, apiKey, signal }) {
     body: JSON.stringify({
       model: MODEL,
       stream: true,
+      thinking: { type: 'disabled' },
       temperature: TEMPERATURE,
       max_tokens: MAX_TOKENS,
       messages: [{ role: 'system', content: buildSystemPrompt() }, ...conversation],
