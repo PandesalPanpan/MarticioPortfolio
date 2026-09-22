@@ -113,7 +113,7 @@ export const ProductEditor = forwardRef<HTMLElement, ProductEditorProps>(functio
           Delete product
         </button>
         <span className={styles.deleteHint}>
-          {isDeleted ? 'Reset to try it again' : '→ then check the old receipt'}
+          {isDeleted ? 'Reset to try it again' : 'Then check the old receipt'}
         </span>
         {isDeleted && (
           <button type="button" className={styles.resetButton} onClick={onReset}>
@@ -121,7 +121,6 @@ export const ProductEditor = forwardRef<HTMLElement, ProductEditorProps>(functio
           </button>
         )}
       </div>
-
     </article>
   );
 });

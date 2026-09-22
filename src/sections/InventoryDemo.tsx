@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { ModeToggle } from '@/components/inventory-demo/ModeToggle';
 import {
   createInitialDemoState,
@@ -17,6 +17,8 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import styles from './InventoryDemo.module.css';
 
 const initialDemo = createInitialDemoState();
+const GUIDE_OBSERVATION_DELAY = 1500;
+const GUIDE_COMPLETION_DELAY = 900;
 
 function parsePrice(value: string): number | null {
   const parsed = Number(value.replace(/[^0-9.]/g, ''));
@@ -60,24 +62,40 @@ export function InventoryDemo() {
   const [receiptPulse, setReceiptPulse] = useState(0);
   const [formError, setFormError] = useState<string | null>(null);
   const [guideStep, setGuideStep] = useState<GuideStep | null>(null);
+  const [guideHasRun, setGuideHasRun] = useState(false);
+  const [guideCompletion, setGuideCompletion] = useState(false);
 
   const selectedReceipt =
     receipts.find((receipt) => receipt.receiptNumber === selectedReceiptNumber) ?? receipts[0];
 
   const handleModeChange = (nextMode: ArchitectureMode) => {
+    const completesGuide = guideStep === 3 && mode === 'usual' && nextMode === 'production';
     setMode(nextMode);
-    setFeedback(null);
     setFormError(null);
+    setGuideCompletion(completesGuide);
+
+    setFeedback(
+      completesGuide
+        ? {
+            tone: 'success',
+            title: 'Snapshot preserved.',
+            description: 'The receipt stayed true even though the catalog changed.',
+          }
+        : null,
+    );
   };
 
   const startGuide = (event: MouseEvent<HTMLButtonElement>) => {
     guideTriggerRef.current = event.currentTarget;
+    setGuideCompletion(false);
+    setFormError(null);
     setGuideStep(1);
   };
 
   const closeGuide = useCallback(() => {
     const trigger = guideTriggerRef.current;
     setGuideStep(null);
+    setGuideHasRun(true);
 
     if (!trigger) return;
     trigger.focus();
@@ -110,16 +128,20 @@ export function InventoryDemo() {
       mode === 'usual'
         ? {
             tone: 'danger',
-            title: 'Past receipt changed — this is the bug.',
+            title: 'Past receipt changed. This is the bug.',
             description:
               'This receipt is reading today’s product record instead of what was actually sold.',
           }
         : {
             tone: 'success',
-            title: 'Snapshot preserved — the past receipt stayed true.',
+            title: 'Snapshot preserved. The past receipt stayed true.',
             description: 'Catalog changes affect future sales, not historical receipts.',
           },
     );
+
+    if (guideStep === 1) {
+      setGuideStep(2);
+    }
   };
 
   const handleSell = () => {
@@ -149,7 +171,7 @@ export function InventoryDemo() {
           }
         : {
             tone: 'success',
-            title: `Product deleted — Receipt #${selectedReceiptNumber} is still intact.`,
+            title: `Product deleted. Receipt #${selectedReceiptNumber} is still intact.`,
             description: 'The original name, price, and total live on the receipt snapshot.',
           },
     );
@@ -171,6 +193,20 @@ export function InventoryDemo() {
     setReceiptPulse(0);
   };
 
+  useEffect(() => {
+    if (guideStep !== 2) return;
+
+    const timeout = window.setTimeout(() => setGuideStep(3), GUIDE_OBSERVATION_DELAY);
+    return () => window.clearTimeout(timeout);
+  }, [guideStep]);
+
+  useEffect(() => {
+    if (guideStep !== 3 || !guideCompletion) return;
+
+    const timeout = window.setTimeout(() => closeGuide(), GUIDE_COMPLETION_DELAY);
+    return () => window.clearTimeout(timeout);
+  }, [closeGuide, guideCompletion, guideStep]);
+
   return (
     <section
       ref={sectionRef}
@@ -188,17 +224,6 @@ export function InventoryDemo() {
             targetRef={modeRef}
             isGuideTarget={guideStep === 3}
           />
-          <span className={styles.modeRowSpacer} aria-hidden="true" />
-          <button
-            type="button"
-            className={styles.guideEntry}
-            onClick={startGuide}
-            aria-expanded={guideStep !== null}
-            aria-controls="inventory-guide"
-          >
-            <span className={styles.guideDot} aria-hidden="true" />
-            Guide me
-          </button>
         </div>
         <h2 id="inventory-demo-title" className={styles.title}>
           Can a past receipt survive a catalog change?
@@ -209,9 +234,15 @@ export function InventoryDemo() {
       </div>
 
       <div className={styles.walkthroughCta}>
+        <span className={styles.walkthroughMarker} aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </span>
         <div className={styles.walkthroughCopy}>
-          <strong>Want the quick version?</strong>
-          <span>Optional — explore freely, or let us point out the important parts.</span>
+          <strong>Want a quick tour?</strong>
+          <span>See the problem and the production fix.</span>
+          <span className={styles.walkthroughDuration}>About 20 seconds</span>
         </div>
         <button
           type="button"
@@ -220,7 +251,7 @@ export function InventoryDemo() {
           aria-expanded={guideStep !== null}
           aria-controls="inventory-guide"
         >
-          Start 20-sec walkthrough →
+          {guideHasRun ? 'Replay guided demo' : 'Start guided demo'}
         </button>
       </div>
 
@@ -266,9 +297,11 @@ export function InventoryDemo() {
 
       <div className={styles.helperBar}>
         <strong>Try it:</strong>
-        <span className={styles.helperSteps}>SELL → EDIT + SAVE → DELETE</span>
+        <span className={styles.helperSteps}>SELL, EDIT + SAVE, DELETE</span>
         <span className={styles.helperRule}>
-          {mode === 'usual' ? 'A past receipt should never change.' : 'Snapshot keeps the receipt true.'}
+          {mode === 'usual'
+            ? 'A past receipt should never change.'
+            : 'Snapshot keeps the receipt true.'}
         </span>
       </div>
 
@@ -291,7 +324,7 @@ export function InventoryDemo() {
           modeRef={modeRef}
           coachmarkRef={coachmarkRef}
           reducedMotion={reducedMotion}
-          onStepChange={setGuideStep}
+          isComplete={guideCompletion}
           onClose={closeGuide}
         />
       )}

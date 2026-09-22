@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import {
   createInitialDemoState,
   createInitialProduct,
@@ -29,6 +29,11 @@ function editProduct() {
   });
   fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
 }
+
+afterEach(() => {
+  vi.useRealTimers();
+  document.documentElement.removeAttribute('data-theme');
+});
 
 describe('inventory demo domain', () => {
   it('seeds Receipt #1001 from one USB-C Cable sale and leaves 19 in stock', () => {
@@ -95,10 +100,7 @@ describe('inventory demo domain', () => {
   });
 
   it('creates a new snapshot sale from the current catalog values', () => {
-    const product = updateCatalogProduct(
-      { ...createInitialProduct(), stock: 19 },
-      EDITED_VALUES,
-    );
+    const product = updateCatalogProduct({ ...createInitialProduct(), stock: 19 }, EDITED_VALUES);
     const { product: afterSale, sale } = sellOneItem(product, 1002);
 
     expect(afterSale.stock).toBe(18);
@@ -123,53 +125,141 @@ describe('InventoryDemo', () => {
     renderDemo();
 
     expect(screen.queryByTestId('inventory-guide')).not.toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Start 20-sec walkthrough →' }),
-    ).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Start guided demo' })).toHaveLength(1);
+    expect(screen.queryByRole('button', { name: 'Guide me' })).not.toBeInTheDocument();
   });
 
   it('opens the walkthrough at step 1 only after the CTA is pressed', () => {
     renderDemo();
 
-    const start = screen.getByRole('button', { name: 'Start 20-sec walkthrough →' });
+    const start = screen.getByRole('button', { name: 'Start guided demo' });
     fireEvent.click(start);
 
     expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
     expect(screen.getByRole('heading', { name: 'Edit the current product' })).toBeInTheDocument();
-    expect(document.activeElement).toBe(screen.getByRole('dialog'));
+    expect(document.activeElement).toBe(screen.getByLabelText('Name'));
+    expect(screen.queryByRole('button', { name: /Next/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Back/ })).not.toBeInTheDocument();
   });
 
-  it('moves through all three walkthrough steps and closes with Done', () => {
+  it('does not advance when the visitor only types', () => {
     renderDemo();
-    fireEvent.click(screen.getByRole('button', { name: 'Start 20-sec walkthrough →' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
 
-    fireEvent.click(screen.getByRole('button', { name: 'Next →' }));
+    fireEvent.change(screen.getByLabelText('Price'), { target: { value: '8' } });
+
+    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
+  });
+
+  it('does not advance when Save changes has no actual change', () => {
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
+  });
+
+  it('does not advance after an invalid save', () => {
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+
+    fireEvent.change(screen.getByLabelText('Price'), { target: { value: '0' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
+    expect(screen.getByRole('status')).toHaveTextContent('greater than $0');
+  });
+
+  it('advances to the receipt after a valid catalog change is saved', () => {
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+
+    editProduct();
+
     expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 3');
-    expect(screen.getByRole('heading', { name: 'Now watch the receipt' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'The old receipt changed' })).toBeInTheDocument();
+    expect(screen.getByTestId('receipt-card')).toHaveAttribute('data-tone', 'danger');
+    expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $8.00');
+  });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Next →' }));
+  it('automatically moves from the receipt observation to step 3', () => {
+    vi.useFakeTimers();
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    editProduct();
+
+    act(() => {
+      vi.advanceTimersByTime(1499);
+    });
+    expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 3');
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
     expect(screen.getByRole('dialog')).toHaveTextContent('3 OF 3');
-    expect(screen.getByRole('heading', { name: 'Compare both approaches' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Now compare the production approach' }),
+    ).toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Done' }));
+  it('waits for the real architecture change before completing the guide', () => {
+    vi.useFakeTimers();
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    editProduct();
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+
+    expect(screen.getByRole('dialog')).toHaveTextContent('3 OF 3');
+    expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $8.00');
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready' }));
+
+    expect(screen.getByTestId('receipt-card')).toHaveTextContent('USB-C Cable');
+    expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $5.00');
+    expect(screen.getByTestId('receipt-feedback')).toHaveTextContent('Snapshot preserved.');
+    expect(screen.getByRole('dialog')).toHaveTextContent('Snapshot preserved');
+
+    act(() => {
+      vi.advanceTimersByTime(899);
+    });
+    expect(screen.getByTestId('inventory-guide')).toBeInTheDocument();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
     expect(screen.queryByTestId('inventory-guide')).not.toBeInTheDocument();
   });
 
-  it('supports Back, Exit guide, Escape, and focus restoration', () => {
+  it('supports the close control and Escape without resetting demo state', () => {
     renderDemo();
-    const start = screen.getByRole('button', { name: 'Start 20-sec walkthrough →' });
-    fireEvent.click(start);
-    fireEvent.click(screen.getByRole('button', { name: 'Next →' }));
-    fireEvent.click(screen.getByRole('button', { name: '← Back' }));
-    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
+    editProduct();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Exit guide' }));
+    const start = screen.getByRole('button', { name: 'Start guided demo' });
+    fireEvent.click(start);
+    fireEvent.click(screen.getByRole('button', { name: 'Exit guided demo' }));
+
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Price')).toHaveValue('8.00');
     expect(document.activeElement).toBe(start);
 
-    fireEvent.click(start);
+    const replay = screen.getByRole('button', { name: 'Replay guided demo' });
+    fireEvent.click(replay);
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Price')).toHaveValue('8.00');
+    expect(document.activeElement).toBe(replay);
+  });
+
+  it('keeps the coachmark on the theme-aware demo surface in dark mode', () => {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+
+    const coachmark = screen.getByRole('dialog');
+    expect(getComputedStyle(coachmark).backgroundColor).not.toBe('rgb(255, 255, 255)');
+    expect(coachmark.className).toContain('coachmark');
   });
 
   it('shows the seeded receipt immediately with the current catalog beside it', () => {
@@ -204,7 +294,7 @@ describe('InventoryDemo', () => {
     expect(receipt).toHaveAttribute('data-tone', 'danger');
     expect(receipt).toHaveTextContent('Premium Braided USB-C Cable');
     expect(receipt).toHaveTextContent('1 × $8.00');
-    expect(receipt).toHaveTextContent('Past receipt changed — this is the bug.');
+    expect(receipt).toHaveTextContent('Past receipt changed. This is the bug.');
     expect(receipt).toHaveTextContent('USB-C Cable · $5.00');
   });
 
@@ -218,7 +308,7 @@ describe('InventoryDemo', () => {
     expect(receipt).toHaveAttribute('data-tone', 'success');
     expect(receipt).toHaveTextContent('USB-C Cable');
     expect(receipt).toHaveTextContent('1 × $5.00');
-    expect(receipt).toHaveTextContent('Snapshot preserved — the past receipt stayed true.');
+    expect(receipt).toHaveTextContent('Snapshot preserved. The past receipt stayed true.');
     expect(screen.getByLabelText('Name')).toHaveValue(EDITED_VALUES.name);
     expect(screen.getByLabelText('Price')).toHaveValue('8.00');
   });
@@ -245,7 +335,7 @@ describe('InventoryDemo', () => {
     expect(receipt).toHaveAttribute('data-receipt-status', 'resolved');
     expect(receipt).toHaveTextContent('USB-C Cable');
     expect(receipt).toHaveTextContent('1 × $5.00');
-    expect(receipt).toHaveTextContent('Product deleted — Receipt #1001 is still intact.');
+    expect(receipt).toHaveTextContent('Product deleted. Receipt #1001 is still intact.');
   });
 
   it('creates Receipt #1002 from the current catalog and keeps #1001 selectable', () => {
@@ -271,7 +361,10 @@ describe('InventoryDemo', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Delete product' }));
     fireEvent.click(screen.getByRole('button', { name: 'Reset demo' }));
 
-    expect(screen.getByRole('tab', { name: 'Usual issue' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('tab', { name: 'Usual issue' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
     expect(screen.getByLabelText('Name')).toHaveValue('USB-C Cable');
     expect(screen.getByLabelText('Price')).toHaveValue('5.00');
     expect(screen.getByTestId('product-editor')).toHaveTextContent('19 in stock');

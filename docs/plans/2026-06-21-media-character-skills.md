@@ -1,4 +1,4 @@
-# Plan — Project Media, SVG Character, Skills, Tooltips
+# Plan: Project Media, SVG Character, Skills, Tooltips
 
 Branch: `feat/media-character-skills` → merge to `main` after green tests.
 Docker: build + tag `pandesalpanpan/marticioportfolio:1.3.0` (+ `latest`), push.

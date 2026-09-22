@@ -20,7 +20,7 @@ type WalkthroughProps = {
   modeRef: RefObject<HTMLElement | null>;
   coachmarkRef: RefObject<HTMLDivElement | null>;
   reducedMotion: boolean;
-  onStepChange: (step: GuideStep) => void;
+  isComplete: boolean;
   onClose: () => void;
 };
 
@@ -28,18 +28,24 @@ const stepContent: Record<GuideStep, { target: GuideTarget; title: string; body:
   1: {
     target: 'product',
     title: 'Edit the current product',
-    body: 'Change the name or price, then press Save changes. Try $5.00 → $8.00.',
+    body: 'Try changing the product name or price, then save it. Try $5.00 to $8.00.',
   },
   2: {
     target: 'receipt',
-    title: 'Now watch the receipt',
-    body: 'This receipt was already sold earlier. After saving, check whether its name or price changes too.',
+    title: 'The old receipt changed',
+    body: 'This sale happened before your edit, but its name or price changed too. That is the problem.',
   },
   3: {
     target: 'mode',
-    title: 'Compare both approaches',
-    body: 'Switch between Usual issue and Production-ready. The same catalog edit should break one receipt and leave the snapshotted one unchanged.',
+    title: 'Now compare the production approach',
+    body: 'Switch to Production-ready. The same sale should stay exactly as it was when it happened.',
   },
+};
+
+const completionContent = {
+  target: 'mode' as const,
+  title: 'Snapshot preserved',
+  body: 'The receipt stayed true even though the catalog changed.',
 };
 
 function clamp(value: number, minimum: number, maximum: number): number {
@@ -96,7 +102,7 @@ export function Walkthrough({
   modeRef,
   coachmarkRef,
   reducedMotion,
-  onStepChange,
+  isComplete,
   onClose,
 }: WalkthroughProps) {
   const [spotlight, setSpotlight] = useState<SpotlightRect>({
@@ -106,14 +112,10 @@ export function Walkthrough({
     height: 0,
   });
   const [containerWidth, setContainerWidth] = useState(820);
-  const content = stepContent[step];
+  const content = step === 3 && isComplete ? completionContent : stepContent[step];
 
   const targetRef: RefObject<HTMLElement | null> =
-    content.target === 'product'
-      ? productRef
-      : content.target === 'receipt'
-        ? receiptRef
-        : modeRef;
+    content.target === 'product' ? productRef : content.target === 'receipt' ? receiptRef : modeRef;
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -167,6 +169,16 @@ export function Walkthrough({
         block: 'center',
         behavior: reducedMotion ? 'auto' : 'smooth',
       });
+    }
+
+    if (content.target === 'product') {
+      target?.querySelector<HTMLInputElement>('input:not(:disabled)')?.focus();
+      return;
+    }
+
+    if (content.target === 'mode') {
+      target?.querySelector<HTMLButtonElement>('[role="tab"]:last-child')?.focus();
+      return;
     }
 
     coachmarkRef.current?.focus({ preventScroll: true });
@@ -226,6 +238,14 @@ export function Walkthrough({
         aria-describedby="inventory-guide-body"
         tabIndex={-1}
       >
+        <button
+          type="button"
+          className={styles.guideClose}
+          onClick={onClose}
+          aria-label="Exit guided demo"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
         <span className={styles.guideStep}>{step} OF 3</span>
         <h3 id="inventory-guide-title" className={styles.guideTitle}>
           {content.title}
@@ -233,35 +253,6 @@ export function Walkthrough({
         <p id="inventory-guide-body" className={styles.guideBody}>
           {content.body}
         </p>
-        <div className={styles.guideActions}>
-          <button type="button" className={styles.guideExit} onClick={onClose}>
-            Exit guide
-          </button>
-          <div className={styles.guideActionGroup}>
-            {step > 1 && (
-              <button
-                type="button"
-                className={styles.guideBack}
-                onClick={() => onStepChange((step - 1) as GuideStep)}
-              >
-                ← Back
-              </button>
-            )}
-            {step < 3 ? (
-              <button
-                type="button"
-                className={styles.guideNext}
-                onClick={() => onStepChange((step + 1) as GuideStep)}
-              >
-                Next →
-              </button>
-            ) : (
-              <button type="button" className={styles.guideNext} onClick={onClose}>
-                Done
-              </button>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );

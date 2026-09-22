@@ -1,8 +1,8 @@
 // Rate limiting for the "Ask Peter" chatbot proxy.
 //
 // Two independent goals:
-//   1. Per-visitor limits  — stop one person from spamming the assistant.
-//   2. A global limit       — a hard ceiling across ALL visitors so a
+//   1. Per-visitor limits: stop one person from spamming the assistant.
+//   2. A global limit: a hard ceiling across ALL visitors so a
 //                             determined abuser can't run up the API bill.
 //
 // Netlify functions are serverless: any in-memory counter lives on a single
@@ -15,7 +15,7 @@
 
 import { ChatError } from './chat.mjs';
 
-// Moderate defaults — comfortable for real visitors, caps cost abuse.
+// Moderate defaults. Comfortable for real visitors, with a cap on cost abuse.
 // Tweak the numbers here; everything else derives from them.
 export const RULES = [
   { name: 'ip-min', scope: 'ip', limit: 15, windowSec: 60 }, // 15 / minute / visitor
@@ -28,7 +28,7 @@ export class RateLimitError extends ChatError {
     super(
       429,
       scope === 'global'
-        ? "The assistant is a bit busy right now — please try again in a few minutes."
+        ? 'The assistant is a bit busy right now. Please try again in a few minutes.'
         : "You're sending messages a little too fast. Please wait a moment and try again.",
     );
     this.name = 'RateLimitError';
@@ -104,7 +104,7 @@ export function createMemoryStore() {
  * Durable store backed by Netlify Blobs (production). Pass the `getStore`
  * function from '@netlify/blobs'. Strong consistency keeps counters accurate
  * across function instances. The window bucket is part of the key, so we never
- * need to expire values — old buckets are just never read again.
+ * need to expire values. Old buckets are simply never read again.
  *
  * @param {(opts: { name: string, consistency?: string }) => any} getStore
  */

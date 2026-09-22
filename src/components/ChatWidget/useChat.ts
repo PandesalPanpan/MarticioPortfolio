@@ -85,7 +85,7 @@ export function useChat() {
         }
       } catch (err) {
         if (err instanceof DOMException && err.name === 'AbortError') {
-          // User stopped it — keep whatever streamed so far.
+          // User stopped it. Keep whatever streamed so far.
         } else {
           const message = err instanceof Error ? err.message : 'Something went wrong.';
           setError(message);

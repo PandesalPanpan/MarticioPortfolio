@@ -12,7 +12,7 @@ const SUGGESTIONS = [
   'How do I get in touch?',
 ];
 
-// Remember, per browser, that we've already nudged this visitor — don't nag.
+// Remember, per browser, that we've already nudged this visitor. Do not nag.
 const HINT_KEY = 'askpeter:hint-dismissed';
 const HINT_DELAY_MS = 3500;
 
@@ -51,14 +51,14 @@ function AvailableChatWidget() {
   const { messages, isStreaming, error, send, stop } = useChat();
   const reduced = usePrefersReducedMotion();
 
-  // Nudge visitors toward the chat a few seconds after load — once ever.
+  // Nudge visitors toward the chat a few seconds after load, once ever.
   useEffect(() => {
     if (open) return;
     let dismissed = false;
     try {
       dismissed = localStorage.getItem(HINT_KEY) === '1';
     } catch {
-      /* storage unavailable — just show it this session */
+      /* Storage unavailable. Show it this session. */
     }
     if (dismissed) return;
     const t = window.setTimeout(() => setShowHint(true), HINT_DELAY_MS);

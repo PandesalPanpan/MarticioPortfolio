@@ -55,7 +55,7 @@ export function sanitizeMessages(input) {
 
 /**
  * Calls DeepSeek with streaming enabled and returns a web ReadableStream of
- * plain-text token deltas (UTF-8 bytes) — the raw text the assistant produces,
+ * plain-text token deltas (UTF-8 bytes), the raw text the assistant produces,
  * with the upstream SSE framing already stripped.
  *
  * @param {{ messages: any[], apiKey: string, signal?: AbortSignal }} opts

@@ -1,4 +1,4 @@
-// Netlify Functions v2 — Fit Check endpoint.
+// Netlify Functions v2: Fit Check endpoint.
 // Routed by the `config.path` export below, like the chat function.
 // Shares the chatbot's rate limiter so one visitor cannot drain the API budget
 // by alternating between the two features.

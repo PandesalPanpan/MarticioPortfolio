@@ -1,4 +1,4 @@
-// Netlify Functions v2 — streaming proxy for the "Ask Peter" chatbot.
+// Netlify Functions v2: streaming proxy for the "Ask Peter" chatbot.
 // Reached in production via the /api/chat redirect (see netlify.toml).
 // Reads the DeepSeek key from the DEEPSEEK_API_KEY environment variable.
 

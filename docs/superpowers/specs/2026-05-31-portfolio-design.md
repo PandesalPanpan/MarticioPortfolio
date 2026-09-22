@@ -1,4 +1,4 @@
-# Portfolio Website — Design Spec
+# Portfolio Website: Design Spec
 
 **Date:** 2026-05-31
 **Owner:** Peter Elijah Marticio
@@ -24,7 +24,7 @@ This spec covers the **AI-assisted build only**.
 - No blog/writing section in v1.
 - No contact form.
 - No SSR / SSG framework (Next.js, Remix). A Vite SPA is sufficient.
-- No CSS framework (Tailwind, etc.) — keeps the eventual handwritten version comparable.
+- No CSS framework (Tailwind, etc.). This keeps the eventual handwritten version comparable.
 - No internationalization.
 
 ## Audience & Tone
@@ -35,7 +35,7 @@ Tone: serious craft, calm typography, quiet confidence. Not playful, not theatri
 
 ## Tech Stack
 
-- **Vite + React 19 + TypeScript** (strict mode) — matches the React version used in MemorizeMate
+- **Vite + React 19 + TypeScript** (strict mode). This matches the React version used in MemorizeMate.
 - **React Router v7** for routing
 - **Zustand** for the tiny global state (theme only)
 - **Framer Motion** for micro-interactions and page transitions
@@ -44,14 +44,14 @@ Tone: serious craft, calm typography, quiet confidence. Not playful, not theatri
 - **Fontsource** packages for self-hosted Google Fonts (Fraunces, Inter, JetBrains Mono)
 - **Vitest + React Testing Library + Playwright** for tests (light coverage)
 
-No backend. Deployed as a static build (target host TBD by user — Vercel, Netlify, or self-hosted VPS).
+No backend. Deployed as a static build (target host TBD by user: Vercel, Netlify, or self-hosted VPS).
 
 ## Routes
 
-- `/` — Home (long-scroll: Hero → Projects → Experience → Education → Contact)
-- `/handmade` — Placeholder route. Initial state: "from-scratch version under construction" stub with a GitHub source link. Later: swapped for the actual handwritten build, or fronted with an iframe to a separately hosted static build.
-- `/colophon` — Meta page explaining the dual-build experiment.
-- `*` — 404 in the same theme.
+- `/`: Home (long-scroll: Hero → Projects → Experience → Education → Contact)
+- `/handmade`: Placeholder route. Initial state: "from-scratch version under construction" stub with a GitHub source link. Later: swapped for the actual handwritten build, or fronted with an iframe to a separately hosted static build.
+- `/colophon`: Meta page explaining the dual-build experiment.
+- `*`: 404 in the same theme.
 
 `/handmade` and `/colophon` are lazy-loaded.
 
@@ -142,14 +142,14 @@ All colors exposed as CSS custom properties on `:root[data-theme="light|dark"]`.
 
 ### Header (sticky)
 - Left: monogram "PM" → links to `/`
-- Right: nav (`Projects`, `Experience`, `Colophon`), theme toggle, version toggle (`Agentic | Handmade` — plain `<Link>` between `/` and `/handmade`)
+- Right: nav (`Projects`, `Experience`, `Colophon`), theme toggle, version toggle (`Agentic | Handmade`) using a plain `<Link>` between `/` and `/handmade`
 
 ### Hero
 - Fraunces headline: "Peter Elijah Marticio"
 - Subhead: "Full-Stack Developer · Computer Engineering @ PUP"
 - 2-line tagline from CV profile
 - CTAs: `View Projects` (anchor), `Download CV` (`/cv.pdf`), `GitHub`
-- Honest one-liner near the version toggle: "This is the AI-assisted build. A from-scratch version is in progress — toggle above."
+- Honest one-liner near the version toggle: "This is the AI-assisted build. A from-scratch version is in progress. Toggle above."
 
 ### Featured Projects (2-col desktop, 1-col mobile)
 
@@ -171,26 +171,26 @@ Order:
 "More on GitHub →" link below the grid.
 
 Muted-text legend below the grid:
-> *Projects are labeled by build style. AI-Assisted means I used AI tooling (Claude Code, Copilot) as a pair-programmer — I drove the architecture, made the calls, and reviewed everything. From Scratch means no AI was used. Both are mine.*
+> *Projects are labeled by build style. AI-Assisted means I used AI tooling (Claude Code, Copilot) as a pair-programmer. I drove the architecture, made the calls, and reviewed everything. From Scratch means no AI was used. Both are mine.*
 
 ### Experience
 Vertical timeline. Three entries from CV: Caret Solutions (2026–Present), Meta Core Systems (Mar–Aug 2024), NTEK Systems (Aug–Oct 2023). Role, dates, 2 bullet outcomes each.
 
 ### Education
 Three side-by-side blocks on desktop, stacked on mobile:
-- PUP — Bachelor in Computer Engineering (2021–Present)
-- The Odin Project — ongoing, link to TOP profile
-- CS50 — completed, link to certificate (TODO)
+- PUP: Bachelor in Computer Engineering (2021–Present)
+- The Odin Project: ongoing, link to TOP profile
+- CS50: completed, link to certificate (TODO)
 
 ### Contact
-Email, LinkedIn, GitHub — icon + label, all "boopable." No form.
+Email, LinkedIn, GitHub: icon + label, all "boopable." No form.
 
 ### `/colophon` Page (4 sections)
 
 1. **Why two versions of this site exist** (1 paragraph)
-2. **What's on this version (AI-Assisted)** — stack, what AI did, what I did, what I rewrote/threw out (specific examples)
-3. **What's on the other version (From Scratch)** — same constraints, no AI, status
-4. **What stays the same across both** — shared data, both static, both Lighthouse-budgeted
+2. **What's on this version (AI-Assisted)**: stack, what AI did, what I did, what I rewrote/threw out (specific examples)
+3. **What's on the other version (From Scratch)**: same constraints, no AI, status
+4. **What stays the same across both**: shared data, both static, both Lighthouse-budgeted
 
 Footer: "Source code: GitHub →"
 
@@ -221,8 +221,8 @@ type Project = {
 ### BuildBadge component
 
 Small chip, top-right of each card. Mono font, lowercase letter-spacing.
-- `AI-Assisted` — teal chip
-- `From Scratch` — slate chip
+- `AI-Assisted`: teal chip
+- `From Scratch`: slate chip
 
 Tooltip on hover:
 - *AI-Assisted:* "Built with AI pair-programming. Architecture, decisions, and review by me."
@@ -260,7 +260,7 @@ A single Zustand store for theme preference (`light` | `dark` | `system`), persi
 ## Testing (light)
 
 - **Vitest + RTL:** version toggle, theme toggle persistence, featured projects list renders
-- **Playwright:** one smoke test — page loads, theme toggle works, all featured cards present
+- **Playwright:** one smoke test: page loads, theme toggle works, all featured cards present
 - No coverage-percentage chase
 
 ## Assets
@@ -272,7 +272,7 @@ A single Zustand store for theme preference (`light` | `dark` | `system`), persi
 - Optional decorative grain SVG
 
 ### Static (`public/`)
-- `cv.pdf` — copied from user's CV
+- `cv.pdf`: copied from user's CV
 - `robots.txt`, `sitemap.xml`
 
 ### Runtime

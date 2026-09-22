@@ -209,7 +209,7 @@ export default defineConfig({
 ```bash
 npx tsc -b
 ```
-Expected: no errors (project may still have boilerplate types — that's fine for now).
+Expected: no errors (the project may still have boilerplate types; that's fine for now).
 
 - [ ] **Step 4: Commit**
 
@@ -278,11 +278,11 @@ mkdir -p src/assets src/components src/data src/hooks src/routes src/sections sr
 
 Assets to add after implementation. Drop files into `src/assets/` (bundled) or `public/` (static), then update the data files noted below.
 
-- [ ] Threaded screenshots (3–4) — drop in `src/assets/threaded/`, list filenames in `src/data/projects.ts` under the `threaded` entry's `images` array.
-- [ ] MemorizeMate screenshots (3–4) — `src/assets/memorizemate/`, same pattern.
-- [ ] MemorizeMate live URL — update `links.live` for the `memorizemate` entry in `src/data/projects.ts`.
-- [ ] CS50 certificate URL — update the `cs50` entry in `src/data/education.ts`.
-- [ ] Optional headshot for hero — drop in `src/assets/`, import in `src/sections/Hero.tsx`.
+- [ ] Threaded screenshots (3–4): drop in `src/assets/threaded/`, list filenames in `src/data/projects.ts` under the `threaded` entry's `images` array.
+- [ ] MemorizeMate screenshots (3–4): `src/assets/memorizemate/`, same pattern.
+- [ ] MemorizeMate live URL: update `links.live` for the `memorizemate` entry in `src/data/projects.ts`.
+- [ ] CS50 certificate URL: update the `cs50` entry in `src/data/education.ts`.
+- [ ] Optional headshot for hero: drop in `src/assets/`, import in `src/sections/Hero.tsx`.
 - [ ] Replace `src/assets/og.png` placeholder with the final OG image (1200×630).
 ```
 
@@ -330,7 +330,7 @@ git commit -m "docs: add image todo checklist and MIT license"
 
 ```css
 :root {
-  /* spacing — 4px base grid */
+  /* spacing: 4px base grid */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -342,7 +342,7 @@ git commit -m "docs: add image todo checklist and MIT license"
   --space-20: 80px;
   --space-24: 96px;
 
-  /* type scale — 1.250 minor third, base 16px */
+  /* type scale: 1.250 minor third, base 16px */
   --text-xs: 0.8rem;
   --text-sm: 0.9rem;
   --text-base: 1rem;
@@ -528,10 +528,10 @@ git commit -m "feat(theme): add reset, fonts, base typography"
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FAF8F5" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0F1117" media="(prefers-color-scheme: dark)" />
-    <title>Peter Elijah Marticio — Full-Stack Developer</title>
+    <title>Peter Elijah Marticio: Full-Stack Developer</title>
     <meta
       name="description"
-      content="Portfolio of Peter Elijah Marticio — Full-Stack Developer and Computer Engineering student at PUP."
+      content="Portfolio of Peter Elijah Marticio: Full-Stack Developer and Computer Engineering student at PUP."
     />
     <meta property="og:title" content="Peter Elijah Marticio" />
     <meta property="og:description" content="Full-Stack Developer · Computer Engineering @ PUP" />
@@ -696,7 +696,7 @@ git commit -m "feat(hooks): add useTheme and usePrefersReducedMotion"
 
 ---
 
-## Task 11: Data layer — types and content files
+## Task 11: Data layer: types and content files
 
 **Files:**
 - Create: `src/data/types.ts`, `src/data/projects.ts`, `src/data/experience.ts`, `src/data/education.ts`
@@ -765,7 +765,7 @@ export const projects: Project[] = [
   {
     id: 'classhub',
     title: 'ClassHub',
-    blurb: 'Undergraduate thesis — PUP Computer Engineering Dept.',
+    blurb: 'Undergraduate thesis: PUP Computer Engineering Dept.',
     description: 'Thesis project for the PUP CompE Department. Built from scratch in JavaScript.',
     tech: ['JavaScript', 'Node.js'],
     buildStyle: 'from-scratch',
@@ -799,7 +799,7 @@ export const projects: Project[] = [
   {
     id: 'binary-speed',
     title: 'binary-speed',
-    blurb: 'CS50 final project — binary ↔ hex training game.',
+    blurb: 'CS50 final project: binary ↔ hex training game.',
     tech: ['Python'],
     buildStyle: 'from-scratch',
     links: { code: 'https://github.com/PandesalPanpan/binary-speed' },
@@ -808,7 +808,7 @@ export const projects: Project[] = [
   {
     id: 'express-inventory',
     title: 'express-inventory-application',
-    blurb: 'Odin Project — Express + MongoDB inventory CRUD.',
+    blurb: 'Odin Project: Express + MongoDB inventory CRUD.',
     tech: ['Node.js', 'Express', 'MongoDB', 'EJS'],
     buildStyle: 'from-scratch',
     links: { code: 'https://github.com/PandesalPanpan/express-inventory-application' },
@@ -817,7 +817,7 @@ export const projects: Project[] = [
   {
     id: 'jollibee-clone',
     title: 'jollibee-clone',
-    blurb: 'Frontend craft exercise — Jollibee site clone.',
+    blurb: 'Frontend craft exercise: Jollibee site clone.',
     tech: ['HTML', 'CSS', 'JavaScript'],
     buildStyle: 'from-scratch',
     links: { code: 'https://github.com/PandesalPanpan/jollibee-clone' },
@@ -1487,7 +1487,7 @@ export function Hero() {
       <p className={styles.eyebrow}>Full-Stack Developer · Computer Engineering @ PUP</p>
       <h1 id="hero-title" className={styles.title}>Peter Elijah Marticio</h1>
       <p className={styles.tagline}>
-        Computer Engineering student building full-stack apps end-to-end — from VPS self-hosting to
+        Computer Engineering student building full-stack apps end-to-end: from VPS self-hosting to
         Flutter POS systems. Active contributor to The Odin Project.
       </p>
       <div className={styles.actions}>
@@ -1496,7 +1496,7 @@ export function Hero() {
         <Button as="a" href="https://github.com/PandesalPanpan" variant="ghost">GitHub</Button>
       </div>
       <p className={styles.note}>
-        This is the AI-assisted build. A from-scratch version is in progress — toggle above.
+        This is the AI-assisted build. A from-scratch version is in progress. Toggle above.
       </p>
     </section>
   );
@@ -1707,7 +1707,7 @@ export function Projects() {
       </a>
       <p className={styles.legend}>
         Projects are labeled by build style. <em>AI-Assisted</em> means I used AI tooling
-        (Claude Code, Copilot) as a pair-programmer — I drove the architecture, made the calls,
+        (Claude Code, Copilot) as a pair-programmer. I drove the architecture, made the calls,
         and reviewed everything. <em>From Scratch</em> means no AI was used. Both are mine.
       </p>
     </section>
@@ -2010,9 +2010,9 @@ export default function Home() {
 export default function Handmade() {
   return (
     <main style={{ maxWidth: 768, margin: '0 auto', padding: '96px 24px' }}>
-      <h1>Handmade version — under construction</h1>
+      <h1>Handmade version: under construction</h1>
       <p style={{ color: 'var(--muted)', marginTop: 16 }}>
-        I'm hand-writing a from-scratch version of this site in parallel — no AI, same content,
+        I'm hand-writing a from-scratch version of this site in parallel. No AI, same content,
         same constraints. When it ships it will live here. In the meantime, you can follow
         progress on{' '}
         <a href="https://github.com/PandesalPanpan/MarticioPortfolio">GitHub</a>.
@@ -2035,7 +2035,7 @@ export default function Colophon() {
         <h2>Why two versions of this site exist</h2>
         <p>
           AI-assisted coding is the reality of how I work now. But I also want to show I can build
-          without it. So this site ships in two versions — the one you're on, built with AI
+          without it. So this site ships in two versions: the one you're on, built with AI
           pair-programming, and a from-scratch version I'm hand-writing in parallel. Toggle between
           them in the header. Same content, different process.
         </p>
@@ -2306,7 +2306,7 @@ git commit -m "chore(test): configure vitest with jsdom + matchMedia shim"
 
 ---
 
-## Task 30: Test — theme toggle persistence
+## Task 30: Test: theme toggle persistence
 
 **Files:**
 - Create: `tests/ThemeToggle.test.tsx`
@@ -2357,7 +2357,7 @@ git commit -m "test: cover ThemeToggle persistence"
 
 ---
 
-## Task 31: Test — version toggle marks active route
+## Task 31: Test: version toggle marks active route
 
 **Files:**
 - Create: `tests/VersionToggle.test.tsx`
@@ -2409,7 +2409,7 @@ git commit -m "test: cover VersionToggle aria-current on both routes"
 
 ---
 
-## Task 32: Test — Projects renders all featured cards
+## Task 32: Test: Projects renders all featured cards
 
 **Files:**
 - Create: `tests/Projects.test.tsx`
@@ -2605,7 +2605,7 @@ git commit -m "docs: add README"
 
 ---
 
-## Task 35: Final verification — full build, type-check, lint, test, lighthouse-spot-check
+## Task 35: Final verification: full build, type-check, lint, test, lighthouse-spot-check
 
 - [ ] **Step 1: Run everything green**
 
@@ -2642,9 +2642,9 @@ git commit -m "chore: final polish from manual review" --allow-empty
 
 ## Self-Review Notes
 
-**Spec coverage check:** Every spec section has a task — routes (27), folder layout (5/27), visual tokens (6), typography & global (7), no-flash (8), theme store/hooks (9/10), data (11), components (12–16, 21), sections (20, 22–25), pages (26), build (27), CV/robots/sitemap (28), tests (29–33), accessibility (covered inline in 8 inline script, 10 reduced-motion hook, 12 BoopIcon, 14 aria-label, 21 aria-expanded, 25 BoopIcon, 26 NotFound landmarks).
+**Spec coverage check:** Every spec section has a task: routes (27), folder layout (5/27), visual tokens (6), typography & global (7), no-flash (8), theme store/hooks (9/10), data (11), components (12–16, 21), sections (20, 22–25), pages (26), build (27), CV/robots/sitemap (28), tests (29–33), accessibility (covered inline in 8 inline script, 10 reduced-motion hook, 12 BoopIcon, 14 aria-label, 21 aria-expanded, 25 BoopIcon, 26 NotFound landmarks).
 
-**Performance budget:** Lazy loading is in Task 27; preload preferences for fonts are deferred to the user — the Fontsource imports in `global.css` are tree-shaken to one variable weight per family by Vite's CSS pipeline.
+**Performance budget:** Lazy loading is in Task 27; preload preferences for fonts are deferred to the user. The Fontsource imports in `global.css` are tree-shaken to one variable weight per family by Vite's CSS pipeline.
 
 **No placeholders:** All TODOs in the code are intentional, user-fillable items tracked in `docs/IMAGE-TODO.md` (Task 5).
 
