@@ -17,7 +17,9 @@ const EDITED_VALUES = {
 
 function renderDemo() {
   render(<InventoryDemo />);
-  return screen.getByRole('region', { name: 'Can a past receipt survive a catalog change?' });
+  return screen.getByRole('region', {
+    name: 'Production systems preserve what actually happened.',
+  });
 }
 
 function editProduct() {
@@ -121,6 +123,37 @@ describe('inventory demo domain', () => {
 });
 
 describe('InventoryDemo', () => {
+  it('frames the section as a system design case study', () => {
+    const demo = renderDemo();
+
+    expect(demo).toHaveAccessibleName('Production systems preserve what actually happened.');
+    expect(screen.getByText('System design case study')).toBeInTheDocument();
+    expect(
+      screen.getByText('Can a receipt survive a product rename, price change, or deletion?'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'This case study shows how I separate mutable catalog data from immutable transaction history so past records stay accurate as the system changes.',
+      ),
+    ).toBeInTheDocument();
+    for (const capability of [
+      'Data integrity',
+      'Transaction snapshots',
+      'Safe mutations',
+      'Failure handling',
+    ]) {
+      expect(screen.getByText(capability)).toBeInTheDocument();
+    }
+    expect(screen.queryByText('Interactive demo')).not.toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Naive approach' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Production-ready approach' })).toBeInTheDocument();
+    expect(screen.getByText('See the engineering decision in action')).toBeInTheDocument();
+    expect(
+      screen.getByText('Cause the data integrity bug, then fix it with a transaction snapshot.'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Why this matters')).toBeInTheDocument();
+  });
+
   it('keeps the optional walkthrough closed on first render', () => {
     renderDemo();
 
@@ -136,7 +169,8 @@ describe('InventoryDemo', () => {
     fireEvent.click(start);
 
     expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
-    expect(screen.getByRole('heading', { name: 'Edit the current product' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Change the live catalog' })).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toHaveTextContent('Try changing $5.00 to $8.00.');
     expect(document.activeElement).toBe(screen.getByLabelText('Name'));
     expect(screen.queryByRole('button', { name: /Next/ })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Back/ })).not.toBeInTheDocument();
@@ -178,7 +212,9 @@ describe('InventoryDemo', () => {
     editProduct();
 
     expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 3');
-    expect(screen.getByRole('heading', { name: 'The old receipt changed' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'The historical record changed' }),
+    ).toBeInTheDocument();
     expect(screen.getByTestId('receipt-card')).toHaveAttribute('data-tone', 'danger');
     expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $8.00');
   });
@@ -199,7 +235,7 @@ describe('InventoryDemo', () => {
     });
     expect(screen.getByRole('dialog')).toHaveTextContent('3 OF 3');
     expect(
-      screen.getByRole('heading', { name: 'Now compare the production approach' }),
+      screen.getByRole('heading', { name: 'Apply the production approach' }),
     ).toBeInTheDocument();
   });
 
@@ -215,7 +251,7 @@ describe('InventoryDemo', () => {
     expect(screen.getByRole('dialog')).toHaveTextContent('3 OF 3');
     expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $8.00');
 
-    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready approach' }));
 
     expect(screen.getByTestId('receipt-card')).toHaveTextContent('USB-C Cable');
     expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $5.00');
@@ -294,13 +330,17 @@ describe('InventoryDemo', () => {
     expect(receipt).toHaveAttribute('data-tone', 'danger');
     expect(receipt).toHaveTextContent('Premium Braided USB-C Cable');
     expect(receipt).toHaveTextContent('1 × $8.00');
-    expect(receipt).toHaveTextContent('Past receipt changed. This is the bug.');
+    expect(receipt).toHaveTextContent('Historical data changed.');
+    expect(receipt).toHaveTextContent(
+      "The receipt is reading today's catalog instead of the values captured at sale time.",
+    );
+    expect(receipt).toHaveTextContent('At time of sale');
     expect(receipt).toHaveTextContent('USB-C Cable · $5.00');
   });
 
   it('keeps Receipt #1001 on its snapshot in production-ready mode', () => {
     const demo = renderDemo();
-    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready approach' }));
     editProduct();
 
     const receipt = screen.getByTestId('receipt-card');
@@ -308,7 +348,11 @@ describe('InventoryDemo', () => {
     expect(receipt).toHaveAttribute('data-tone', 'success');
     expect(receipt).toHaveTextContent('USB-C Cable');
     expect(receipt).toHaveTextContent('1 × $5.00');
-    expect(receipt).toHaveTextContent('Snapshot preserved. The past receipt stayed true.');
+    expect(receipt).toHaveTextContent('Snapshot preserved.');
+    expect(receipt).toHaveTextContent(
+      'The receipt still reflects the original sale, even though the catalog changed.',
+    );
+    expect(receipt).toHaveTextContent('Transaction snapshot');
     expect(screen.getByLabelText('Name')).toHaveValue(EDITED_VALUES.name);
     expect(screen.getByLabelText('Price')).toHaveValue('8.00');
   });
@@ -322,25 +366,31 @@ describe('InventoryDemo', () => {
     expect(receipt).toHaveAttribute('data-receipt-status', 'missing');
     expect(receipt).toHaveTextContent('Missing item');
     expect(receipt).toHaveTextContent('Product record no longer exists');
-    expect(receipt).toHaveTextContent('Deleting catalog data broke a historical receipt.');
+    expect(receipt).toHaveTextContent('Historical record broken.');
+    expect(receipt).toHaveTextContent(
+      'The receipt depended on a catalog record that no longer exists.',
+    );
     expect(screen.getByRole('button', { name: 'Reset demo' })).toBeInTheDocument();
   });
 
   it('keeps a production receipt intact when the catalog product is deleted', () => {
     renderDemo();
-    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready approach' }));
     fireEvent.click(screen.getByRole('button', { name: 'Delete product' }));
 
     const receipt = screen.getByTestId('receipt-card');
     expect(receipt).toHaveAttribute('data-receipt-status', 'resolved');
     expect(receipt).toHaveTextContent('USB-C Cable');
     expect(receipt).toHaveTextContent('1 × $5.00');
-    expect(receipt).toHaveTextContent('Product deleted. Receipt #1001 is still intact.');
+    expect(receipt).toHaveTextContent('Historical record preserved.');
+    expect(receipt).toHaveTextContent(
+      'The catalog item was deleted, but the receipt remains complete.',
+    );
   });
 
   it('creates Receipt #1002 from the current catalog and keeps #1001 selectable', () => {
     renderDemo();
-    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready approach' }));
     editProduct();
     fireEvent.click(screen.getByRole('button', { name: 'Sell 1 item' }));
 
@@ -361,7 +411,7 @@ describe('InventoryDemo', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Delete product' }));
     fireEvent.click(screen.getByRole('button', { name: 'Reset demo' }));
 
-    expect(screen.getByRole('tab', { name: 'Usual issue' })).toHaveAttribute(
+    expect(screen.getByRole('tab', { name: 'Naive approach' })).toHaveAttribute(
       'aria-selected',
       'true',
     );
@@ -373,8 +423,8 @@ describe('InventoryDemo', () => {
 
   it('keeps the architecture toggle keyboard accessible', () => {
     renderDemo();
-    const usualTab = screen.getByRole('tab', { name: 'Usual issue' });
-    const productionTab = screen.getByRole('tab', { name: 'Production-ready' });
+    const usualTab = screen.getByRole('tab', { name: 'Naive approach' });
+    const productionTab = screen.getByRole('tab', { name: 'Production-ready approach' });
 
     productionTab.focus();
     fireEvent.keyDown(productionTab, { key: 'ArrowLeft' });

@@ -7,10 +7,39 @@ test.describe('recruiter inventory demo', () => {
     const demo = page.locator('#inventory-demo');
     const receipt = demo.getByTestId('receipt-card');
     await expect(demo).toBeVisible();
+    await expect(demo.getByText('System design case study')).toBeVisible();
+    await expect(
+      demo.getByRole('heading', { name: 'Production systems preserve what actually happened.' }),
+    ).toBeVisible();
+    await expect(demo.getByText('Data integrity', { exact: true })).toBeVisible();
+    await expect(demo.getByText('Transaction snapshots', { exact: true })).toBeVisible();
+    await expect(demo.getByText('Safe mutations', { exact: true })).toBeVisible();
+    await expect(demo.getByText('Failure handling', { exact: true })).toBeVisible();
+    await expect(demo.getByText('Interactive demo', { exact: true })).toHaveCount(0);
     await expect(receipt).toContainText('Receipt #1001');
     await expect(receipt).toContainText('USB-C Cable');
     await expect(receipt).toContainText('1 × $5.00');
     await expect(demo.getByTestId('product-editor')).toContainText('19 in stock');
+  });
+
+  test('keeps the case-study framing readable in dark mode', async ({ page }) => {
+    await page.goto('/');
+    const demo = page.locator('#inventory-demo');
+    const darkToggle = page.getByRole('button', { name: 'Switch to dark theme' });
+
+    if (await darkToggle.count()) {
+      await darkToggle.click();
+    }
+
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect(
+      demo.getByRole('heading', { name: 'Production systems preserve what actually happened.' }),
+    ).toBeVisible();
+    await expect(demo.getByText('Transaction snapshots', { exact: true })).toBeVisible();
+    await expect(demo.getByRole('tab', { name: 'Production-ready approach' })).toBeVisible();
+    expect(await demo.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe(
+      'rgb(250, 248, 245)',
+    );
   });
 
   test('keeps the walkthrough opt-in and supports the action-driven coach-mark flow', async ({
@@ -24,7 +53,8 @@ test.describe('recruiter inventory demo', () => {
     await expect(demo.getByRole('button', { name: 'Guide me' })).toHaveCount(0);
     await demo.getByRole('button', { name: 'Start guided demo' }).click();
     await expect(demo.getByRole('dialog')).toContainText('1 OF 3');
-    await expect(demo.getByRole('heading', { name: 'Edit the current product' })).toBeVisible();
+    await expect(demo.getByRole('heading', { name: 'Change the live catalog' })).toBeVisible();
+    await expect(demo.getByRole('dialog')).toContainText('Try changing $5.00 to $8.00.');
     await expect(demo.getByRole('button', { name: /Next/ })).toHaveCount(0);
     await expect(demo.getByRole('button', { name: /Back/ })).toHaveCount(0);
 
@@ -32,14 +62,16 @@ test.describe('recruiter inventory demo', () => {
     await demo.getByLabel('Price').fill('8');
     await demo.getByRole('button', { name: 'Save changes' }).click();
     await expect(demo.getByRole('dialog')).toContainText('2 OF 3');
-    await expect(demo.getByRole('heading', { name: 'The old receipt changed' })).toBeVisible();
+    await expect(
+      demo.getByRole('heading', { name: 'The historical record changed' }),
+    ).toBeVisible();
     await expect(demo.getByTestId('receipt-card')).toContainText('1 × $8.00');
 
     await expect(demo.getByRole('dialog')).toContainText('3 OF 3', { timeout: 3_000 });
     await expect(
-      demo.getByRole('heading', { name: 'Now compare the production approach' }),
+      demo.getByRole('heading', { name: 'Apply the production approach' }),
     ).toBeVisible();
-    await demo.getByRole('tab', { name: 'Production-ready' }).click();
+    await demo.getByRole('tab', { name: 'Production-ready approach' }).click();
     await expect(demo.getByTestId('receipt-card')).toContainText('USB-C Cable');
     await expect(demo.getByTestId('receipt-card')).toContainText('1 × $5.00');
     await expect(demo.getByTestId('receipt-feedback')).toContainText('Snapshot preserved.');
@@ -67,7 +99,10 @@ test.describe('recruiter inventory demo', () => {
     await expect(receipt).toHaveAttribute('data-tone', 'danger');
     await expect(receipt).toContainText('Premium Braided USB-C Cable');
     await expect(receipt).toContainText('1 × $8.00');
-    await expect(receipt).toContainText('Past receipt changed. This is the bug.');
+    await expect(receipt).toContainText('Historical data changed.');
+    await expect(receipt).toContainText(
+      "The receipt is reading today's catalog instead of the values captured at sale time.",
+    );
   });
 
   test('switches to production-ready behavior against the same edited catalog', async ({
@@ -76,7 +111,7 @@ test.describe('recruiter inventory demo', () => {
     await page.goto('/');
     const demo = page.locator('#inventory-demo');
 
-    await demo.getByRole('tab', { name: 'Production-ready' }).click();
+    await demo.getByRole('tab', { name: 'Production-ready approach' }).click();
     await demo.getByLabel('Name').fill('Premium Braided USB-C Cable');
     await demo.getByLabel('Price').fill('8');
     await demo.getByRole('button', { name: 'Save changes' }).click();
@@ -85,7 +120,10 @@ test.describe('recruiter inventory demo', () => {
     await expect(receipt).toHaveAttribute('data-tone', 'success');
     await expect(receipt).toContainText('USB-C Cable');
     await expect(receipt).toContainText('1 × $5.00');
-    await expect(receipt).toContainText('Snapshot preserved. The past receipt stayed true.');
+    await expect(receipt).toContainText('Snapshot preserved.');
+    await expect(receipt).toContainText(
+      'The receipt still reflects the original sale, even though the catalog changed.',
+    );
   });
 
   test('shows the different delete outcomes and can reset', async ({ page }) => {
@@ -98,23 +136,19 @@ test.describe('recruiter inventory demo', () => {
       'missing',
     );
     await expect(demo.getByTestId('receipt-card')).toContainText('Missing item');
-    await expect(demo.getByTestId('receipt-card')).toContainText(
-      'Deleting catalog data broke a historical receipt.',
-    );
+    await expect(demo.getByTestId('receipt-card')).toContainText('Historical record broken.');
 
     await demo.getByRole('button', { name: 'Reset demo' }).click();
     await expect(demo.getByTestId('receipt-card')).toContainText('USB-C Cable');
     await expect(demo.getByTestId('product-editor')).toContainText('19 in stock');
 
-    await demo.getByRole('tab', { name: 'Production-ready' }).click();
+    await demo.getByRole('tab', { name: 'Production-ready approach' }).click();
     await demo.getByRole('button', { name: 'Delete product' }).click();
     await expect(demo.getByTestId('receipt-card')).toHaveAttribute(
       'data-receipt-status',
       'resolved',
     );
-    await expect(demo.getByTestId('receipt-card')).toContainText(
-      'Product deleted. Receipt #1001 is still intact.',
-    );
+    await expect(demo.getByTestId('receipt-card')).toContainText('Historical record preserved.');
   });
 
   test('sells a new item from the current catalog while retaining the old receipt', async ({
@@ -123,7 +157,7 @@ test.describe('recruiter inventory demo', () => {
     await page.goto('/');
     const demo = page.locator('#inventory-demo');
 
-    await demo.getByRole('tab', { name: 'Production-ready' }).click();
+    await demo.getByRole('tab', { name: 'Production-ready approach' }).click();
     await demo.getByLabel('Name').fill('Premium Braided USB-C Cable');
     await demo.getByLabel('Price').fill('8');
     await demo.getByRole('button', { name: 'Save changes' }).click();
@@ -159,10 +193,10 @@ test.describe('recruiter inventory demo', () => {
   test('supports keyboard switching for the architecture toggle', async ({ page }) => {
     await page.goto('/');
     const demo = page.locator('#inventory-demo');
-    const production = demo.getByRole('tab', { name: 'Production-ready' });
+    const production = demo.getByRole('tab', { name: 'Production-ready approach' });
     await production.focus();
     await page.keyboard.press('ArrowLeft');
-    await expect(demo.getByRole('tab', { name: 'Usual issue' })).toHaveAttribute(
+    await expect(demo.getByRole('tab', { name: 'Naive approach' })).toHaveAttribute(
       'aria-selected',
       'true',
     );

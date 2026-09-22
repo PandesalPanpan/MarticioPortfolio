@@ -20,7 +20,7 @@ export const ReceiptCard = forwardRef<HTMLElement, ReceiptCardProps>(function Re
   const resolution = resolveReceipt(receipt, product, mode);
   const hasUsualIssue = mode === 'usual' && usualIssueAffectsReceipt(receipt, product);
   const tone = mode === 'production' ? 'success' : hasUsualIssue ? 'danger' : 'neutral';
-  const statusLabel = mode === 'production' ? 'Snapshot protected' : 'Live catalog reference';
+  const statusLabel = mode === 'production' ? 'Transaction snapshot' : 'Current catalog';
 
   return (
     <article
@@ -34,7 +34,11 @@ export const ReceiptCard = forwardRef<HTMLElement, ReceiptCardProps>(function Re
       <div className={styles.receiptHeader}>
         <span className={styles.receiptEyebrow}>Receipt #{receipt.receiptNumber}</span>
         {receipts.length > 1 ? (
-          <div className={styles.receiptSelector} data-testid="receipt-selector" aria-label="Receipts">
+          <div
+            className={styles.receiptSelector}
+            data-testid="receipt-selector"
+            aria-label="Receipts"
+          >
             {receipts.map((item) => (
               <button
                 key={item.receiptNumber}
@@ -72,7 +76,7 @@ export const ReceiptCard = forwardRef<HTMLElement, ReceiptCardProps>(function Re
 
       <div className={styles.snapshotComparison}>
         <span className={styles.comparisonLabel}>
-          {mode === 'production' ? 'Snapshot stored at sale' : 'At the time of sale'}
+          {mode === 'production' ? 'Transaction snapshot' : 'At time of sale'}
         </span>
         <strong>
           {receipt.productNameSnapshot} · {formatCurrency(receipt.unitPriceSnapshot)}

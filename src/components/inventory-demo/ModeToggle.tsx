@@ -43,7 +43,7 @@ export function ModeToggle({
         onClick={() => onChange('usual')}
         onKeyDown={handleKeyDown}
       >
-        Usual issue
+        Naive approach
       </button>
       <button
         type="button"
@@ -53,7 +53,7 @@ export function ModeToggle({
         onClick={() => onChange('production')}
         onKeyDown={handleKeyDown}
       >
-        Production-ready
+        Production-ready approach
       </button>
     </div>
   );

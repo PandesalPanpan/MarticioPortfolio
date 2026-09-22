@@ -24,28 +24,33 @@ type WalkthroughProps = {
   onClose: () => void;
 };
 
-const stepContent: Record<GuideStep, { target: GuideTarget; title: string; body: string }> = {
+const stepContent: Record<
+  GuideStep,
+  { target: GuideTarget; title: string; body: string; hint?: string }
+> = {
   1: {
     target: 'product',
-    title: 'Edit the current product',
-    body: 'Try changing the product name or price, then save it. Try $5.00 to $8.00.',
+    title: 'Change the live catalog',
+    body: 'Edit the product name or price, then save it.',
+    hint: 'Try changing $5.00 to $8.00.',
   },
   2: {
     target: 'receipt',
-    title: 'The old receipt changed',
-    body: 'This sale happened before your edit, but its name or price changed too. That is the problem.',
+    title: 'The historical record changed',
+    body: "This sale already happened, but the receipt changed with today's catalog. Historical records should not work this way.",
   },
   3: {
     target: 'mode',
-    title: 'Now compare the production approach',
-    body: 'Switch to Production-ready. The same sale should stay exactly as it was when it happened.',
+    title: 'Apply the production approach',
+    body: 'Switch to Production-ready approach.',
+    hint: 'The receipt should use the values captured when the sale happened.',
   },
 };
 
 const completionContent = {
   target: 'mode' as const,
   title: 'Snapshot preserved',
-  body: 'The receipt stayed true even though the catalog changed.',
+  body: 'The receipt still reflects the original sale, even though the catalog changed.',
 };
 
 function clamp(value: number, minimum: number, maximum: number): number {
@@ -113,6 +118,10 @@ export function Walkthrough({
   });
   const [containerWidth, setContainerWidth] = useState(820);
   const content = step === 3 && isComplete ? completionContent : stepContent[step];
+  const describedBy =
+    'hint' in content && content.hint
+      ? 'inventory-guide-body inventory-guide-hint'
+      : 'inventory-guide-body';
 
   const targetRef: RefObject<HTMLElement | null> =
     content.target === 'product' ? productRef : content.target === 'receipt' ? receiptRef : modeRef;
@@ -235,7 +244,7 @@ export function Walkthrough({
         role="dialog"
         aria-modal="false"
         aria-labelledby="inventory-guide-title"
-        aria-describedby="inventory-guide-body"
+        aria-describedby={describedBy}
         tabIndex={-1}
       >
         <button
@@ -252,6 +261,11 @@ export function Walkthrough({
         </h3>
         <p id="inventory-guide-body" className={styles.guideBody}>
           {content.body}
+          {'hint' in content && content.hint ? (
+            <span id="inventory-guide-hint" className={styles.guideHint}>
+              {content.hint}
+            </span>
+          ) : null}
         </p>
       </div>
     </div>

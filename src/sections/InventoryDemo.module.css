@@ -67,6 +67,7 @@
   align-items: center;
   gap: 10px;
   min-height: 36px;
+  margin-top: 16px;
 }
 
 .demoBadge,
@@ -85,6 +86,7 @@
 .demoBadge {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   min-height: 28px;
   padding: 6px 10px;
   border-radius: 999px;
@@ -136,18 +138,48 @@
 
 .title {
   margin: 0;
+  max-width: 720px;
   color: var(--demo-ink);
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 700;
-  line-height: 1.18;
+  line-height: 1.12;
   letter-spacing: -0.03em;
 }
 
+.scenario {
+  max-width: 720px;
+  margin: 0;
+  color: var(--demo-ink);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
 .subtitle {
-  max-width: none;
+  max-width: 720px;
+  margin: 0;
   color: var(--demo-muted);
   font-size: 13px;
-  line-height: 1.35;
+  line-height: 1.45;
+}
+
+.capabilityRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.capabilityChip {
+  padding: 5px 8px;
+  border: 1px solid var(--demo-border);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--demo-surface) 72%, var(--demo-soft));
+  color: var(--demo-muted);
+  font-size: 10px;
+  line-height: 1.2;
 }
 
 .walkthroughCta {
@@ -660,7 +692,7 @@
 
 .helperBar {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 9px;
   min-height: 46px;
   margin-top: 16px;
@@ -670,16 +702,23 @@
   font-size: 11px;
 }
 
+.helperBar strong {
+  flex: none;
+  color: var(--demo-ink);
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .helperSteps {
   color: var(--demo-accent);
   font-size: 10px;
   white-space: nowrap;
 }
 .helperRule {
-  margin-left: auto;
+  max-width: 720px;
   color: var(--demo-muted);
   font-size: 10px;
-  text-align: right;
+  line-height: 1.35;
 }
 .formError {
   margin-top: 8px;
@@ -782,6 +821,15 @@
   line-height: 1.35;
 }
 
+.guideHint {
+  display: block;
+  margin-top: 6px;
+  color: var(--demo-accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.3;
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
@@ -840,7 +888,6 @@
   }
   .helperRule {
     width: 100%;
-    margin-left: 0;
     text-align: left;
   }
 }
@@ -860,7 +907,7 @@
     flex: 1;
   }
   .title {
-    font-size: 24px;
+    font-size: 26px;
   }
   .receiptHeader {
     align-items: flex-start;

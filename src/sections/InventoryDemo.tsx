@@ -79,7 +79,8 @@ export function InventoryDemo() {
         ? {
             tone: 'success',
             title: 'Snapshot preserved.',
-            description: 'The receipt stayed true even though the catalog changed.',
+            description:
+              'The receipt still reflects the original sale, even though the catalog changed.',
           }
         : null,
     );
@@ -128,14 +129,15 @@ export function InventoryDemo() {
       mode === 'usual'
         ? {
             tone: 'danger',
-            title: 'Past receipt changed. This is the bug.',
+            title: 'Historical data changed.',
             description:
-              'This receipt is reading today’s product record instead of what was actually sold.',
+              "The receipt is reading today's catalog instead of the values captured at sale time.",
           }
         : {
             tone: 'success',
-            title: 'Snapshot preserved. The past receipt stayed true.',
-            description: 'Catalog changes affect future sales, not historical receipts.',
+            title: 'Snapshot preserved.',
+            description:
+              'The receipt still reflects the original sale, even though the catalog changed.',
           },
     );
 
@@ -166,13 +168,13 @@ export function InventoryDemo() {
       mode === 'usual'
         ? {
             tone: 'danger',
-            title: 'Deleting catalog data broke a historical receipt.',
-            description: 'The naive receipt can no longer resolve its product record.',
+            title: 'Historical record broken.',
+            description: 'The receipt depended on a catalog record that no longer exists.',
           }
         : {
             tone: 'success',
-            title: `Product deleted. Receipt #${selectedReceiptNumber} is still intact.`,
-            description: 'The original name, price, and total live on the receipt snapshot.',
+            title: 'Historical record preserved.',
+            description: 'The catalog item was deleted, but the receipt remains complete.',
           },
     );
     setReceiptPulse((current) => current + 1);
@@ -216,21 +218,32 @@ export function InventoryDemo() {
       aria-labelledby="inventory-demo-title"
     >
       <div className={styles.header}>
-        <div className={styles.modeRow}>
-          <span className={styles.demoBadge}>Interactive demo</span>
-          <ModeToggle
-            mode={mode}
-            onChange={handleModeChange}
-            targetRef={modeRef}
-            isGuideTarget={guideStep === 3}
-          />
-        </div>
+        <span className={styles.demoBadge}>System design case study</span>
         <h2 id="inventory-demo-title" className={styles.title}>
-          Can a past receipt survive a catalog change?
+          Production systems preserve what actually happened.
         </h2>
-        <p className={styles.subtitle}>
-          Sell once, then rename, reprice, or delete the product. Watch what happens to the receipt.
+        <p className={styles.scenario}>
+          Can a receipt survive a product rename, price change, or deletion?
         </p>
+        <p className={styles.subtitle}>
+          This case study shows how I separate mutable catalog data from immutable transaction
+          history so past records stay accurate as the system changes.
+        </p>
+        <ul className={styles.capabilityRow} aria-label="Capabilities demonstrated">
+          <li className={styles.capabilityChip}>Data integrity</li>
+          <li className={styles.capabilityChip}>Transaction snapshots</li>
+          <li className={styles.capabilityChip}>Safe mutations</li>
+          <li className={styles.capabilityChip}>Failure handling</li>
+        </ul>
+      </div>
+
+      <div className={styles.modeRow}>
+        <ModeToggle
+          mode={mode}
+          onChange={handleModeChange}
+          targetRef={modeRef}
+          isGuideTarget={guideStep === 3}
+        />
       </div>
 
       <div className={styles.walkthroughCta}>
@@ -240,8 +253,8 @@ export function InventoryDemo() {
           <span />
         </span>
         <div className={styles.walkthroughCopy}>
-          <strong>Want a quick tour?</strong>
-          <span>See the problem and the production fix.</span>
+          <strong>See the engineering decision in action</strong>
+          <span>Cause the data integrity bug, then fix it with a transaction snapshot.</span>
           <span className={styles.walkthroughDuration}>About 20 seconds</span>
         </div>
         <button
@@ -296,12 +309,9 @@ export function InventoryDemo() {
       </div>
 
       <div className={styles.helperBar}>
-        <strong>Try it:</strong>
-        <span className={styles.helperSteps}>SELL, EDIT + SAVE, DELETE</span>
+        <strong>Why this matters</strong>
         <span className={styles.helperRule}>
-          {mode === 'usual'
-            ? 'A past receipt should never change.'
-            : 'Snapshot keeps the receipt true.'}
+          Catalog data describes the product now. Transaction data records what actually happened.
         </span>
       </div>
 
