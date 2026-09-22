@@ -32,8 +32,10 @@ export function ModeToggle({
     <div
       ref={targetRef}
       className={`${styles.modeToggle} ${isGuideTarget ? styles.guideTargetActive : ''}`}
+      data-testid="mode-toggle"
       role="tablist"
       aria-label="Architecture mode"
+      data-guide-target={isGuideTarget ? 'true' : 'false'}
     >
       <button
         type="button"

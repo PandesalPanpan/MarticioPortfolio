@@ -162,94 +162,161 @@ describe('InventoryDemo', () => {
     expect(screen.queryByRole('button', { name: 'Guide me' })).not.toBeInTheDocument();
   });
 
-  it('opens the walkthrough at step 1 only after the CTA is pressed', () => {
+  it('starts the guided demo at a deterministic receipt baseline', () => {
     renderDemo();
+    editProduct();
+    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready approach' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sell 1 item' }));
 
-    const start = screen.getByRole('button', { name: 'Start guided demo' });
-    fireEvent.click(start);
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
 
-    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
-    expect(screen.getByRole('heading', { name: 'Change the live catalog' })).toBeInTheDocument();
-    expect(screen.getByRole('dialog')).toHaveTextContent('Try changing $5.00 to $8.00.');
+    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 4');
+    expect(screen.getByRole('heading', { name: 'Remember this receipt' })).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toHaveTextContent(
+      'This sale already happened. Receipt #1001 records a USB-C Cable sold for $5.00.',
+    );
+    expect(screen.getByRole('dialog')).toHaveTextContent(
+      'Keep the name and price in mind. We are about to change the product catalog.',
+    );
+    expect(screen.getByRole('button', { name: 'Got it' })).toBeInTheDocument();
+    expect(screen.getByTestId('receipt-card')).toHaveAttribute('data-guide-target', 'true');
+    expect(screen.getByTestId('receipt-card')).toHaveTextContent('Receipt #1001');
+    expect(screen.getByTestId('receipt-card')).toHaveTextContent('USB-C Cable');
+    expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $5.00');
+    expect(screen.getByLabelText('Name')).toHaveValue('USB-C Cable');
+    expect(screen.getByLabelText('Price')).toHaveValue('5.00');
+    expect(screen.getByTestId('product-editor')).toHaveTextContent('19 in stock');
+    expect(screen.getByRole('tab', { name: 'Naive approach' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    expect(document.activeElement).toBe(screen.getByRole('dialog'));
+  });
+
+  it('keeps the first receipt observation manual even when timers advance', () => {
+    vi.useFakeTimers();
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 4');
+    expect(screen.getByRole('heading', { name: 'Remember this receipt' })).toBeInTheDocument();
+  });
+
+  it('uses Got it to enter the live catalog action step', () => {
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
+
+    expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 4');
+    expect(
+      screen.getByRole('heading', { name: 'Now change the live catalog' }),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('product-editor')).toHaveAttribute('data-guide-target', 'true');
+    expect(screen.getByTestId('receipt-card')).toHaveAttribute('data-guide-target', 'false');
     expect(document.activeElement).toBe(screen.getByLabelText('Name'));
-    expect(screen.queryByRole('button', { name: /Next/ })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Back/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Next|Back|Previous/ })).not.toBeInTheDocument();
   });
 
   it('does not advance when the visitor only types', () => {
     renderDemo();
     fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
 
     fireEvent.change(screen.getByLabelText('Price'), { target: { value: '8' } });
 
-    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
+    expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 4');
   });
 
   it('does not advance when Save changes has no actual change', () => {
     renderDemo();
     fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
 
-    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
+    expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 4');
   });
 
   it('does not advance after an invalid save', () => {
     renderDemo();
     fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
 
     fireEvent.change(screen.getByLabelText('Price'), { target: { value: '0' } });
     fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
 
-    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 3');
+    expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 4');
     expect(screen.getByRole('status')).toHaveTextContent('greater than $0');
   });
 
-  it('advances to the receipt after a valid catalog change is saved', () => {
+  it('advances to the corrupted receipt after a valid catalog change is saved', () => {
     renderDemo();
     fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
 
     editProduct();
 
-    expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 3');
+    expect(screen.getByRole('dialog')).toHaveTextContent('3 OF 4');
     expect(
-      screen.getByRole('heading', { name: 'The historical record changed' }),
+      screen.getByRole('heading', { name: 'The historical receipt changed' }),
     ).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toHaveTextContent('That is the data integrity problem.');
+    expect(screen.getByTestId('receipt-card')).toHaveAttribute('data-guide-target', 'true');
     expect(screen.getByTestId('receipt-card')).toHaveAttribute('data-tone', 'danger');
+    expect(screen.getByTestId('receipt-card')).toHaveTextContent('Premium Braided USB-C Cable');
     expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $8.00');
+    expect(screen.getByRole('button', { name: 'Show me the fix' })).toBeInTheDocument();
   });
 
-  it('automatically moves from the receipt observation to step 3', () => {
+  it('keeps the corrupted receipt visible until the visitor chooses the fix', () => {
     vi.useFakeTimers();
     renderDemo();
     fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
     editProduct();
 
     act(() => {
-      vi.advanceTimersByTime(1499);
+      vi.advanceTimersByTime(5000);
     });
-    expect(screen.getByRole('dialog')).toHaveTextContent('2 OF 3');
 
-    act(() => {
-      vi.advanceTimersByTime(1);
-    });
-    expect(screen.getByRole('dialog')).toHaveTextContent('3 OF 3');
+    expect(screen.getByRole('dialog')).toHaveTextContent('3 OF 4');
     expect(
-      screen.getByRole('heading', { name: 'Apply the production approach' }),
+      screen.getByRole('heading', { name: 'The historical receipt changed' }),
     ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Show me the fix' })).toBeInTheDocument();
+  });
+
+  it('uses Show me the fix to enter the architecture action step', () => {
+    renderDemo();
+    fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
+    editProduct();
+    fireEvent.click(screen.getByRole('button', { name: 'Show me the fix' }));
+
+    expect(screen.getByRole('dialog')).toHaveTextContent('4 OF 4');
+    expect(
+      screen.getByRole('heading', { name: 'Now apply the production approach' }),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('mode-toggle')).toHaveAttribute('data-guide-target', 'true');
+    expect(screen.queryByRole('button', { name: 'Show me the fix' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Next|Back|Previous/ })).not.toBeInTheDocument();
   });
 
   it('waits for the real architecture change before completing the guide', () => {
     vi.useFakeTimers();
     renderDemo();
     fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
     editProduct();
-    act(() => {
-      vi.advanceTimersByTime(1500);
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Show me the fix' }));
 
-    expect(screen.getByRole('dialog')).toHaveTextContent('3 OF 3');
-    expect(screen.getByTestId('receipt-card')).toHaveTextContent('1 × $8.00');
+    fireEvent.click(screen.getByRole('tab', { name: 'Naive approach' }));
+    expect(screen.getByRole('dialog')).toHaveTextContent('4 OF 4');
+    expect(screen.getByRole('dialog')).not.toHaveTextContent('Snapshot preserved');
 
     fireEvent.click(screen.getByRole('tab', { name: 'Production-ready approach' }));
 
@@ -259,7 +326,7 @@ describe('InventoryDemo', () => {
     expect(screen.getByRole('dialog')).toHaveTextContent('Snapshot preserved');
 
     act(() => {
-      vi.advanceTimersByTime(899);
+      vi.advanceTimersByTime(1499);
     });
     expect(screen.getByTestId('inventory-guide')).toBeInTheDocument();
     act(() => {
@@ -270,25 +337,34 @@ describe('InventoryDemo', () => {
 
   it('supports the close control and Escape without resetting demo state', () => {
     renderDemo();
-    editProduct();
-
     const start = screen.getByRole('button', { name: 'Start guided demo' });
     fireEvent.click(start);
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
+    editProduct();
     fireEvent.click(screen.getByRole('button', { name: 'Exit guided demo' }));
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Name')).toHaveValue(EDITED_VALUES.name);
     expect(screen.getByLabelText('Price')).toHaveValue('8.00');
     expect(document.activeElement).toBe(start);
 
     const replay = screen.getByRole('button', { name: 'Replay guided demo' });
     fireEvent.click(replay);
+    expect(screen.getByLabelText('Name')).toHaveValue('USB-C Cable');
+    expect(screen.getByLabelText('Price')).toHaveValue('5.00');
+    expect(screen.getByRole('dialog')).toHaveTextContent('1 OF 4');
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
+    fireEvent.change(screen.getByLabelText('Price'), { target: { value: '7' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
     fireEvent.keyDown(document, { key: 'Escape' });
+
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    expect(screen.getByLabelText('Price')).toHaveValue('8.00');
+    expect(screen.getByLabelText('Price')).toHaveValue('7.00');
     expect(document.activeElement).toBe(replay);
   });
 
-  it('keeps the coachmark on the theme-aware demo surface in dark mode', () => {
+  it('keeps the coachmark readable through all four steps in dark mode', () => {
+    vi.useFakeTimers();
     document.documentElement.setAttribute('data-theme', 'dark');
     renderDemo();
     fireEvent.click(screen.getByRole('button', { name: 'Start guided demo' }));
@@ -296,6 +372,23 @@ describe('InventoryDemo', () => {
     const coachmark = screen.getByRole('dialog');
     expect(getComputedStyle(coachmark).backgroundColor).not.toBe('rgb(255, 255, 255)');
     expect(coachmark.className).toContain('coachmark');
+    fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
+    expect(getComputedStyle(screen.getByRole('dialog')).backgroundColor).not.toBe(
+      'rgb(255, 255, 255)',
+    );
+    editProduct();
+    expect(getComputedStyle(screen.getByRole('dialog')).backgroundColor).not.toBe(
+      'rgb(255, 255, 255)',
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Show me the fix' }));
+    expect(getComputedStyle(screen.getByRole('dialog')).backgroundColor).not.toBe(
+      'rgb(255, 255, 255)',
+    );
+    fireEvent.click(screen.getByRole('tab', { name: 'Production-ready approach' }));
+    expect(screen.getByRole('dialog')).toHaveTextContent('Snapshot preserved');
+    expect(getComputedStyle(screen.getByRole('dialog')).backgroundColor).not.toBe(
+      'rgb(255, 255, 255)',
+    );
   });
 
   it('shows the seeded receipt immediately with the current catalog beside it', () => {
@@ -371,6 +464,10 @@ describe('InventoryDemo', () => {
       'The receipt depended on a catalog record that no longer exists.',
     );
     expect(screen.getByRole('button', { name: 'Reset demo' })).toBeInTheDocument();
+    expect(screen.getByTestId('product-editor')).toHaveTextContent(
+      'Historical receipts remain available.',
+    );
+    expect(screen.queryByText('Historical receipts are still available above.')).not.toBeInTheDocument();
   });
 
   it('keeps a production receipt intact when the catalog product is deleted', () => {

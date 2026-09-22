@@ -52,39 +52,157 @@ test.describe('recruiter inventory demo', () => {
     await expect(demo.getByRole('button', { name: 'Start guided demo' })).toHaveCount(1);
     await expect(demo.getByRole('button', { name: 'Guide me' })).toHaveCount(0);
     await demo.getByRole('button', { name: 'Start guided demo' }).click();
-    await expect(demo.getByRole('dialog')).toContainText('1 OF 3');
-    await expect(demo.getByRole('heading', { name: 'Change the live catalog' })).toBeVisible();
-    await expect(demo.getByRole('dialog')).toContainText('Try changing $5.00 to $8.00.');
+    await expect(demo.getByRole('dialog')).toContainText('1 OF 4');
+    await expect(demo.getByRole('heading', { name: 'Remember this receipt' })).toBeVisible();
+    await expect(demo.getByRole('dialog')).toContainText(
+      'Receipt #1001 records a USB-C Cable sold for $5.00.',
+    );
+    await expect(demo.getByTestId('receipt-card')).toHaveAttribute('data-guide-target', 'true');
+    await expect(demo.getByRole('button', { name: 'Got it' })).toBeVisible();
     await expect(demo.getByRole('button', { name: /Next/ })).toHaveCount(0);
     await expect(demo.getByRole('button', { name: /Back/ })).toHaveCount(0);
+
+    await page.waitForTimeout(1_700);
+    await expect(demo.getByRole('dialog')).toContainText('1 OF 4');
+
+    await demo.getByRole('button', { name: 'Got it' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('2 OF 4');
+    await expect(
+      demo.getByRole('heading', { name: 'Now change the live catalog' }),
+    ).toBeVisible();
+    await expect(demo.getByTestId('product-editor')).toHaveAttribute(
+      'data-guide-target',
+      'true',
+    );
+    await expect(demo.getByRole('button', { name: /Next|Back|Previous/ })).toHaveCount(0);
 
     await demo.getByLabel('Name').fill('Premium Braided USB-C Cable');
     await demo.getByLabel('Price').fill('8');
     await demo.getByRole('button', { name: 'Save changes' }).click();
-    await expect(demo.getByRole('dialog')).toContainText('2 OF 3');
+    await expect(demo.getByRole('dialog')).toContainText('3 OF 4');
     await expect(
-      demo.getByRole('heading', { name: 'The historical record changed' }),
+      demo.getByRole('heading', { name: 'The historical receipt changed' }),
     ).toBeVisible();
     await expect(demo.getByTestId('receipt-card')).toContainText('1 × $8.00');
+    await expect(demo.getByRole('dialog')).toContainText('That is the data integrity problem.');
+    await expect(demo.getByRole('button', { name: 'Show me the fix' })).toBeVisible();
 
-    await expect(demo.getByRole('dialog')).toContainText('3 OF 3', { timeout: 3_000 });
+    await page.waitForTimeout(1_700);
+    await expect(demo.getByRole('dialog')).toContainText('3 OF 4');
     await expect(
-      demo.getByRole('heading', { name: 'Apply the production approach' }),
+      demo.getByRole('heading', { name: 'The historical receipt changed' }),
     ).toBeVisible();
+    await demo.getByRole('button', { name: 'Show me the fix' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('4 OF 4');
+    await expect(
+      demo.getByRole('heading', { name: 'Now apply the production approach' }),
+    ).toBeVisible();
+    await expect(demo.getByTestId('mode-toggle')).toHaveAttribute('data-guide-target', 'true');
     await demo.getByRole('tab', { name: 'Production-ready approach' }).click();
     await expect(demo.getByTestId('receipt-card')).toContainText('USB-C Cable');
     await expect(demo.getByTestId('receipt-card')).toContainText('1 × $5.00');
     await expect(demo.getByTestId('receipt-feedback')).toContainText('Snapshot preserved.');
+    await expect(demo.getByRole('dialog')).toContainText('Snapshot preserved');
     await expect(demo.getByTestId('inventory-guide')).toHaveCount(0, { timeout: 3_000 });
 
     await expect(demo.getByRole('button', { name: 'Replay guided demo' })).toHaveCount(1);
     await demo.getByRole('button', { name: 'Replay guided demo' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('1 OF 4');
+    await expect(demo.getByRole('tab', { name: 'Naive approach' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    await expect(demo.getByLabel('Name')).toHaveValue('USB-C Cable');
+    await expect(demo.getByLabel('Price')).toHaveValue('5.00');
+    await expect(demo.getByTestId('product-editor')).toContainText('19 in stock');
+    await expect(demo.getByTestId('receipt-card')).toHaveAttribute('data-receipt-number', '1001');
     await demo.getByRole('button', { name: 'Exit guided demo' }).click();
     await expect(demo.getByTestId('inventory-guide')).toHaveCount(0);
 
     await demo.getByRole('button', { name: 'Replay guided demo' }).click();
+    await demo.getByRole('button', { name: 'Got it' }).click();
+    await demo.getByLabel('Price').fill('7');
+    await demo.getByRole('button', { name: 'Save changes' }).click();
     await page.keyboard.press('Escape');
     await expect(demo.getByTestId('inventory-guide')).toHaveCount(0);
+    await expect(demo.getByLabel('Price')).toHaveValue('7.00');
+  });
+
+  test('keeps all guide steps readable in dark mode', async ({ page }) => {
+    await page.goto('/');
+    const demo = page.locator('#inventory-demo');
+    const darkToggle = page.getByRole('button', { name: 'Switch to dark theme' });
+
+    if (await darkToggle.count()) {
+      await darkToggle.click();
+    }
+
+    await demo.getByRole('button', { name: 'Start guided demo' }).click();
+    for (const step of ['1 OF 4', 'Remember this receipt']) {
+      await expect(demo.getByRole('dialog')).toContainText(step);
+    }
+    await expect(demo.getByRole('dialog')).toBeVisible();
+    await expect(
+      demo.getByRole('dialog').evaluate((element) => getComputedStyle(element).color),
+    ).resolves.not.toBe('rgb(255, 255, 255)');
+
+    await demo.getByRole('button', { name: 'Got it' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('2 OF 4');
+    await demo.getByLabel('Price').fill('8');
+    await demo.getByRole('button', { name: 'Save changes' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('3 OF 4');
+    await expect(demo.getByRole('dialog')).toContainText('That is the data integrity problem.');
+    await demo.getByRole('button', { name: 'Show me the fix' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('4 OF 4');
+    await demo.getByRole('tab', { name: 'Production-ready approach' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('Snapshot preserved');
+    await expect(demo.getByTestId('receipt-card')).toContainText('1 × $5.00');
+  });
+
+  test('keeps the four-step guide usable without overflow across target viewports', async ({
+    page,
+  }) => {
+    for (const width of [375, 390, 430, 768, 820, 1440]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto('/');
+      const demo = page.locator('#inventory-demo');
+      const receipt = demo.getByTestId('receipt-card');
+
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+        `Expected no horizontal overflow at ${width}px`,
+      ).toBe(true);
+      await demo.getByRole('button', { name: 'Start guided demo' }).click();
+      await expect(receipt).toHaveAttribute('data-guide-target', 'true');
+      await expect(receipt).toBeVisible();
+      expect(
+        await page.evaluate(() => {
+          const dialog = document.querySelector('#inventory-demo [role="dialog"]');
+          const target = document.querySelector('#inventory-demo [data-testid="receipt-card"]');
+          if (!dialog || !target) return false;
+          const dialogBox = dialog.getBoundingClientRect();
+          const targetBox = target.getBoundingClientRect();
+          return (
+            dialogBox.right <= targetBox.left ||
+            dialogBox.left >= targetBox.right ||
+            dialogBox.bottom <= targetBox.top ||
+            dialogBox.top >= targetBox.bottom
+          );
+        }),
+        `Expected the step 1 coachmark not to cover receipt values at ${width}px`,
+      ).toBe(true);
+      await demo.getByRole('button', { name: 'Got it' }).click();
+      await page.waitForTimeout(400);
+      await expect(demo.getByLabel('Name')).toBeEditable();
+      await demo.getByLabel('Price').fill('8');
+      await demo.getByRole('button', { name: 'Save changes' }).click();
+      await expect(demo.getByRole('dialog')).toContainText('3 OF 4');
+      await expect(receipt).toHaveAttribute('data-guide-target', 'true');
+      await page.waitForTimeout(400);
+      await demo.getByRole('button', { name: 'Show me the fix' }).click();
+      await expect(demo.getByTestId('mode-toggle')).toHaveAttribute('data-guide-target', 'true');
+      await expect(demo.getByRole('tab', { name: 'Production-ready approach' })).toBeVisible();
+    }
   });
 
   test('makes the usual issue visible after editing and saving the catalog', async ({ page }) => {

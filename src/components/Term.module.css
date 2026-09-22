@@ -63,6 +63,32 @@
   transform: translateX(-50%) translateY(0);
 }
 
+@media (max-width: 520px) {
+  .tip {
+    position: fixed;
+    top: auto;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+    transform: translateY(4px);
+    transform-origin: top left;
+  }
+
+  .tip::after {
+    right: 24px;
+    left: auto;
+    transform: none;
+  }
+
+  .term:hover .tip,
+  .term:focus .tip,
+  .term:focus-within .tip {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tip { transition: none; }
 }

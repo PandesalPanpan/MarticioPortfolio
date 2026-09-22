@@ -42,6 +42,7 @@ export const ProductEditor = forwardRef<HTMLElement, ProductEditorProps>(functio
       ref={ref}
       className={`${styles.productCard} ${isGuideTarget ? styles.guideTargetActive : ''}`}
       data-testid="product-editor"
+      data-guide-target={isGuideTarget ? 'true' : 'false'}
     >
       <div className={styles.cardHeader}>
         <span className={styles.cardEyebrow}>Current product</span>
@@ -53,7 +54,7 @@ export const ProductEditor = forwardRef<HTMLElement, ProductEditorProps>(functio
       {isDeleted && (
         <div className={styles.deletedNotice} role="status">
           <strong>Product removed from catalog.</strong>
-          <span>Historical receipts are still available above.</span>
+          <span>Historical receipts remain available.</span>
         </div>
       )}
 

@@ -30,6 +30,7 @@ export const ReceiptCard = forwardRef<HTMLElement, ReceiptCardProps>(function Re
       data-receipt-number={receipt.receiptNumber}
       data-receipt-status={resolution.status}
       data-tone={tone}
+      data-guide-target={isGuideTarget ? 'true' : 'false'}
     >
       <div className={styles.receiptHeader}>
         <span className={styles.receiptEyebrow}>Receipt #{receipt.receiptNumber}</span>

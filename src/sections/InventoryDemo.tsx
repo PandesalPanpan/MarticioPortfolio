@@ -17,8 +17,7 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import styles from './InventoryDemo.module.css';
 
 const initialDemo = createInitialDemoState();
-const GUIDE_OBSERVATION_DELAY = 1500;
-const GUIDE_COMPLETION_DELAY = 900;
+const GUIDE_COMPLETION_DELAY = 1500;
 
 function parsePrice(value: string): number | null {
   const parsed = Number(value.replace(/[^0-9.]/g, ''));
@@ -69,7 +68,7 @@ export function InventoryDemo() {
     receipts.find((receipt) => receipt.receiptNumber === selectedReceiptNumber) ?? receipts[0];
 
   const handleModeChange = (nextMode: ArchitectureMode) => {
-    const completesGuide = guideStep === 3 && mode === 'usual' && nextMode === 'production';
+    const completesGuide = guideStep === 4 && mode === 'usual' && nextMode === 'production';
     setMode(nextMode);
     setFormError(null);
     setGuideCompletion(completesGuide);
@@ -88,6 +87,16 @@ export function InventoryDemo() {
 
   const startGuide = (event: MouseEvent<HTMLButtonElement>) => {
     guideTriggerRef.current = event.currentTarget;
+    const state = resetState();
+    setMode('usual');
+    setProduct(state.product);
+    setReceipts(state.receipts);
+    setNextReceiptNumber(state.nextReceiptNumber);
+    setSelectedReceiptNumber(state.selectedReceiptNumber);
+    setDraftName(state.draftName);
+    setDraftPrice(state.draftPrice);
+    setFeedback(null);
+    setReceiptPulse(0);
     setGuideCompletion(false);
     setFormError(null);
     setGuideStep(1);
@@ -141,8 +150,8 @@ export function InventoryDemo() {
           },
     );
 
-    if (guideStep === 1) {
-      setGuideStep(2);
+    if (guideStep === 2) {
+      setGuideStep(3);
     }
   };
 
@@ -196,18 +205,14 @@ export function InventoryDemo() {
   };
 
   useEffect(() => {
-    if (guideStep !== 2) return;
+    if (guideStep !== 4 || !guideCompletion) return;
 
-    const timeout = window.setTimeout(() => setGuideStep(3), GUIDE_OBSERVATION_DELAY);
+    const timeout = window.setTimeout(
+      () => closeGuide(),
+      reducedMotion ? 0 : GUIDE_COMPLETION_DELAY,
+    );
     return () => window.clearTimeout(timeout);
-  }, [guideStep]);
-
-  useEffect(() => {
-    if (guideStep !== 3 || !guideCompletion) return;
-
-    const timeout = window.setTimeout(() => closeGuide(), GUIDE_COMPLETION_DELAY);
-    return () => window.clearTimeout(timeout);
-  }, [closeGuide, guideCompletion, guideStep]);
+  }, [closeGuide, guideCompletion, guideStep, reducedMotion]);
 
   return (
     <section
@@ -242,7 +247,7 @@ export function InventoryDemo() {
           mode={mode}
           onChange={handleModeChange}
           targetRef={modeRef}
-          isGuideTarget={guideStep === 3}
+          isGuideTarget={guideStep === 4}
         />
       </div>
 
@@ -271,7 +276,7 @@ export function InventoryDemo() {
       <div className={styles.demoSurface}>
         <ProductEditor
           ref={productRef}
-          isGuideTarget={guideStep === 1}
+          isGuideTarget={guideStep === 2}
           product={product}
           name={draftName}
           price={draftPrice}
@@ -292,7 +297,7 @@ export function InventoryDemo() {
         {selectedReceipt && (
           <ReceiptCard
             ref={receiptRef}
-            isGuideTarget={guideStep === 2}
+            isGuideTarget={guideStep === 1 || guideStep === 3}
             key={`${selectedReceipt.receiptNumber}-${receiptPulse}`}
             receipt={selectedReceipt}
             receipts={receipts}
@@ -335,6 +340,10 @@ export function InventoryDemo() {
           coachmarkRef={coachmarkRef}
           reducedMotion={reducedMotion}
           isComplete={guideCompletion}
+          onAdvance={() => {
+            setGuideCompletion(false);
+            setGuideStep((current) => (current === 1 ? 2 : current === 3 ? 4 : current));
+          }}
           onClose={closeGuide}
         />
       )}
