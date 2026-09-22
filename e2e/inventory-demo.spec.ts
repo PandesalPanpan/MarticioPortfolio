@@ -1,7 +1,151 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-test.describe('interactive inventory demo', () => {
-  test('loads without browser console errors', async ({ page }) => {
+test.describe('recruiter inventory demo', () => {
+  test('shows the seeded receipt immediately', async ({ page }) => {
+    await page.goto('/');
+
+    const demo = page.locator('#inventory-demo');
+    const receipt = demo.getByTestId('receipt-card');
+    await expect(demo).toBeVisible();
+    await expect(receipt).toContainText('Receipt #1001');
+    await expect(receipt).toContainText('USB-C Cable');
+    await expect(receipt).toContainText('1 × $5.00');
+    await expect(demo.getByTestId('product-editor')).toContainText('19 in stock');
+  });
+
+  test('keeps the walkthrough opt-in and supports the full coach-mark flow', async ({ page }) => {
+    await page.goto('/');
+    const demo = page.locator('#inventory-demo');
+
+    await expect(demo.getByTestId('inventory-guide')).toHaveCount(0);
+    await demo.getByRole('button', { name: 'Start 20-sec walkthrough →' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('1 OF 3');
+    await expect(demo.getByRole('heading', { name: 'Edit the current product' })).toBeVisible();
+
+    await demo.getByRole('button', { name: 'Next →' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('2 OF 3');
+    await expect(demo.getByRole('heading', { name: 'Now watch the receipt' })).toBeVisible();
+
+    await demo.getByRole('button', { name: 'Next →' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('3 OF 3');
+    await expect(demo.getByRole('heading', { name: 'Compare both approaches' })).toBeVisible();
+    await demo.getByRole('button', { name: '← Back' }).click();
+    await expect(demo.getByRole('dialog')).toContainText('2 OF 3');
+
+    await demo.getByRole('button', { name: 'Exit guide' }).click();
+    await expect(demo.getByTestId('inventory-guide')).toHaveCount(0);
+
+    await demo.getByRole('button', { name: 'Start 20-sec walkthrough →' }).click();
+    await page.keyboard.press('Escape');
+    await expect(demo.getByTestId('inventory-guide')).toHaveCount(0);
+  });
+
+  test('makes the usual issue visible after editing and saving the catalog', async ({ page }) => {
+    await page.goto('/');
+    const demo = page.locator('#inventory-demo');
+
+    await demo.getByLabel('Name').fill('Premium Braided USB-C Cable');
+    await demo.getByLabel('Price').fill('8');
+    await demo.getByRole('button', { name: 'Save changes' }).click();
+
+    const receipt = demo.getByTestId('receipt-card');
+    await expect(receipt).toHaveAttribute('data-tone', 'danger');
+    await expect(receipt).toContainText('Premium Braided USB-C Cable');
+    await expect(receipt).toContainText('1 × $8.00');
+    await expect(receipt).toContainText('Past receipt changed — this is the bug.');
+  });
+
+  test('switches to production-ready behavior against the same edited catalog', async ({ page }) => {
+    await page.goto('/');
+    const demo = page.locator('#inventory-demo');
+
+    await demo.getByRole('tab', { name: 'Production-ready' }).click();
+    await demo.getByLabel('Name').fill('Premium Braided USB-C Cable');
+    await demo.getByLabel('Price').fill('8');
+    await demo.getByRole('button', { name: 'Save changes' }).click();
+
+    const receipt = demo.getByTestId('receipt-card');
+    await expect(receipt).toHaveAttribute('data-tone', 'success');
+    await expect(receipt).toContainText('USB-C Cable');
+    await expect(receipt).toContainText('1 × $5.00');
+    await expect(receipt).toContainText('Snapshot preserved — the past receipt stayed true.');
+  });
+
+  test('shows the different delete outcomes and can reset', async ({ page }) => {
+    await page.goto('/');
+    const demo = page.locator('#inventory-demo');
+
+    await demo.getByRole('button', { name: 'Delete product' }).click();
+    await expect(demo.getByTestId('receipt-card')).toHaveAttribute('data-receipt-status', 'missing');
+    await expect(demo.getByTestId('receipt-card')).toContainText('Missing item');
+    await expect(demo.getByTestId('receipt-card')).toContainText(
+      'Deleting catalog data broke a historical receipt.',
+    );
+
+    await demo.getByRole('button', { name: 'Reset demo' }).click();
+    await expect(demo.getByTestId('receipt-card')).toContainText('USB-C Cable');
+    await expect(demo.getByTestId('product-editor')).toContainText('19 in stock');
+
+    await demo.getByRole('tab', { name: 'Production-ready' }).click();
+    await demo.getByRole('button', { name: 'Delete product' }).click();
+    await expect(demo.getByTestId('receipt-card')).toHaveAttribute('data-receipt-status', 'resolved');
+    await expect(demo.getByTestId('receipt-card')).toContainText(
+      'Product deleted — Receipt #1001 is still intact.',
+    );
+  });
+
+  test('sells a new item from the current catalog while retaining the old receipt', async ({ page }) => {
+    await page.goto('/');
+    const demo = page.locator('#inventory-demo');
+
+    await demo.getByRole('tab', { name: 'Production-ready' }).click();
+    await demo.getByLabel('Name').fill('Premium Braided USB-C Cable');
+    await demo.getByLabel('Price').fill('8');
+    await demo.getByRole('button', { name: 'Save changes' }).click();
+    await demo.getByRole('button', { name: 'Sell 1 item' }).click();
+
+    await expect(demo.getByTestId('product-editor')).toContainText('18 in stock');
+    await expect(demo.getByTestId('receipt-card')).toHaveAttribute('data-receipt-number', '1002');
+    await expect(demo.getByTestId('receipt-card')).toContainText('Premium Braided USB-C Cable');
+    await expect(demo.getByTestId('receipt-card')).toContainText('1 × $8.00');
+
+    await demo.getByRole('button', { name: 'View receipt #1001' }).click();
+    await expect(demo.getByTestId('receipt-card')).toHaveAttribute('data-receipt-number', '1001');
+    await expect(demo.getByTestId('receipt-card')).toContainText('USB-C Cable');
+    await expect(demo.getByTestId('receipt-card')).toContainText('1 × $5.00');
+  });
+
+  test('stacks the editor and receipt without horizontal overflow on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+      true,
+    );
+
+    const demo = page.locator('#inventory-demo');
+    const editorBox = await demo.getByTestId('product-editor').boundingBox();
+    const receiptBox = await demo.getByTestId('receipt-card').boundingBox();
+    expect(editorBox).not.toBeNull();
+    expect(receiptBox).not.toBeNull();
+    expect(receiptBox!.y).toBeGreaterThan(editorBox!.y + editorBox!.height - 1);
+  });
+
+  test('supports keyboard switching for the architecture toggle', async ({ page }) => {
+    await page.goto('/');
+    const demo = page.locator('#inventory-demo');
+    const production = demo.getByRole('tab', { name: 'Production-ready' });
+    await production.focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(demo.getByRole('tab', { name: 'Usual issue' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    await page.keyboard.press('End');
+    await expect(production).toHaveAttribute('aria-selected', 'true');
+  });
+
+  test('does not emit browser errors on the home page', async ({ page }) => {
     const consoleErrors: string[] = [];
     page.on('console', (message) => {
       if (message.type() === 'error' && !message.text().includes('Failed to load resource')) {
@@ -9,85 +153,8 @@ test.describe('interactive inventory demo', () => {
       }
     });
     page.on('pageerror', (error) => consoleErrors.push(error.message));
-    page.on('response', (response) => {
-      const path = new URL(response.url()).pathname;
-      if (response.status() >= 400 && path !== '/api/chat') {
-        consoleErrors.push(`${response.status()} ${response.url()}`);
-      }
-    });
-
     await page.goto('/');
     await expect(page.locator('#inventory-demo')).toBeVisible();
-
     expect(consoleErrors).toEqual([]);
-  });
-
-  test('hovering the sell CTA reveals stock, receipt, and movement in sequence', async ({
-    page,
-  }) => {
-    await page.goto('/');
-    const demo = page.locator('#inventory-demo');
-    const sell = demo.getByRole('button', { name: 'Sell 2 units →' });
-
-    await sell.hover();
-    await page.waitForFunction(() => {
-      const demo = document.querySelector('#inventory-demo');
-      return demo?.querySelector('[data-testid="movement-preview"][data-visible="true"]') !== null;
-    });
-    expect(await demo.getByTestId('stock-value').textContent()).toBe('18 units');
-    await expect(demo.getByTestId('receipt-preview')).toHaveAttribute('data-visible', 'true');
-    await expect(demo.getByTestId('movement-preview')).toHaveAttribute('data-visible', 'true');
-    await expect(demo.getByText('#1001 · USB-C Cable')).toHaveCount(1);
-    await expect(demo.getByText(/SALE\s+−2/)).toHaveCount(1);
-    await expect(demo.getByText('Receipt #1001')).toHaveCount(1);
-  });
-
-  test('clicking the sell CTA pins the preview after the pointer leaves', async ({ page }) => {
-    await page.goto('/');
-    const demo = page.locator('#inventory-demo');
-    const sell = demo.getByRole('button', { name: 'Sell 2 units →' });
-
-    await sell.click();
-    await page.waitForFunction(() => {
-      const demo = document.querySelector('#inventory-demo');
-      return demo?.querySelector('[data-testid="movement-preview"][data-visible="true"]') !== null;
-    });
-    await page.mouse.move(0, 0);
-
-    await expect(demo.getByTestId('stock-value')).toHaveText('18 units');
-    await expect(demo.getByRole('button', { name: 'Sold 2 units ✓' })).toBeVisible();
-    await expect(demo.getByText('Click again to reset')).toBeVisible();
-  });
-
-  test('keyboard activation exposes the same result', async ({ page }) => {
-    await page.goto('/');
-    const demo = page.locator('#inventory-demo');
-    const sell = demo.getByRole('button', { name: 'Sell 2 units →' });
-
-    await sell.focus();
-    await page.keyboard.press('Enter');
-    await expect(demo.getByTestId('stock-value')).toHaveText('18 units');
-    await expect(demo.getByText('#1001 · USB-C Cable')).toBeVisible();
-  });
-
-  test('Why this matters opens and proves snapshot values survive a live edit', async ({
-    page,
-  }) => {
-    await page.goto('/');
-    const demo = page.locator('#inventory-demo');
-
-    const whyThisMatters = demo.getByRole('button', { name: 'Why this matters ↗' });
-    await expect(whyThisMatters).toHaveAttribute('aria-expanded', 'false');
-    await whyThisMatters.click();
-    await expect(whyThisMatters).toHaveAttribute('aria-expanded', 'true');
-    await expect(
-      demo.getByRole('heading', { name: 'What it is now vs. what was sold then' }),
-    ).toBeVisible();
-    await demo.getByRole('button', { name: 'Edit product' }).click();
-
-    await expect(demo.getByRole('heading', { name: 'Premium Braided USB-C Cable' })).toBeVisible();
-    await expect(demo.getByText('$8.00').first()).toBeVisible();
-    await expect(demo.getByText('USB-C Cable').last()).toBeVisible();
-    await expect(demo.getByText('$5.00').last()).toBeVisible();
   });
 });

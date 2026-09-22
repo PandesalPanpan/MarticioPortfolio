@@ -1,112 +1,156 @@
-export type MovementType = 'INITIAL' | 'SALE' | 'RECEIVING' | 'ADJUSTMENT';
+export type ArchitectureMode = 'usual' | 'production';
 
 export type Product = {
   id: string;
   sku: string;
   name: string;
-  currentPrice: number;
-  currentStock: number;
+  price: number;
+  stock: number;
 };
 
-export type ReceiptLineSnapshot = {
+export type SaleRecord = {
+  receiptNumber: number;
   productId: string;
   productNameSnapshot: string;
-  skuSnapshot: string;
   unitPriceSnapshot: number;
   quantity: number;
   lineTotal: number;
+  soldAt: string;
 };
 
-export type Receipt = {
-  receiptNumber: string;
-  createdAt: string;
-  lines: ReceiptLineSnapshot[];
-  total: number;
+export type DemoState = {
+  product: Product;
+  receipts: SaleRecord[];
+  nextReceiptNumber: number;
 };
 
-export type StockMovement = {
-  type: MovementType;
-  quantityDelta: number;
-  balanceAfter: number;
-  reference?: string;
+export type ReceiptResolution =
+  | {
+      status: 'resolved';
+      name: string;
+      unitPrice: number;
+      total: number;
+      source: 'catalog' | 'snapshot';
+    }
+  | {
+      status: 'missing';
+      source: 'catalog';
+    };
+
+export type DemoFeedback = {
+  tone: 'danger' | 'success';
+  title: string;
+  description: string;
 };
 
-export type InventoryTransaction = {
-  productAfterSale: Product;
-  receipt: Receipt;
-  movement: StockMovement;
-  initialMovement: StockMovement;
-};
-
-export const SALE_QUANTITY = 2;
-export const DEMO_RECEIPT_NUMBER = '#1001';
-export const DEMO_CREATED_AT = '2026-09-17T17:42:00+08:00';
+export const PRODUCT_ID = 'CABLE-001';
+export const SEED_RECEIPT_NUMBER = 1001;
+export const FIRST_RECEIPT_SOLD_AT = '2026-09-17T17:42:00+08:00';
+export const SALE_QUANTITY = 1;
 
 export function createInitialProduct(): Product {
   return {
-    id: 'usb-c-cable',
-    sku: 'CABLE-001',
+    id: PRODUCT_ID,
+    sku: PRODUCT_ID,
     name: 'USB-C Cable',
-    currentPrice: 5,
-    currentStock: 20,
+    price: 5,
+    stock: 20,
   };
 }
 
-export function simulateSale(
+export function createSale(
   product: Product,
-  quantity: number,
-  receiptNumber = DEMO_RECEIPT_NUMBER,
-  createdAt = DEMO_CREATED_AT,
-): InventoryTransaction {
+  receiptNumber: number,
+  quantity = SALE_QUANTITY,
+  soldAt = FIRST_RECEIPT_SOLD_AT,
+): SaleRecord {
   if (!Number.isInteger(quantity) || quantity <= 0) {
     throw new Error('Sale quantity must be a positive integer.');
   }
 
-  if (quantity > product.currentStock) {
+  if (quantity > product.stock) {
     throw new Error('Sale quantity cannot exceed current stock.');
   }
 
-  const lineTotal = product.currentPrice * quantity;
-  const receiptLine: ReceiptLineSnapshot = {
+  return {
+    receiptNumber,
     productId: product.id,
     productNameSnapshot: product.name,
-    skuSnapshot: product.sku,
-    unitPriceSnapshot: product.currentPrice,
+    unitPriceSnapshot: product.price,
     quantity,
-    lineTotal,
-  };
-  const productAfterSale: Product = {
-    ...product,
-    currentStock: product.currentStock - quantity,
-  };
-
-  return {
-    productAfterSale,
-    receipt: {
-      receiptNumber,
-      createdAt,
-      lines: [receiptLine],
-      total: lineTotal,
-    },
-    movement: {
-      type: 'SALE',
-      quantityDelta: -quantity,
-      balanceAfter: productAfterSale.currentStock,
-      reference: receiptNumber,
-    },
-    initialMovement: {
-      type: 'INITIAL',
-      quantityDelta: product.currentStock,
-      balanceAfter: product.currentStock,
-    },
+    lineTotal: product.price * quantity,
+    soldAt,
   };
 }
 
-export function updateLiveProduct(
+export function sellOneItem(
   product: Product,
-  changes: Pick<Product, 'name' | 'currentPrice'>,
+  receiptNumber: number,
+  soldAt = FIRST_RECEIPT_SOLD_AT,
+): { product: Product; sale: SaleRecord } {
+  const sale = createSale(product, receiptNumber, SALE_QUANTITY, soldAt);
+  return {
+    product: { ...product, stock: product.stock - SALE_QUANTITY },
+    sale,
+  };
+}
+
+export function createInitialDemoState(): DemoState {
+  const startingProduct = createInitialProduct();
+  const { product, sale } = sellOneItem(startingProduct, SEED_RECEIPT_NUMBER);
+
+  return {
+    product,
+    receipts: [sale],
+    nextReceiptNumber: SEED_RECEIPT_NUMBER + 1,
+  };
+}
+
+export function updateCatalogProduct(
+  product: Product,
+  changes: Pick<Product, 'name' | 'price'>,
 ): Product {
   return { ...product, ...changes };
+}
+
+export function resolveReceipt(
+  receipt: SaleRecord,
+  product: Product | null,
+  mode: ArchitectureMode,
+): ReceiptResolution {
+  if (mode === 'production') {
+    return {
+      status: 'resolved',
+      name: receipt.productNameSnapshot,
+      unitPrice: receipt.unitPriceSnapshot,
+      total: receipt.lineTotal,
+      source: 'snapshot',
+    };
+  }
+
+  if (!product || product.id !== receipt.productId) {
+    return { status: 'missing', source: 'catalog' };
+  }
+
+  return {
+    status: 'resolved',
+    name: product.name,
+    unitPrice: product.price,
+    total: product.price * receipt.quantity,
+    source: 'catalog',
+  };
+}
+
+export function usualIssueAffectsReceipt(
+  receipt: SaleRecord,
+  product: Product | null,
+): boolean {
+  const resolution = resolveReceipt(receipt, product, 'usual');
+  return (
+    resolution.status === 'missing' ||
+    resolution.name !== receipt.productNameSnapshot ||
+    resolution.unitPrice !== receipt.unitPriceSnapshot
+  );
 }
 
 export function formatCurrency(value: number): string {
@@ -115,9 +159,3 @@ export function formatCurrency(value: number): string {
     currency: 'USD',
   }).format(value);
 }
-
-export function formatMovementDelta(value: number): string {
-  return value < 0 ? `−${Math.abs(value)}` : `+${value}`;
-}
-
-export const DEMO_TRANSACTION = simulateSale(createInitialProduct(), SALE_QUANTITY);
