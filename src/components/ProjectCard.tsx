@@ -36,6 +36,24 @@ export function ProjectCard({ project }: { project: Project }) {
         <dd>{project.status}</dd>
       </dl>
 
+      {project.engineeringDecision ? (
+        <div className={styles.decision}>
+          <span className={styles.decisionLabel}>Engineering decision</span>
+          <p className={styles.decisionText}>{project.engineeringDecision}</p>
+        </div>
+      ) : null}
+
+      {project.evidence?.length ? (
+        <div className={styles.evidence}>
+          <span className={styles.evidenceLabel}>Evidence</span>
+          <ul className={styles.evidenceList}>
+            {project.evidence.map((item) => (
+              <li key={item} className={styles.evidenceBadge}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       {project.highlights?.length ? (
         <ul className={styles.highlights}>
           {project.highlights.map((h) => (

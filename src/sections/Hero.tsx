@@ -19,9 +19,9 @@ export function Hero() {
           Peter Elijah Marticio
         </h1>
         <p className={styles.tagline}>
-          Full-stack developer and Computer Engineering {standing}. I build full-stack web apps
-          and <Term term="IMS">Inventory Management Systems</Term> that run in production,
-          self-host my projects on a <Term term="VPS">VPS</Term>, and{' '}
+          Full-stack developer and Computer Engineering {standing}. I build web apps, have helped
+          build and deploy an <Term term="IMS">Inventory Management System</Term>, self-host projects
+          on a <Term term="VPS">VPS</Term>, and{' '}
           <a href={OSS_CONTRIBUTIONS_URL} target="_blank" rel="noreferrer">
             contribute to open source
           </a>{' '}

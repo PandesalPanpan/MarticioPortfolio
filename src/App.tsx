@@ -5,6 +5,7 @@ import { Header } from '@/components/Header';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Footer } from '@/components/Footer';
 import { ChatWidget } from '@/components/ChatWidget/ChatWidget';
+import { RouteMetadata } from '@/seo/RouteMetadata';
 import { usePrefetchHandmade } from '@/hooks/usePrefetchHandmade';
 import Home from '@/routes/Home';
 import styles from './App.module.css';
@@ -17,6 +18,7 @@ export default function App() {
   usePrefetchHandmade();
   return (
     <BrowserRouter>
+      <RouteMetadata />
       <GlobalStyles />
       {/* One 820px column holds the header, content and footer, as in the design. */}
       <div className={styles.page}>

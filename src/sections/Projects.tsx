@@ -1,4 +1,5 @@
 import { projects } from '@/data/projects';
+import { AiAssistedDisclosure } from '@/components/AiAssistedDisclosure';
 import { ProjectCard } from '@/components/ProjectCard';
 import { Reveal } from '@/components/Reveal';
 import { SectionHeading } from '@/components/SectionHeading';
@@ -14,6 +15,7 @@ export function Projects() {
       >
         Projects
       </SectionHeading>
+      <AiAssistedDisclosure />
       <div className={styles.list}>
         {featured.map((p) => (
           <ProjectCard key={p.id} project={p} />

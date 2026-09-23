@@ -29,6 +29,10 @@ export type Project = {
   buildStyle: BuildStyle;
   links: { live?: string; code?: string };
   featured: boolean;
+  /** A concise explanation of a meaningful implementation choice. */
+  engineeringDecision?: string;
+  /** Compact supporting proof, such as tests, deployment, or hardware integration. */
+  evidence?: string[];
   highlights?: string[];
   /** Optional signature video (poster + click-to-play in the lightbox). */
   video?: ProjectVideo;

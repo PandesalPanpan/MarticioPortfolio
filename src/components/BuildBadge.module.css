@@ -6,7 +6,6 @@
   font-size: var(--text-xs);
   letter-spacing: 0.02em;
   color: #fff;
-  cursor: help;
 }
 .ai { background: var(--chip-ai); }
 .scratch { background: var(--chip-scratch); }
