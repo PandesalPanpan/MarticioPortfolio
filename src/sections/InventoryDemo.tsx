@@ -78,8 +78,7 @@ export function InventoryDemo() {
         ? {
             tone: 'success',
             title: 'Snapshot preserved.',
-            description:
-              'The receipt still reflects the original sale, even though the catalog changed.',
+            description: 'Receipt #1001 stays true to the original sale.',
           }
         : null,
     );
@@ -139,14 +138,12 @@ export function InventoryDemo() {
         ? {
             tone: 'danger',
             title: 'Historical data changed.',
-            description:
-              "The receipt is reading today's catalog instead of the values captured at sale time.",
+            description: "This old receipt is reading today's catalog.",
           }
         : {
             tone: 'success',
             title: 'Snapshot preserved.',
-            description:
-              'The receipt still reflects the original sale, even though the catalog changed.',
+            description: 'Receipt #1001 stays true to the original sale.',
           },
     );
 
@@ -178,12 +175,12 @@ export function InventoryDemo() {
         ? {
             tone: 'danger',
             title: 'Historical record broken.',
-            description: 'The receipt depended on a catalog record that no longer exists.',
+            description: 'Its catalog record was deleted.',
           }
         : {
             tone: 'success',
             title: 'Historical record preserved.',
-            description: 'The catalog item was deleted, but the receipt remains complete.',
+            description: 'The receipt survives the catalog deletion.',
           },
     );
     setReceiptPulse((current) => current + 1);
@@ -223,23 +220,10 @@ export function InventoryDemo() {
       aria-labelledby="inventory-demo-title"
     >
       <div className={styles.header}>
-        <span className={styles.demoBadge}>System design case study</span>
         <h2 id="inventory-demo-title" className={styles.title}>
-          Production systems preserve what actually happened.
+          I build systems that don't rewrite the past.
         </h2>
-        <p className={styles.scenario}>
-          Can a receipt survive a product rename, price change, or deletion?
-        </p>
-        <p className={styles.subtitle}>
-          This case study shows how I separate mutable catalog data from immutable transaction
-          history so past records stay accurate as the system changes.
-        </p>
-        <ul className={styles.capabilityRow} aria-label="Capabilities demonstrated">
-          <li className={styles.capabilityChip}>Data integrity</li>
-          <li className={styles.capabilityChip}>Transaction snapshots</li>
-          <li className={styles.capabilityChip}>Safe mutations</li>
-          <li className={styles.capabilityChip}>Failure handling</li>
-        </ul>
+        <p className={styles.subtitle}>Change the product. The old receipt should stay true.</p>
       </div>
 
       <div className={styles.modeRow}>
@@ -252,15 +236,10 @@ export function InventoryDemo() {
       </div>
 
       <div className={styles.walkthroughCta}>
-        <span className={styles.walkthroughMarker} aria-hidden="true">
-          <span />
-          <span />
-          <span />
-        </span>
         <div className={styles.walkthroughCopy}>
-          <strong>See the engineering decision in action</strong>
-          <span>Cause the data integrity bug, then fix it with a transaction snapshot.</span>
-          <span className={styles.walkthroughDuration}>About 20 seconds</span>
+          <span className={styles.challengeLabel}>20-second challenge</span>
+          <strong>Can you break Receipt #1001?</strong>
+          <span>Then see how I keep it correct.</span>
         </div>
         <button
           type="button"
@@ -269,7 +248,7 @@ export function InventoryDemo() {
           aria-expanded={guideStep !== null}
           aria-controls="inventory-guide"
         >
-          {guideHasRun ? 'Replay guided demo' : 'Start guided demo'}
+          {guideHasRun ? 'Replay' : 'Try it'}
         </button>
       </div>
 
@@ -314,10 +293,8 @@ export function InventoryDemo() {
       </div>
 
       <div className={styles.helperBar}>
-        <strong>Why this matters</strong>
-        <span className={styles.helperRule}>
-          Catalog data describes the product now. Transaction data records what actually happened.
-        </span>
+        <strong>WHY IT MATTERS</strong>
+        <span className={styles.helperRule}>Catalogs change. Transaction history should not.</span>
       </div>
 
       {formError && (
